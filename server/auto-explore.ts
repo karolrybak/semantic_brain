@@ -50,16 +50,19 @@ async function runAutoExploreIteration(context: AutoExploreContext): Promise<voi
   }
 
   // If no focused node target, find any node needing connections
-  if (!targetNode && state.settings.autoExplore) {
+  if (!targetNode) {
     targetNode = Object.values(state.nodes).find(n => {
       const links = state.links.filter(
-        l => l.source === n.id || l.target === n.id
+        l => (l.source === n.id || l.target === n.id) && (n.status === "accepted" || state.settings.autoExplore)
       );
       return links.length < state.settings.minConnections;
     });
   }
-
-  if (!targetNode) return;
+  
+  if (!targetNode){
+    console.log(`Nothing to do.`);
+    return;
+  } 
 
   // Set thinking state
   applyStatePatches(state, [

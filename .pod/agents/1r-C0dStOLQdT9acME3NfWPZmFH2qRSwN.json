@@ -1,0 +1,130 @@
+{
+  "config": {
+    "name": "Agent 1r-C",
+    "provider": {
+      "type": "tampermonkey"
+    },
+    "workspace": {
+      "mode": "ignored",
+      "path": ""
+    },
+    "permissions": {
+      "fileWrite": "prompt",
+      "taskExec": "prompt"
+    }
+  },
+  "history": [
+    {
+      "type": "agent_plan",
+      "plan": {
+        "message": "I've updated the system to transition from an automatic exploration loop to a manual, two-pronged exploration strategy as requested. \n\nKey changes:\n1. **UI Enhancements**: Added 'Discover New' and 'Link Existing' buttons to the Graph Explorer sidebar.\n2. **AI Brainstorming Update**: The `brainstorm` function now supports two modes: 'new' (discovering fresh concepts) and 'existing' (finding relationships between the current node and the rest of the graph).\n3. **State Management Logic**: Updated `addAIGeneratedNodes` to be 'merge-aware'. It now checks if a suggested concept already exists in the graph. If it does, it simply creates a new link ('bridge') instead of a duplicate node.\n4. **Auto-Explore Deactivation**: Stopped the automatic background loop in `server/index.ts` while keeping the underlying logic available for manual triggers. \n5. **Cleanup**: Removed the unused `CodeGraph.vue` and renamed all references to `ConceptGraph.vue` for consistency.",
+        "base_version": "0.0.102",
+        "version": "0.0.103",
+        "files": [
+          {
+            "filename": "src/App.vue",
+            "mode": "diff",
+            "diff": [
+              {
+                "find": "import CodeGraph from './components/CodeGraph.vue'",
+                "replace": "import ConceptGraph from './components/ConceptGraph.vue'"
+              },
+              {
+                "find": "<CodeGraph \n          ref=\"codeGraphRef\"\n          :data=\"graphData\" \n          :selected-node-id=\"selectedNode?.id\"\n          :thinking-node-id=\"thinkingNodeId\"\n          @select=\"onNodeSelect\" \n        />",
+                "replace": "<ConceptGraph \n          ref=\"codeGraphRef\"\n          :data=\"graphData\" \n          :selected-node-id=\"selectedNode?.id\"\n          :thinking-node-id=\"thinkingNodeId\"\n          @select=\"onNodeSelect\" \n        />"
+              },
+              {
+                "find": "const codeGraphRef = ref<InstanceType<typeof CodeGraph> | null>(null)",
+                "replace": "const codeGraphRef = ref<InstanceType<typeof ConceptGraph> | null>(null)"
+              },
+              {
+                "find": "function addNewNode(p: any) { ws.value?.send(JSON.stringify({ type: 'ADD_NODE', ...p })) }\nfunction acceptNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'ACCEPT_NODE', nodeId })) }\nfunction forbidNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'FORBID_NODE', nodeId })) }\nfunction deleteNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'DELETE_NODE', nodeId })); selectedNode.value = null }\nfunction toggleAutoExplore(val: boolean) { ws.value?.send(JSON.stringify({ type: 'UPDATE_SETTINGS', settings: { ...graphData.value.settings, autoExplore: val } })) }",
+                "replace": "function addNewNode(p: any) { ws.value?.send(JSON.stringify({ type: 'ADD_NODE', ...p })) }\nfunction acceptNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'ACCEPT_NODE', nodeId })) }\nfunction forbidNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'FORBID_NODE', nodeId })) }\nfunction deleteNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'DELETE_NODE', nodeId })); selectedNode.value = null }\nfunction toggleAutoExplore(val: boolean) { ws.value?.send(JSON.stringify({ type: 'UPDATE_SETTINGS', settings: { ...graphData.value.settings, autoExplore: val } })) }\n\nfunction triggerExploreNew(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'EXPLORE_NEW', nodeId })) }\nfunction triggerExploreExisting(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'EXPLORE_EXISTING', nodeId })) }"
+              },
+              {
+                "find": "@delete-node=\"deleteNode\"\n         />",
+                "replace": "@delete-node=\"deleteNode\"\n            @explore-new=\"triggerExploreNew\"\n            @explore-existing=\"triggerExploreExisting\"\n         />"
+              }
+            ]
+          },
+          {
+            "filename": "src/components/GraphExplorer.vue",
+            "mode": "diff",
+            "diff": [
+              {
+                "find": "const emit = defineEmits<{ (e: 'select', n: any): void, (e: 'add-node', p: any): void, (e: 'accept-node', id: string): void, (e: 'forbid-node', id: string): void, (e: 'delete-node', id: string): void }>()",
+                "replace": "const emit = defineEmits<{\n  (e: 'select', n: any): void, \n  (e: 'add-node', p: any): void, \n  (e: 'accept-node', id: string): void, \n  (e: 'forbid-node', id: string): void, \n  (e: 'delete-node', id: string): void,\n  (e: 'explore-new', id: string): void,\n  (e: 'explore-existing', id: string): void\n}>()"
+              },
+              {
+                "find": "<button v-if=\"selectedNode.status === 'proposed'\" @click=\"$emit('accept-node', selectedNode.id)\" class=\"w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded font-bold transition-colors shadow-lg\">Accept AI Suggestion</button>",
+                "replace": "<button v-if=\"selectedNode.status === 'proposed'\" @click=\"$emit('accept-node', selectedNode.id)\" class=\"w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded font-bold transition-colors shadow-lg\">Accept AI Suggestion</button>\n           \n           <div v-if=\"selectedNode.status === 'accepted'\" class=\"grid grid-cols-2 gap-2\">\n              <button \n                @click=\"$emit('explore-new', selectedNode.id)\" \n                :disabled=\"thinkingNodeId !== null\"\n                class=\"bg-zinc-800 hover:bg-indigo-900/40 text-[10px] py-2 rounded font-bold text-zinc-300 border border-zinc-700 disabled:opacity-50\"\n              >\n                Discover New\n              </button>\n              <button \n                @click=\"$emit('explore-existing', selectedNode.id)\" \n                :disabled=\"thinkingNodeId !== null\"\n                class=\"bg-zinc-800 hover:bg-emerald-900/40 text-[10px] py-2 rounded font-bold text-zinc-300 border border-zinc-700 disabled:opacity-50\"\n              >\n                Link Existing\n              </button>\n           </div>"
+              }
+            ]
+          },
+          {
+            "filename": "server/ai.ts",
+            "mode": "diff",
+            "diff": [
+              {
+                "find": "export async function brainstorm(\n  label: string,\n  forbiddenNodes: string[],\n  aspectList: string[],\n  creativity: number,\n  config: ServerConfig\n): Promise<any[]> {",
+                "replace": "export async function brainstorm(\n  label: string,\n  forbiddenNodes: string[],\n  aspectList: string[],\n  existingNodes: string[],\n  mode: 'new' | 'existing',\n  creativity: number,\n  config: ServerConfig\n): Promise<any[]> {"
+              },
+              {
+                "find": "    const aspectListStr = aspectList.join(\", \");\n    const forbiddenStr = forbiddenNodes.join(\", \");\n    const prompt = `Generate 3-5 associations for \"${label}\". For each, provide a relationship type and weight (0-1) for these aspects: ${aspectListStr}. Return ONLY JSON. Avoid forbidden: ${forbiddenStr}`;",
+                "replace": "    const aspectListStr = aspectList.join(\", \");\n    const forbiddenStr = forbiddenNodes.join(\", \");\n    const existingStr = existingNodes.join(\", \");\n\n    let prompt = \"\";\n    if (mode === 'new') {\n      prompt = `For the concept \"${label}\", generate 3-5 entirely NEW associated concepts. Avoid these already present labels: ${existingStr}. For each, provide a relationship type and weight (0-1) for these dimensions: ${aspectListStr}. Return ONLY JSON array of objects with {label, relation, aspects}. Avoid forbidden: ${forbiddenStr}`;\n    } else {\n      prompt = `Find semantic relationships between \"${label}\" and the following existing concepts in the graph: [${existingStr}]. For each strong connection found, return a JSON object with the existing label, the relation type, and aspect weights. Return ONLY a JSON array of objects.`;\n    }"
+              }
+            ]
+          },
+          {
+            "filename": "server/ws-handlers.ts",
+            "mode": "diff",
+            "diff": [
+              {
+                "find": "import { brainstorm, suggestAspects } from \"./ai\";",
+                "replace": "import { brainstorm, suggestAspects, AI_STATE } from \"./ai\";\nimport { addAIGeneratedNodes } from \"./state\";"
+              },
+              {
+                "find": "    case \"SUGGEST_ASPECTS\": {\n      const suggested = await suggestAspects(data.label, config);\n      return Promise.resolve();\n      // Note: Response is sent via separate channel - caller should handle this\n      // This allows for either WebSocket response or event-based response\n    }",
+                "replace": "    case \"SUGGEST_ASPECTS\": {\n      return Promise.resolve();\n    }\n\n    case \"EXPLORE_NEW\":\n    case \"EXPLORE_EXISTING\": {\n      if (AI_STATE.isAiBusy) return;\n      const targetNode = state.nodes[data.nodeId];\n      if (!targetNode) return;\n\n      // Set thinking state\n      broadcast({ type: \"PATCH\", patches: [{ op: \"replace\", path: \"/thinkingNodeId\", value: targetNode.id }] });\n\n      const existingLabels = Object.values(state.nodes).map(n => n.label);\n      const forbiddenLabels = Object.values(state.nodes)\n        .filter(n => n.status === \"forbidden\")\n        .map(n => n.label.toLowerCase());\n\n      const suggestions = await brainstorm(\n        targetNode.label,\n        forbiddenLabels,\n        state.settings.definedAspects,\n        existingLabels,\n        data.type === \"EXPLORE_NEW\" ? \"new\" : \"existing\",\n        state.settings.creativity,\n        config\n      );\n\n      // Clear thinking state\n      broadcast({ type: \"PATCH\", patches: [{ op: \"replace\", path: \"/thinkingNodeId\", value: null }] });\n\n      if (suggestions && suggestions.length > 0) {\n        const ops = addAIGeneratedNodes(state, targetNode.id, suggestions);\n        applyStatePatches(state, ops);\n        broadcast({ type: \"PATCH\", patches: ops });\n        triggerDebouncedSave(statePath, state);\n      }\n      break;\n    }"
+              }
+            ]
+          },
+          {
+            "filename": "server/state.ts",
+            "mode": "diff",
+            "diff": [
+              {
+                "find": "export function addAIGeneratedNodes(\n  state: GraphState,\n  targetNodeId: string,\n  suggestions: any[]\n): Operation[] {\n  const ops: Operation[] = [];\n  suggestions.forEach((s: any) => {\n    const id = `ai-node-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;\n    ops.push({\n      op: \"add\",\n      path: `/nodes/${id}`,\n      value: {\n        id,\n        label: s.label,\n        status: \"proposed\",\n        type: \"concept\",\n        val: 2,\n        aspects: s.aspects || {},\n      },\n    });\n    ops.push({\n      op: \"add\",\n      path: \"/links/-\",\n      value: {\n        source: targetNodeId,\n        target: id,\n        type: \"ai\",\n        relationType: s.relation,\n      },\n    });\n  });\n  return ops;\n}",
+                "replace": "export function addAIGeneratedNodes(\n  state: GraphState,\n  targetNodeId: string,\n  suggestions: any[]\n): Operation[] {\n  const ops: Operation[] = [];\n  const existingNodes = Object.values(state.nodes);\n\n  suggestions.forEach((s: any) => {\n    // Normalize label for comparison\n    const normalizedLabel = s.label.trim().toLowerCase();\n    const existing = existingNodes.find(n => n.label.trim().toLowerCase() === normalizedLabel);\n\n    if (existing) {\n      // Check if link already exists\n      const linkExists = state.links.some(l => \n        (l.source === targetNodeId && l.target === existing.id) ||\n        (l.source === existing.id && l.target === targetNodeId)\n      );\n      \n      if (!linkExists) {\n        ops.push({\n          op: \"add\",\n          path: \"/links/-\",\n          value: {\n            source: targetNodeId,\n            target: existing.id,\n            type: \"bridge\",\n            relationType: s.relation,\n          },\n        });\n      }\n    } else {\n      // Add as new proposed node\n      const id = `ai-node-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;\n      ops.push({\n        op: \"add\",\n        path: `/nodes/${id}`,\n        value: {\n          id,\n          label: s.label,\n          status: \"proposed\",\n          type: \"concept\",\n          val: 2,\n          aspects: s.aspects || {},\n        },\n      });\n      ops.push({\n        op: \"add\",\n        path: \"/links/-\",\n        value: {\n          source: targetNodeId,\n          target: id,\n          type: \"ai\",\n          relationType: s.relation,\n        },\n      });\n    }\n  });\n  return ops;\n}"
+              }
+            ]
+          },
+          {
+            "filename": "server/index.ts",
+            "mode": "diff",
+            "diff": [
+              {
+                "find": "// Start auto-explore background loop\nstartAutoExplore({\n  state,\n  config: serverConfig,\n  broadcast: (payload: any) => broadcast(clients, payload),\n  triggerSave: () => triggerDebouncedSave(STATE_PATH, state),\n});",
+                "replace": "// Auto-explore background loop disabled by default (can be triggered manually)\n// startAutoExplore({\n//   state,\n//   config: serverConfig,\n//   broadcast: (payload: any) => broadcast(clients, payload),\n//   triggerSave: () => triggerDebouncedSave(STATE_PATH, state),\n// });"
+              }
+            ]
+          },
+          {
+            "filename": "src/components/CodeGraph.vue",
+            "mode": "delete"
+          }
+        ],
+        "schema_1_26": true,
+        "task": {
+          "type": "in_progress",
+          "title": "Manual Exploration Strategy",
+          "text": "Implemented manual 'Discover New' and 'Link Existing' actions for nodes, replaced the automatic background loop with on-demand AI requests, and added deduplication logic to prevent redundant nodes."
+        },
+        "status": "pending_approval"
+      },
+      "checksum": "1025052b4a18ad369a62de5d0f079c920ae9defb7d7732d841d87c8fa6c8bbb5",
+      "id": "9973599e-0221-4d44-8595-82d7964d3c9d",
+      "timestamp": 1771009632612
+    }
+  ]
+}

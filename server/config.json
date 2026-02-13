@@ -1,4 +1,4 @@
 {
-  "modelPath": "/path/to/your/model.gguf",
+  "modelPath": "/mnt/ssd/Qwen2.5-0.5B-Instruct-Q5_K_M.gguf",
   "logPrompts": true
 }

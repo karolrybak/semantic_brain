@@ -107,6 +107,7 @@ function applyPatchToLocalGraph(patches: any[]) {
     }
     else if (patch.op === 'replace' && patch.path === '/links') graphData.value.links = patch.value;
     else if (patch.op === 'replace' && patch.path === '/thinkingNodeId') thinkingNodeId.value = patch.value;
+    else if (patch.op === 'replace' && patch.path === '/settings') graphData.value.settings = patch.value;
     else if (patch.op === 'replace' && patch.path.endsWith('/status')) {
         const id = patch.path.split('/')[2];
         const node = graphData.value.nodes.find((n:any) => n.id === id);
@@ -143,7 +144,10 @@ function promptNewIndependentNode() { const label = prompt('New independent conc
 
 onMounted(() => {
   connectWS()
-  window.addEventListener('update-settings', (e: any) => ws.value?.send(JSON.stringify({ type: 'UPDATE_SETTINGS', settings: e.detail })))
+  window.addEventListener('update-settings', (e: any) => {
+    const updatedSettings = { ...graphData.value.settings, ...e.detail };
+    ws.value?.send(JSON.stringify({ type: 'UPDATE_SETTINGS', settings: updatedSettings }));
+  })
   window.addEventListener('clear-graph', () => ws.value?.send(JSON.stringify({ type: 'CLEAR_GRAPH' })))
 })
 </script>

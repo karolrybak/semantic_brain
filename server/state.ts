@@ -12,7 +12,7 @@ export function createDefaultState(): GraphState {
       maxWords: 3,
       minConnections: 3,
       autoExplore: false,
-      definedAspects: ["Technical", "Emotional", "Practical"],
+      definedAspects: [],
       activeAspects: [],
     },
   };
@@ -21,7 +21,7 @@ export function createDefaultState(): GraphState {
 export function initializeLoadedState(state: GraphState): GraphState {
   state.thinkingNodeId = null;
   if (!state.settings.definedAspects) {
-    state.settings.definedAspects = ["Technical", "Emotional", "Practical"];
+    state.settings.definedAspects = [];
   }
   if (!state.settings.activeAspects) {
     state.settings.activeAspects = [];

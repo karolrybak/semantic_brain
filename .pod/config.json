@@ -38,7 +38,11 @@
     {
       "name": "default",
       "filter": "+ src/**\n- **/node_modules/**\n- **/dist/**\n- **/.output/**\n- bun.lock\n- public\n- cloned/**"
-    }
+    },
+    {
+      "name": "server",
+      "filter": "+ server/**\n- **/node_modules/**\n- **/dist/**\n- **/.output/**\n- bun.lock\n- public\n- cloned/**"
+    }    
   ],
   "tasks": {
     "build": "bun scripts/build.ts",
