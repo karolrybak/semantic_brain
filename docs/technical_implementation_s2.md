@@ -32,15 +32,15 @@
 
 ## 4. Detailed Task List
 
-| ID | Task | Component | Priority |
-|:---|:---|:---|:---|
-| S2.1 | Update shared TypeScript interfaces and initial state | Data | High |
-| S2.2 | Refactor LLM prompt to include Relation Types and Aspect Weights | Server | High |
-| S2.3 | Implement Aspect Toggle Bar (UI Only) | Client | Med |
-| S2.4 | Implement Shader/Material logic for Aspect filtering (Opacity) | Client | Med |
-| S2.5 | Add 'Forbidden' status logic to Server and Client | Logic | Med |
-| S2.6 | Add text labels to 3D Links | Client | Low |
-| S2.7 | Implement Cross-Link discovery logic | Server | Low |
+| ID | Task | Component | Priority | Status |
+|:---|:---|:---|:---|:---|
+| S2.1 | Update shared TypeScript interfaces and initial state | Data | High | [x] |
+| S2.2 | Refactor LLM prompt to include Relation Types and Aspect Weights | Server | High | [x] |
+| S2.3 | Implement Aspect Toggle Bar | Client | Med | [x] |
+| S2.4 | Implement Shader/Material logic for Aspect filtering (Opacity) | Client | Med | [x] |
+| S2.5 | Add 'Forbidden' status logic to Server and Client | Logic | Med | [x] |
+| S2.6 | Add text labels to 3D Links | Client | Low | [x] |
+| S2.7 | Implement Cross-Link discovery logic | Server | Low | [ ] |
 
 ## 5. Technical Risks
 - **Prompt Complexity**: Requesting labels, relations, AND weights in one shot might degrade LLM performance on smaller models (e.g., Phi-3 or Llama-3-8B). We might need a two-step generation.

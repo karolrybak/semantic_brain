@@ -1,3 +1,4 @@
 {
-  "modelPath": "/mnt/ssd/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf"
+  "modelPath": "/path/to/your/model.gguf",
+  "logPrompts": true
 }

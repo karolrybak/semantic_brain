@@ -6,10 +6,10 @@ export interface GraphNode {
   status: NodeStatus;
   type: 'concept' | 'root';
   val: number;
+  aspects: Record<string, number>;
   group?: number;
   metadata?: {
     reason?: string;
-    aspect?: string;
     timestamp: number;
   };
   // Physics
@@ -30,6 +30,8 @@ export interface GraphLink {
   source: string;
   target: string;
   type: 'ai' | 'user' | 'bridge';
+  relationType?: string;
+  explanation?: string;
   id?: string;
 }
 
@@ -43,7 +45,8 @@ export interface GraphState {
     maxWords: number;
     minConnections: number;
     autoExplore: boolean;
-    activeAspect: string; // E.g. "Cyberpunk", "Naturalistic", "Melancholy"
+    definedAspects: string[];
+    activeAspects: string[];
   };
 }
 

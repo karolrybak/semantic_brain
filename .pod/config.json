@@ -38,10 +38,6 @@
     {
       "name": "default",
       "filter": "+ src/**\n- **/node_modules/**\n- **/dist/**\n- **/.output/**\n- bun.lock\n- public\n- cloned/**"
-    },
-    {
-      "name": "webxr",
-      "filter": "+ cloned/**/*.md\n+ cloned/**/*.js\n+ cloned/**/*.html\n- **/node_modules/**"
     }
   ],
   "tasks": {
@@ -51,5 +47,5 @@
     "lint": "bun scripts/lint.ts",
     "format": "bun scripts/format.ts"
   },
-  "version": "0.0.95"
+  "version": "0.0.102"
 }
