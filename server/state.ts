@@ -90,30 +90,58 @@ export function addAIGeneratedNodes(
   suggestions: any[]
 ): Operation[] {
   const ops: Operation[] = [];
+  const existingNodes = Object.values(state.nodes);
+
   suggestions.forEach((s: any) => {
-    const id = `ai-node-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
-    ops.push({
-      op: "add",
-      path: `/nodes/${id}`,
-      value: {
-        id,
-        label: s.label,
-        status: "proposed",
-        type: "concept",
-        val: 2,
-        aspects: s.aspects || {},
-      },
-    });
-    ops.push({
-      op: "add",
-      path: "/links/-",
-      value: {
-        source: targetNodeId,
-        target: id,
-        type: "ai",
-        relationType: s.relation,
-      },
-    });
+    // Normalize label for comparison
+    const normalizedLabel = s.label.trim().toLowerCase();
+    const existing = existingNodes.find(n => n.label.trim().toLowerCase() === normalizedLabel);
+
+    if (existing) {
+      // Check if link already exists
+      const linkExists = state.links.some(l => 
+        (l.source === targetNodeId && l.target === existing.id) ||
+        (l.source === existing.id && l.target === targetNodeId)
+      );
+      
+      if (!linkExists) {
+        ops.push({
+          op: "add",
+          path: "/links/-",
+          value: {
+            source: targetNodeId,
+            target: existing.id,
+            type: "bridge",
+            relationType: s.relation,
+          },
+        });
+      }
+    } else {
+      // Add as new proposed node
+      const id = `ai-node-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+      ops.push({
+        op: "add",
+        path: `/nodes/${id}`,
+        value: {
+          id,
+          label: s.label,
+          status: "proposed",
+          type: "concept",
+          val: 2,
+          aspects: s.aspects || {},
+        },
+      });
+      ops.push({
+        op: "add",
+        path: "/links/-",
+        value: {
+          source: targetNodeId,
+          target: id,
+          type: "ai",
+          relationType: s.relation,
+        },
+      });
+    }
   });
   return ops;
 }

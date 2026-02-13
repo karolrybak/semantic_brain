@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full h-screen bg-[#19191d] overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <CodeGraph 
+        <ConceptGraph 
           ref="codeGraphRef"
           :data="graphData" 
           :selected-node-id="selectedNode?.id"
@@ -22,6 +22,9 @@
             @accept-node="acceptNode"
             @forbid-node="forbidNode"
             @delete-node="deleteNode"
+            @explore-new="triggerExploreNew"
+            @explore-existing="triggerExploreExisting"
+            @update-aspects="triggerUpdateAspects"
          />
        </div>
        <div class="pointer-events-auto flex items-center gap-2">
@@ -66,14 +69,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import CodeGraph from './components/CodeGraph.vue'
+import ConceptGraph from './components/ConceptGraph.vue'
 import GraphExplorer from './components/GraphExplorer.vue'
 import ConfigPanel from './components/ConfigPanel.vue'
 import AspectBar from './components/AspectBar.vue'
 import InitialOnboarding from './components/InitialOnboarding.vue'
 import type { GraphData, GraphNode } from './types/graph'
 
-const codeGraphRef = ref<InstanceType<typeof CodeGraph> | null>(null)
+const codeGraphRef = ref<InstanceType<typeof ConceptGraph> | null>(null)
 const selectedNode = ref<GraphNode | null>(null)
 const thinkingNodeId = ref<string | null>(null)
 const graphData = ref<any>({ nodes: [], links: [], settings: {} })
@@ -140,6 +143,10 @@ function acceptNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'ACC
 function forbidNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'FORBID_NODE', nodeId })) }
 function deleteNode(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'DELETE_NODE', nodeId })); selectedNode.value = null }
 function toggleAutoExplore(val: boolean) { ws.value?.send(JSON.stringify({ type: 'UPDATE_SETTINGS', settings: { ...graphData.value.settings, autoExplore: val } })) }
+
+function triggerExploreNew(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'EXPLORE_NEW', nodeId })) }
+function triggerExploreExisting(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'EXPLORE_EXISTING', nodeId })) }
+function triggerUpdateAspects(nodeId: string) { ws.value?.send(JSON.stringify({ type: 'UPDATE_NODE_ASPECTS', nodeId })) }
 function promptNewIndependentNode() { const label = prompt('New independent concept:'); if (label) addNewNode({ label }) }
 
 onMounted(() => {

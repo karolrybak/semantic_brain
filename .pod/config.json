@@ -38,11 +38,7 @@
     {
       "name": "default",
       "filter": "+ src/**\n- **/node_modules/**\n- **/dist/**\n- **/.output/**\n- bun.lock\n- public\n- cloned/**"
-    },
-    {
-      "name": "server",
-      "filter": "+ server/**\n- **/node_modules/**\n- **/dist/**\n- **/.output/**\n- bun.lock\n- public\n- cloned/**"
-    }    
+    }
   ],
   "tasks": {
     "build": "bun scripts/build.ts",
@@ -51,5 +47,5 @@
     "lint": "bun scripts/lint.ts",
     "format": "bun scripts/format.ts"
   },
-  "version": "0.0.102"
+  "version": "0.0.110"
 }

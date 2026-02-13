@@ -23,9 +23,6 @@ export const AI_STATE: AIState = {
   isAiBusy: false,
 };
 
-const SYSTEM_PROMPT =
-  "You are a semantic association engine. Your task is to provide structured associations. You MUST return ONLY a JSON array of objects. Format: [{ \"label\": \"word\", \"relation\": \"causes|enables|depends_on|part_of\", \"aspects\": { \"AspectName\": 0.8 } }]. No prose.";
-
 export async function initializeAI(
   config: ServerConfig,
   onReady?: () => void
@@ -40,13 +37,9 @@ export async function initializeAI(
     if (!AI_STATE.model) throw new Error("Failed to load model");
     AI_STATE.context = await AI_STATE.model.createContext();
     AI_STATE.session = new LlamaChatSession({
-      contextSequence: AI_STATE.context!.getSequence(),
-      systemPrompt: SYSTEM_PROMPT,
+      contextSequence: AI_STATE.context!.getSequence()
     });
 
-    if (config.logPrompts) {
-      console.log(`[AI] System Prompt Set: "${SYSTEM_PROMPT}"`);
-    }
     console.log("[AI] READY: Semantic Engine online.");
     onReady?.();
   } catch (e) {
@@ -65,7 +58,7 @@ export async function suggestAspects(
   const startTime = performance.now();
 
   try {
-    const prompt = `For the concept "${label}", suggest 6-8 high-level semantic dimensions (aspects) to explore it from different perspectives (e.g. historical, emotional, physical). Return ONLY a JSON array of strings.`;
+    const prompt = `You are a semantic dimensionality analyzer. For the concept "${label}", suggest 6-8 high-level semantic dimensions (aspects) to explore it from different perspectives (e.g. historical, emotional, physical, technical). \n\nRules:\n1. Return ONLY a JSON array of strings: ["Aspect1", "Aspect2"].\n2. No preamble, no explanation, no prose.`;
 
     if (config.logPrompts) {
       console.log(`[AI] >>> ASPECT PROMPT: "${prompt}"`);
@@ -94,6 +87,8 @@ export async function brainstorm(
   label: string,
   forbiddenNodes: string[],
   aspectList: string[],
+  existingNodes: string[],
+  mode: 'new' | 'existing',
   creativity: number,
   config: ServerConfig
 ): Promise<any[]> {
@@ -106,7 +101,14 @@ export async function brainstorm(
   try {
     const aspectListStr = aspectList.join(", ");
     const forbiddenStr = forbiddenNodes.join(", ");
-    const prompt = `Generate 3-5 associations for "${label}". For each, provide a relationship type and weight (0-1) for these aspects: ${aspectListStr}. Return ONLY JSON. Avoid forbidden: ${forbiddenStr}`;
+    const existingStr = existingNodes.join(", ");
+
+    let prompt = "";
+    if (mode === 'new') {
+      prompt = `You are a semantic association engine. Generate 3-5 NEW unique concepts related to "${label}". \n\nConstraints:\n- Avoid these existing labels: [${existingStr}].\n- Do not use forbidden concepts: [${forbiddenStr}].\n- For each concept, calculate relevance (0 to 1) for these aspects: [${aspectListStr}].\n\nFormat: Return ONLY a JSON array of objects: [{ "label": "word", "relation": "causes|enables|depends_on|part_of", "aspects": { "AspectName": 0.8 } }]. No prose.`;
+    } else {
+      prompt = `You are a semantic connectivity engine. Analyze the relationship between "${label}" and the following existing concepts: [${existingStr}]. \n\nTask: Identify valid semantic links. For each connection, determine the relation type and relevance (0 to 1) for: [${aspectListStr}].\n\nFormat: Return ONLY a JSON array of objects: [{ "label": "existing_label", "relation": "type", "aspects": { "AspectName": 0.5 } }]. No prose.`;
+    }
 
     if (config.logPrompts) {
       console.log(`[AI] >>> BRAINSTORM PROMPT: "${prompt}"`);
@@ -134,6 +136,45 @@ export async function brainstorm(
     return [];
   } catch (e) {
     return [];
+  } finally {
+    AI_STATE.isAiBusy = false;
+  }
+}
+
+export async function evaluateAspects(
+  label: string,
+  aspectList: string[],
+  config: ServerConfig
+): Promise<Record<string, number>> {
+  const { session, isAiBusy } = AI_STATE;
+  if (!session || isAiBusy) return {};
+
+  AI_STATE.isAiBusy = true;
+  const startTime = performance.now();
+
+  try {
+    const aspectStr = aspectList.join(", ");
+    const prompt = `You are a semantic scoring agent. Target: "${label}". Dimensions to score: [${aspectStr}].\n\nRequirements:\n1. Evaluate how much "${label}" relates to each dimension on a scale of 0.0 to 1.0.\n2. Return ONLY a JSON object where keys are the dimension names and values are floats.\n3. Format: { "DimensionName": 0.85 }\n4. No preamble, no markers, ONLY the JSON object.`
+
+    if (config.logPrompts) {
+      console.log(`[AI] >>> ASPECT EVAL PROMPT: "${prompt}"`);
+    }
+
+    const response = await session.prompt(prompt, {
+      maxTokens: 200,
+      temperature: 0.1,
+    });
+
+    const duration = ((performance.now() - startTime) / 1000).toFixed(2);
+    if (config.logPrompts) {
+      console.log(`[AI] <<< ASPECT EVAL RESPONSE (${duration}s): "${response}"`);
+    }
+
+    const jsonMatch = response.match(/\{.*\}/s);
+    return jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+  } catch (e) {
+    console.error("[AI] Eval Error", e);
+    return {};
   } finally {
     AI_STATE.isAiBusy = false;
   }

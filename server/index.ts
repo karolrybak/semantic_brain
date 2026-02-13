@@ -55,13 +55,13 @@ const handlerContext = {
   broadcast: (payload: any) => broadcast(clients, payload),
 };
 
-// Start auto-explore background loop
-startAutoExplore({
-  state,
-  config: serverConfig,
-  broadcast: (payload: any) => broadcast(clients, payload),
-  triggerSave: () => triggerDebouncedSave(STATE_PATH, state),
-});
+// Auto-explore background loop disabled by default (can be triggered manually)
+// startAutoExplore({
+//   state,
+//   config: serverConfig,
+//   broadcast: (payload: any) => broadcast(clients, payload),
+//   triggerSave: () => triggerDebouncedSave(STATE_PATH, state),
+// });
 
 // Start HTTP/WebSocket server
 serve({

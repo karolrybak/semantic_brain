@@ -1,11 +1,12 @@
 import type { GraphState } from "../src/types/graph";
 import type { ServerConfig } from "./config";
-import { suggestAspects } from "./ai";
+import { brainstorm, suggestAspects, evaluateAspects, AI_STATE } from "./ai";
 import {
   addNodeToState,
   applyStatePatches,
   deleteNodeFromState,
   clearStateGraph,
+  addAIGeneratedNodes,
 } from "./state";
 import { triggerDebouncedSave } from "./persistence";
 import type { Operation } from "fast-json-patch";
@@ -34,7 +35,7 @@ export async function handleWSMessage(
 ): Promise<void> {
   const { state, config, statePath, broadcast } = context;
   const data = message;
-
+  console.log("[WS] Message received", data);
   switch (data.type) {
     case "SET_FOCUS":
       applyStatePatches(state, [
@@ -113,10 +114,79 @@ export async function handleWSMessage(
       break;
 
     case "SUGGEST_ASPECTS": {
-      const suggested = await suggestAspects(data.label, config);
       return Promise.resolve();
-      // Note: Response is sent via separate channel - caller should handle this
-      // This allows for either WebSocket response or event-based response
+    }
+
+    case "EXPLORE_NEW":
+    case "EXPLORE_EXISTING": {
+      if (AI_STATE.isAiBusy) return;
+      const targetNode = state.nodes[data.nodeId];
+      if (!targetNode) return;
+
+      // Set thinking state locally and notify clients
+      applyStatePatches(state, [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }]);
+      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }] });
+
+      const existingLabels = Object.values(state.nodes).map(n => n.label);
+      const forbiddenLabels = Object.values(state.nodes)
+        .filter(n => n.status === "forbidden")
+        .map(n => n.label.toLowerCase());
+
+      const suggestions = await brainstorm(
+        targetNode.label,
+        forbiddenLabels,
+        state.settings.definedAspects,
+        existingLabels,
+        data.type === "EXPLORE_NEW" ? "new" : "existing",
+        state.settings.creativity,
+        config
+      );
+
+      // Clear thinking state
+      applyStatePatches(state, [{ op: "replace", path: "/thinkingNodeId", value: null }]);
+      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: null }] });
+
+      if (suggestions && suggestions.length > 0) {
+        const ops = addAIGeneratedNodes(state, targetNode.id, suggestions);
+        applyStatePatches(state, ops);
+        broadcast({ type: "PATCH", patches: ops });
+        triggerDebouncedSave(statePath, state);
+      }
+      break;
+    }
+
+    case "UPDATE_NODE_ASPECTS": {
+      if (AI_STATE.isAiBusy) return;
+      const targetNode = state.nodes[data.nodeId];
+      if (!targetNode) return;
+
+      console.log(`[Explore] Updating aspects for: ${targetNode.label}`);
+      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }] });
+
+      const aspects = await evaluateAspects(
+        targetNode.label,
+        state.settings.definedAspects,
+        config
+      );
+
+      if (Object.keys(aspects).length > 0) {
+        console.log(`[Explore] New aspects for ${targetNode.label}:`, aspects);
+        
+        const patches: Operation[] = [
+          { op: "replace", path: "/thinkingNodeId", value: null },
+          { op: "replace", path: `/nodes/${targetNode.id}/aspects`, value: aspects }
+        ];
+
+        applyStatePatches(state, patches);
+        broadcast({ type: "PATCH", patches });
+        
+        // Explicitly trigger a re-save to ensure persistence
+        triggerDebouncedSave(statePath, state);
+      } else {
+        console.warn(`[Explore] AI returned empty aspects for ${targetNode.label}`);
+        broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: null }] });
+      }
+      break;
     }
   }
 }

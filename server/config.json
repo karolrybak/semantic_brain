@@ -1,4 +1,4 @@
 {
-  "modelPath": "/mnt/ssd/Qwen2.5-0.5B-Instruct-Q5_K_M.gguf",
+  "modelPath": "/mnt/ssd/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf",
   "logPrompts": true
 }

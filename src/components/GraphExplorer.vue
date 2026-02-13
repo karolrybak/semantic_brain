@@ -81,6 +81,31 @@
              </button>
            </div>
            <button v-if="selectedNode.status === 'proposed'" @click="$emit('accept-node', selectedNode.id)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded font-bold transition-colors shadow-lg">Accept AI Suggestion</button>
+           
+           <div v-if="selectedNode.status === 'accepted'" class="grid grid-cols-2 gap-2">
+              <button 
+                @click="$emit('explore-new', selectedNode.id)" 
+                :disabled="thinkingNodeId !== null"
+                class="bg-zinc-800 hover:bg-indigo-900/40 text-[10px] py-2 rounded font-bold text-zinc-300 border border-zinc-700 disabled:opacity-50"
+              >
+                Discover New
+              </button>
+              <button 
+                @click="$emit('explore-existing', selectedNode.id)" 
+                :disabled="thinkingNodeId !== null"
+                class="bg-zinc-800 hover:bg-emerald-900/40 text-[10px] py-2 rounded font-bold text-zinc-300 border border-zinc-700 disabled:opacity-50"
+              >
+                Link Existing
+              </button>
+           </div>
+           <button 
+             v-if="selectedNode.status === 'accepted'"
+             @click="$emit('update-aspects', selectedNode.id)"
+             :disabled="thinkingNodeId !== null"
+             class="w-full mt-2 bg-zinc-800 hover:bg-amber-900/30 text-[10px] py-2 rounded font-bold text-zinc-400 border border-zinc-700 transition-colors"
+           >
+             Update Aspect Weights
+           </button>
         </div>
     </div>
     <div v-else class="w-64 bg-zinc-900/50 backdrop-blur border border-zinc-800/50 p-4 rounded-lg text-center pointer-events-auto">
@@ -95,7 +120,16 @@ import type { GraphData, GraphNode } from '../types/graph'
 import NodeIcon from './NodeIcon.vue'
 
 const props = defineProps<{ data: GraphData, selectedNode: GraphNode | null, thinkingNodeId: string | null }>()
-const emit = defineEmits<{ (e: 'select', n: any): void, (e: 'add-node', p: any): void, (e: 'accept-node', id: string): void, (e: 'forbid-node', id: string): void, (e: 'delete-node', id: string): void }>()
+const emit = defineEmits<{
+  (e: 'select', n: any): void, 
+  (e: 'add-node', p: any): void, 
+  (e: 'accept-node', id: string): void, 
+  (e: 'forbid-node', id: string): void, 
+  (e: 'delete-node', id: string): void,
+  (e: 'explore-new', id: string): void,
+  (e: 'explore-existing', id: string): void,
+  (e: 'update-aspects', id: string): void
+}>()
 
 const relatedInput = ref('')
 function addRelated() { if (relatedInput.value && props.selectedNode) { emit('add-node', { label: relatedInput.value, parentId: props.selectedNode.id }); relatedInput.value = '' } }

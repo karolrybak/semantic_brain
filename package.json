@@ -1,6 +1,6 @@
 {
   "name": "kodoksztalt-vite",
-  "version": "0.0.102",
+  "version": "0.0.110",
   "type": "module",
   "scripts": {
     "dev": "vite",
