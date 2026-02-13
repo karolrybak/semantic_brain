@@ -1,0 +1,381 @@
+{
+  "nodes": {
+    "node-1770994998981": {
+      "id": "node-1770994998981",
+      "label": "Flower on barricades",
+      "status": "accepted",
+      "type": "root",
+      "val": 5
+    },
+    "ai-node-1770995002133-548vr": {
+      "id": "ai-node-1770995002133-548vr",
+      "label": "Revolutionary beauty",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995002133-dn9ox": {
+      "id": "ai-node-1770995002133-dn9ox",
+      "label": "Protest petals",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995002133-sa0qk": {
+      "id": "ai-node-1770995002133-sa0qk",
+      "label": "Garden of defiance",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995002133-hxl72": {
+      "id": "ai-node-1770995002133-hxl72",
+      "label": "Blooming resistance",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995002133-5dk66": {
+      "id": "ai-node-1770995002133-5dk66",
+      "label": "Thorny protest",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995370106-9epvy": {
+      "id": "ai-node-1770995370106-9epvy",
+      "label": "Subversive allure",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995370106-drphc": {
+      "id": "ai-node-1770995370106-drphc",
+      "label": "Aesthetic anarchy",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995370106-weucu": {
+      "id": "ai-node-1770995370106-weucu",
+      "label": "Beauty in chaos",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995370106-f8f4g": {
+      "id": "ai-node-1770995370106-f8f4g",
+      "label": "Rebel ravishing",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995370106-5qyvj": {
+      "id": "ai-node-1770995370106-5qyvj",
+      "label": "Sublime sedition",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995374118-gkhk3": {
+      "id": "ai-node-1770995374118-gkhk3",
+      "label": "Syllables of dissent",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995374118-f6hi7": {
+      "id": "ai-node-1770995374118-f6hi7",
+      "label": "Fragile yet fierce",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995374118-yt1cm": {
+      "id": "ai-node-1770995374118-yt1cm",
+      "label": "Delicate defiance",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995374118-j9yq0": {
+      "id": "ai-node-1770995374118-j9yq0",
+      "label": "Softly shouting",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995374118-6h2d2": {
+      "id": "ai-node-1770995374118-6h2d2",
+      "label": "Tiny tumult",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995378136-topz3": {
+      "id": "ai-node-1770995378136-topz3",
+      "label": "Secret sanctuary",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995378136-jy5rk": {
+      "id": "ai-node-1770995378136-jy5rk",
+      "label": "Hidden hub of hope",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995378136-diq58": {
+      "id": "ai-node-1770995378136-diq58",
+      "label": "Unruly oasis",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995378136-r97h5": {
+      "id": "ai-node-1770995378136-r97h5",
+      "label": "Wildflower uprising",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995378136-c5va0": {
+      "id": "ai-node-1770995378136-c5va0",
+      "label": "Blossoming barricade",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995382168-7n7nu": {
+      "id": "ai-node-1770995382168-7n7nu",
+      "label": "Petal power surge",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995382168-4akbf": {
+      "id": "ai-node-1770995382168-4akbf",
+      "label": "Floral insurrection",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995382168-72mx9": {
+      "id": "ai-node-1770995382168-72mx9",
+      "label": "Blossoming bravado",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995382168-l9gmc": {
+      "id": "ai-node-1770995382168-l9gmc",
+      "label": "Vibrant vengeance",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995382168-6msg4": {
+      "id": "ai-node-1770995382168-6msg4",
+      "label": "Colorful coup",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995386191-3rvq3": {
+      "id": "ai-node-1770995386191-3rvq3",
+      "label": "Prickly patriotism",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995386191-jd9pc": {
+      "id": "ai-node-1770995386191-jd9pc",
+      "label": "Barbed boldness",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995386191-3nd7u": {
+      "id": "ai-node-1770995386191-3nd7u",
+      "label": "Thistle uprising",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995386191-js13t": {
+      "id": "ai-node-1770995386191-js13t",
+      "label": "Spike of dissent",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    },
+    "ai-node-1770995386191-96q33": {
+      "id": "ai-node-1770995386191-96q33",
+      "label": "Razor-sharp rebellion",
+      "status": "proposed",
+      "type": "concept",
+      "val": 2
+    }
+  },
+  "links": [
+    {
+      "source": "node-1770994998981",
+      "target": "ai-node-1770995002133-548vr",
+      "type": "ai"
+    },
+    {
+      "source": "node-1770994998981",
+      "target": "ai-node-1770995002133-dn9ox",
+      "type": "ai"
+    },
+    {
+      "source": "node-1770994998981",
+      "target": "ai-node-1770995002133-sa0qk",
+      "type": "ai"
+    },
+    {
+      "source": "node-1770994998981",
+      "target": "ai-node-1770995002133-hxl72",
+      "type": "ai"
+    },
+    {
+      "source": "node-1770994998981",
+      "target": "ai-node-1770995002133-5dk66",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-548vr",
+      "target": "ai-node-1770995370106-9epvy",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-548vr",
+      "target": "ai-node-1770995370106-drphc",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-548vr",
+      "target": "ai-node-1770995370106-weucu",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-548vr",
+      "target": "ai-node-1770995370106-f8f4g",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-548vr",
+      "target": "ai-node-1770995370106-5qyvj",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-dn9ox",
+      "target": "ai-node-1770995374118-gkhk3",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-dn9ox",
+      "target": "ai-node-1770995374118-f6hi7",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-dn9ox",
+      "target": "ai-node-1770995374118-yt1cm",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-dn9ox",
+      "target": "ai-node-1770995374118-j9yq0",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-dn9ox",
+      "target": "ai-node-1770995374118-6h2d2",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-sa0qk",
+      "target": "ai-node-1770995378136-topz3",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-sa0qk",
+      "target": "ai-node-1770995378136-jy5rk",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-sa0qk",
+      "target": "ai-node-1770995378136-diq58",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-sa0qk",
+      "target": "ai-node-1770995378136-r97h5",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-sa0qk",
+      "target": "ai-node-1770995378136-c5va0",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-hxl72",
+      "target": "ai-node-1770995382168-7n7nu",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-hxl72",
+      "target": "ai-node-1770995382168-4akbf",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-hxl72",
+      "target": "ai-node-1770995382168-72mx9",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-hxl72",
+      "target": "ai-node-1770995382168-l9gmc",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-hxl72",
+      "target": "ai-node-1770995382168-6msg4",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-5dk66",
+      "target": "ai-node-1770995386191-3rvq3",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-5dk66",
+      "target": "ai-node-1770995386191-jd9pc",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-5dk66",
+      "target": "ai-node-1770995386191-3nd7u",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-5dk66",
+      "target": "ai-node-1770995386191-js13t",
+      "type": "ai"
+    },
+    {
+      "source": "ai-node-1770995002133-5dk66",
+      "target": "ai-node-1770995386191-96q33",
+      "type": "ai"
+    }
+  ],
+  "focusNodeId": "ai-node-1770995370106-9epvy",
+  "thinkingNodeId": null,
+  "settings": {
+    "creativity": 0.7,
+    "maxWords": 3,
+    "minConnections": 3,
+    "autoExplore": false
+  }
+}
