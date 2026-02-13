@@ -1,4 +1,4 @@
-export type NodeStatus = 'proposed' | 'accepted';
+export type NodeStatus = 'proposed' | 'accepted' | 'forbidden';
 
 export interface GraphNode {
   id: string;
@@ -7,7 +7,11 @@ export interface GraphNode {
   type: 'concept' | 'root';
   val: number;
   group?: number;
-  metadata?: any;
+  metadata?: {
+    reason?: string;
+    aspect?: string;
+    timestamp: number;
+  };
   // Physics
   x?: number;
   y?: number;
@@ -25,7 +29,7 @@ export interface GraphNode {
 export interface GraphLink {
   source: string;
   target: string;
-  type: 'ai' | 'user';
+  type: 'ai' | 'user' | 'bridge';
   id?: string;
 }
 
@@ -33,16 +37,18 @@ export interface GraphState {
   nodes: Record<string, GraphNode>;
   links: GraphLink[];
   focusNodeId: string | null;
+  thinkingNodeId: string | null;
   settings: {
     creativity: number;
     maxWords: number;
     minConnections: number;
     autoExplore: boolean;
+    activeAspect: string; // E.g. "Cyberpunk", "Naturalistic", "Melancholy"
   };
-  thinkingNodeId: string | null;
 }
 
 export interface GraphData {
   nodes: GraphNode[];
   links: GraphLink[];
+  settings?: GraphState['settings'];
 }

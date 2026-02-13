@@ -52,7 +52,7 @@ try {
     links: [],
     focusNodeId: null,
     thinkingNodeId: null,
-    settings: { creativity: 0.7, maxWords: 3, minConnections: 3, autoExplore: false }
+    settings: { creativity: 0.7, maxWords: 3, minConnections: 3, autoExplore: false, activeAspect: "" }
   };
 }
 
@@ -90,8 +90,9 @@ async function brainstorm(label: string) {
   const startTime = performance.now();
   
   try {
-    const existingLabels = Object.values(state.nodes).map(n => n.label.toLowerCase());
-    const prompt = `Generate 3-5 creative and diverse associations for: "${label}". Return as JSON array of strings. Avoid: ${existingLabels.slice(0, 30).join(', ')}.`;
+    const aspectPrompt = state.settings.activeAspect ? `Consider the following context aspect: "${state.settings.activeAspect}". ` : "";
+    const forbiddenLabels = Object.values(state.nodes).filter(n => n.status === 'forbidden').map(n => n.label.toLowerCase());
+    const prompt = `${aspectPrompt}Generate 3-5 creative and diverse associations for: "${label}". Return as JSON array of strings. Do not use these forbidden words: ${forbiddenLabels.join(', ')}.` ;
     
     console.log(`[AI] >>> DREAMING for: "${label}"`);
     const response = await session.prompt(prompt, { maxTokens: 120, temperature: state.settings.creativity });
