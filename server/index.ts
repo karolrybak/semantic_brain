@@ -1,6 +1,19 @@
 import { serve } from "bun";
 import type { GraphState } from "../src/types/graph";
 import { join } from "path";
+import { Schemas, getJsonSchema } from "./ai/schemas";
+
+// Handle CLI Flags
+const args = process.argv.slice(2);
+if (args.includes("-d") || args.includes("--dump-schema")) {
+  const schemas = {
+    AspectList: getJsonSchema(Schemas.AspectResponse),
+    Association: getJsonSchema(Schemas.ConnectionResponse),
+    Eval: getJsonSchema(Schemas.Node)
+  };
+  console.log(JSON.stringify(schemas, null, 2));
+  process.exit(0);
+}
 
 // Module imports
 import { loadConfig } from "./config";
@@ -15,7 +28,7 @@ import {
   createDefaultState,
   initializeLoadedState,
 } from "./state";
-import { initializeAI, AI_STATE } from "./ai";
+import { initializeAI, AI_STATE } from "./ai/index";
 import { startAutoExplore } from "./auto-explore";
 import {
   broadcast,

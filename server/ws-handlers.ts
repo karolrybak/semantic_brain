@@ -1,6 +1,6 @@
 import type { GraphState } from "../src/types/graph";
 import type { ServerConfig } from "./config";
-import { brainstorm, suggestAspects, evaluateAspects, AI_STATE } from "./ai";
+import { newConnections, describeConcept, describeNode, AI_STATE } from "./ai/index";
 import {
   addNodeToState,
   applyStatePatches,
@@ -10,6 +10,7 @@ import {
 } from "./state";
 import { triggerDebouncedSave } from "./persistence";
 import type { Operation } from "fast-json-patch";
+import { aiListToGraphPatch } from "./ai/response";
 
 export interface WSHandlerContext {
   state: GraphState;
@@ -36,6 +37,7 @@ export async function handleWSMessage(
   const { state, config, statePath, broadcast } = context;
   const data = message;
   console.log("[WS] Message received", data);
+  console.log(`AI State: ${AI_STATE.isAiBusy? "BUSY": "IDLE"}`);
   switch (data.type) {
     case "SET_FOCUS":
       applyStatePatches(state, [
@@ -121,7 +123,7 @@ export async function handleWSMessage(
     case "EXPLORE_EXISTING": {
       if (AI_STATE.isAiBusy) return;
       const targetNode = state.nodes[data.nodeId];
-      if (!targetNode) return;
+      if (!targetNode) {console.log("no target node"); return} 
 
       // Set thinking state locally and notify clients
       applyStatePatches(state, [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }]);
@@ -132,21 +134,22 @@ export async function handleWSMessage(
         .filter(n => n.status === "forbidden")
         .map(n => n.label.toLowerCase());
 
-      const suggestions = await brainstorm(
-        targetNode.label,
-        forbiddenLabels,
-        state.settings.definedAspects,
-        existingLabels,
-        data.type === "EXPLORE_NEW" ? "new" : "existing",
-        state.settings.creativity,
+      const suggestions = await newConnections({
+        label: targetNode.label,
+        focus: "varied relation types",
+        forbiddenNodes: forbiddenLabels,
+        aspectList: state.settings.definedAspects,
+        existingNodes: existingLabels,
+        mode: data.type === "EXPLORE_NEW" ? "new" : "existing",
+        creativity: state.settings.creativity,
         config
-      );
+      });
 
       // Clear thinking state
       applyStatePatches(state, [{ op: "replace", path: "/thinkingNodeId", value: null }]);
       broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: null }] });
 
-      if (suggestions && suggestions.length > 0) {
+      if (suggestions && suggestions.connections.length > 0) {
         const ops = addAIGeneratedNodes(state, targetNode.id, suggestions);
         applyStatePatches(state, ops);
         broadcast({ type: "PATCH", patches: ops });
@@ -163,24 +166,23 @@ export async function handleWSMessage(
       console.log(`[Explore] Updating aspects for: ${targetNode.label}`);
       broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }] });
 
-      const aspects = await evaluateAspects(
+      const node = await describeNode(
         targetNode.label,
         state.settings.definedAspects,
         config
       );
 
-      if (Object.keys(aspects).length > 0) {
-        console.log(`[Explore] New aspects for ${targetNode.label}:`, aspects);
+      if (node) {
+        console.log(`[Explore] New description for ${targetNode.label}:`, node);
         
         const patches: Operation[] = [
           { op: "replace", path: "/thinkingNodeId", value: null },
-          { op: "replace", path: `/nodes/${targetNode.id}/aspects`, value: aspects }
+          { op: "replace", path: `/nodes/${targetNode.id}`, value: node }
         ];
 
         applyStatePatches(state, patches);
         broadcast({ type: "PATCH", patches });
         
-        // Explicitly trigger a re-save to ensure persistence
         triggerDebouncedSave(statePath, state);
       } else {
         console.warn(`[Explore] AI returned empty aspects for ${targetNode.label}`);
@@ -199,7 +201,7 @@ export function createWSMessageHandler(context: WSHandlerContext) {
 
       // Special case for SUGGEST_ASPECTS that needs direct ws response
       if (data.type === "SUGGEST_ASPECTS") {
-        const suggested = await suggestAspects(data.label, context.config);
+        const suggested = await describeConcept(data.label, context.config);
         ws.send(
           JSON.stringify({
             type: "ASPECT_SUGGESTIONS",

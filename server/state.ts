@@ -1,5 +1,6 @@
 import { applyPatch, type Operation } from "fast-json-patch";
 import type { GraphState } from "../src/types/graph";
+import type { Schemas } from "./ai/schemas";
 
 export function createDefaultState(): GraphState {
   return {
@@ -41,7 +42,7 @@ export function addNodeToState(
   label: string,
   parentId?: string
 ): { nodeId: string; ops: Operation[] } {
-  const id = `node-${Date.now()}`;
+  const id = Math.random().toString(36).slice(2, 9);
   const isFirst = Object.keys(state.nodes).length === 0;
   const newNode = {
     id,
@@ -83,18 +84,24 @@ export function clearStateGraph(state: GraphState): void {
   state.focusNodeId = null;
   state.thinkingNodeId = null;
 }
+export function shortRandomHash(length: 6 | 8 = 8): string {
+  const bytesLen = Math.ceil((length * 3) / 4);
+  const bytes = new Uint8Array(bytesLen);
+  crypto.getRandomValues(bytes);
 
+  return Buffer.from(bytes).toString("base64url").slice(0, length);
+}
 export function addAIGeneratedNodes(
   state: GraphState,
   targetNodeId: string,
-  suggestions: any[]
+  suggestions: typeof Schemas.ConnectionResponse.infer
 ): Operation[] {
   const ops: Operation[] = [];
   const existingNodes = Object.values(state.nodes);
 
-  suggestions.forEach((s: any) => {
+  suggestions.connections.forEach((s) => {
     // Normalize label for comparison
-    const normalizedLabel = s.label.trim().toLowerCase();
+    const normalizedLabel = s.target.trim().toLowerCase();
     const existing = existingNodes.find(n => n.label.trim().toLowerCase() === normalizedLabel);
 
     if (existing) {
@@ -118,17 +125,17 @@ export function addAIGeneratedNodes(
       }
     } else {
       // Add as new proposed node
-      const id = `ai-node-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+      const id = shortRandomHash();
       ops.push({
         op: "add",
         path: `/nodes/${id}`,
         value: {
           id,
-          label: s.label,
+          label: s.target,
           status: "proposed",
           type: "concept",
           val: 2,
-          aspects: s.aspects || {},
+          aspects: {},
         },
       });
       ops.push({

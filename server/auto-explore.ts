@@ -1,5 +1,5 @@
 import type { GraphState } from "../src/types/graph";
-import { AI_STATE, brainstorm } from "./ai";
+import { AI_STATE, newConnections } from "./ai/index";
 import { addAIGeneratedNodes, applyStatePatches } from "./state";
 import type { ServerConfig } from "./config";
 
@@ -71,17 +71,20 @@ async function runAutoExploreIteration(context: AutoExploreContext): Promise<voi
   broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }] });
 
   // Generate suggestions
+  const existingLabels = Object.values(state.nodes).map(n => n.label);
   const forbiddenLabels = Object.values(state.nodes)
     .filter(n => n.status === "forbidden")
     .map(n => n.label.toLowerCase());
 
-  const suggestions = await brainstorm(
-    targetNode.label,
-    forbiddenLabels,
-    state.settings.definedAspects,
-    state.settings.creativity,
+  const suggestions = await newConnections({
+    label: targetNode.label,
+    forbiddenNodes: forbiddenLabels,
+    aspectList: state.settings.definedAspects,
+    existingNodes: existingLabels,
+    mode: 'new',
+    creativity: state.settings.creativity,
     config
-  );
+  });
 
   // Clear thinking state
   applyStatePatches(state, [

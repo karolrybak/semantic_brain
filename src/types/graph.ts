@@ -7,6 +7,7 @@ export interface GraphNode {
   type: 'concept' | 'root';
   val: number;
   aspects: Record<string, number>;
+  description?: string
   group?: number;
   metadata?: {
     reason?: string;
@@ -31,7 +32,6 @@ export interface GraphLink {
   target: string;
   type: 'ai' | 'user' | 'bridge';
   relationType?: string;
-  explanation?: string;
   id?: string;
 }
 

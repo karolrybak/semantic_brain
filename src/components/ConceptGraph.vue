@@ -8,6 +8,7 @@
 </template>
 
 <script setup lang="ts">
+/// <reference lib="dom" />
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import * as THREE from 'three'
 import ForceGraph3D from '3d-force-graph'
@@ -84,8 +85,8 @@ function getHealthColor(node: GraphNode) {
 }
 
 function initGraph() {
-  graph = ForceGraph3D()(container.value!)
-    .nodeLabel(null)
+  graph = new ForceGraph3D(container.value!)
+    .nodeLabel("")
     .onNodeClick((node: any) => emit('select', node))
     .onNodeDrag((node: any) => draggedNode.value = node)
     .onNodeDragEnd((node: any) => {
@@ -194,7 +195,7 @@ function updateGraph(data: GraphData) {
   const nodes = data.nodes.map(n => {
     const existing = existingNodes.get(n.id);
     if (existing) {
-      const { x, y, z, fx, fy, fz, vx, vy, vz, __threeObj, neighbors, links, ...serializable } = n;
+      const { x, y, z, fx, fy, fz, __threeObj, neighbors, links, ...serializable } = n;
       Object.assign(existing, serializable);
       return existing;
     }

@@ -148,7 +148,7 @@ const outgoingLinks = computed(() => {
     return props.data.links
         .filter(l => l.source === props.selectedNode!.id)
         .map(l => ({ node: props.data.nodes.find(n => n.id === l.target), type: l.relationType }))
-        .filter((n): n is { node: GraphNode, type?: string } => !!n.node)
+        .filter((n): n is { node: GraphNode, type: string } => !!n.node)
 })
 
 const incomingLinks = computed(() => {
@@ -156,6 +156,6 @@ const incomingLinks = computed(() => {
     return props.data.links
         .filter(l => l.target === props.selectedNode!.id)
         .map(l => ({ node: props.data.nodes.find(n => n.id === l.source), type: l.relationType }))
-        .filter((n): n is { node: GraphNode, type?: string } => !!n.node)
+        .filter((n): n is { node: GraphNode, type: string } => !!n.node)
 })
 </script>

@@ -1,0 +1,13 @@
+{
+  "name": "cloned",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "vue-tsc": "^3.2.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

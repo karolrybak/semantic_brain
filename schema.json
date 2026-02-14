@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "aspects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "const": "aspect"
+          }
+        },
+        "required": [
+          "label",
+          "type"
+        ]
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "aspects": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "relation": {
+            "enum": [
+              "causes",
+              "conflicts_with",
+              "depends_on",
+              "enables",
+              "example_of",
+              "opportunity_for",
+              "part_of",
+              "risk_of"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "type": {
+            "const": "connection"
+          }
+        },
+        "required": [
+          "aspects",
+          "relation",
+          "source",
+          "target",
+          "type"
+        ]
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "aspects": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "const": "node"
+          }
+        },
+        "required": [
+          "aspects",
+          "label",
+          "type"
+        ]
+      }
+    }
+  }
+}
