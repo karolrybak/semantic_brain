@@ -23,16 +23,19 @@ const emit = defineEmits<{ (e: 'select', node: GraphNode | null): void }>()
 // --- Physics & Visual Constants ---
 const PHYSICS = {
   TRANSITION_SPEED: 0.04,
-  LINK_DISTANCE: 45,
-  LINK_STRENGTH_BASE: 0.4,
+  LINK_DISTANCE: 5,
+  LINK_STRENGTH_BASE: 0.5,
+  ASPECT_FILTER_LINK_MULT: 0.1, // Reduction when filtering
   CHARGE_STRENGTH: -120,
-  CHARGE_DYNAMICS: { base: 1.6, multiplier: 1.1 },
+  ASPECT_FILTER_CHARGE_MULT: 0.4, 
+  CHARGE_DYNAMICS: { base: 1.2, multiplier: 0.4 },
   CENTER_GRAVITY_K: 0.08,
-  CENTER_GRAVITY_SCORE_BIAS: 0.4,
-  SIMILARITY_K: 0.02,
+  CENTER_GRAVITY_SCORE_BIAS: 1,
+  SIMILARITY_K: 5,
   SIMILARITY_THRESHOLD: 0.85,
-  SIMILARITY_FORCE_MULTIPLIER: 0.05,
-  VELOCITY_DECAY: 0.4,
+  SIMILARITY_FORCE_MULTIPLIER: 1,
+  VELOCITY_DECAY: 0.2,
+  
   NODE_SIZE_RANGE: { min: 1, max: 15 }, // Range for node value (radius factor)
   NODE_REL_SIZE: 1.5, // Base relative size multiplier
   FOCUS_DISTANCE: 80,
@@ -123,7 +126,7 @@ function initGraph() {
   const g = new ForceGraph3D(container.value)
     .backgroundColor('#19191d')
     .nodeColor(node => getHealthColor(node as GraphNode))
-    .nodeVal(node => {
+    .nodeVal(node => { 
       const score = nodePhysicsData.get((node as any).id)?.currentScore || 0.5;
       return PHYSICS.NODE_SIZE_RANGE.min + (PHYSICS.NODE_SIZE_RANGE.max - PHYSICS.NODE_SIZE_RANGE.min) * score;
     })
@@ -145,13 +148,17 @@ function initGraph() {
   g.d3Force('link')?.distance(PHYSICS.LINK_DISTANCE).strength(link => {
     const s = nodePhysicsData.get((link.source as any).id)?.currentScore || 0.5;
     const t = nodePhysicsData.get((link.target as any).id)?.currentScore || 0.5;
-    return PHYSICS.LINK_STRENGTH_BASE * ((s + t) / 2);
+    const isFiltering = props.settings.activeAspects.length > 0;
+    const mult = isFiltering ? PHYSICS.ASPECT_FILTER_LINK_MULT : 1.0;
+    return PHYSICS.LINK_STRENGTH_BASE * ((s + t) / 2) * mult;
   });
 
   // Force: Repulsion (Charge)
   g.d3Force('charge')?.strength(node => {
     const score = nodePhysicsData.get((node as any).id)?.currentScore || 0.5;
-    return PHYSICS.CHARGE_STRENGTH * (PHYSICS.CHARGE_DYNAMICS.base - score * PHYSICS.CHARGE_DYNAMICS.multiplier);
+    const isFiltering = props.settings.activeAspects.length > 0;
+    const mult = isFiltering ? PHYSICS.ASPECT_FILTER_CHARGE_MULT : 1.0;
+    return PHYSICS.CHARGE_STRENGTH * (PHYSICS.CHARGE_DYNAMICS.base - score * PHYSICS.CHARGE_DYNAMICS.multiplier) * mult;
   });
 
   // Force: Aspect-Based Gravity
@@ -200,6 +207,12 @@ function initGraph() {
       // Refresh visual properties
       g.nodeColor(g.nodeColor());
       g.nodeVal(g.nodeVal());
+
+      // Force D3 to re-evaluate cached strengths for links and charge
+      const lForce: any = g.d3Force('link');
+      if (lForce) lForce.strength(lForce.strength());
+      const cForce: any = g.d3Force('charge');
+      if (cForce) cForce.strength(cForce.strength());
     }
   });
 
