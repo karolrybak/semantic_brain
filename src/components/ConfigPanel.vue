@@ -14,12 +14,16 @@
 
     <h3 class="font-bold text-zinc-400 uppercase tracking-wider mt-2 pt-3 border-t border-zinc-800">Visuals</h3>
     <div class="space-y-1">
-      <label class="flex justify-between text-zinc-500">Node Scale <span>{{ config.nodeRelSize }}</span></label>
-      <input type="range" min="1" max="15" step="0.5" v-model.number="config.nodeRelSize" class="w-full accent-blue-500" />
+      <label class="flex justify-between text-zinc-500">Link Opacity <span>{{ config.linkOpacity }}</span></label>
+      <input type="range" min="0" max="1" step="0.05" v-model.number="config.linkOpacity" class="w-full accent-blue-500" />
     </div>
     <div class="space-y-1">
-      <label class="flex justify-between text-zinc-500">Physics <span>{{ config.chargeStrength }}</span></label>
-      <input type="range" min="-500" max="500" step="10" v-model.number="config.chargeStrength" class="w-full accent-blue-500" />
+      <label class="flex justify-between text-zinc-500">Label Size <span>{{ config.labelSize }}</span></label>
+      <input type="range" min="0.1" max="3" step="0.1" v-model.number="config.labelSize" class="w-full accent-blue-500" />
+    </div>
+    <div class="space-y-1">
+      <label class="flex justify-between text-zinc-500">Label Distance <span>{{ config.labelVisibleDistance }}</span></label>
+      <input type="range" min="50" max="1000" step="10" v-model.number="config.labelVisibleDistance" class="w-full accent-blue-500" />
     </div>
 
     <div class="pt-2 border-t border-zinc-700/50 flex flex-col gap-2">

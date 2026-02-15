@@ -8,9 +8,9 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
-  server: {
-    hmr: false
-  },
+  // server: {
+  //   hmr: false
+  // },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

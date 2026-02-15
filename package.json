@@ -1,6 +1,6 @@
 {
   "name": "kodoksztalt-vite",
-  "version": "0.0.170",
+  "version": "0.0.184",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -24,6 +24,7 @@
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "three": "^0.172.0",
+    "three-spritetext": "^1.10.0",
     "vue": "^3.5.28"
   },
   "devDependencies": {

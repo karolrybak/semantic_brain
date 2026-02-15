@@ -77,11 +77,9 @@ async function startInteractiveShell() {
           case "2":
             const newNodes = await newConnections({
               label: targetNode.label,
-              focus: "variety",
               forbiddenNodes: [],
               aspectList: state!.settings.definedAspects,
               existingNodes: Object.values(state!.nodes).map(n => n.label),
-              mode: 'new',
               creativity: state!.settings.creativity,
               config
             });
@@ -90,11 +88,9 @@ async function startInteractiveShell() {
           case "3":
             const links = await newConnections({
               label: targetNode.label,
-              focus: "challenges or obstacles",
               forbiddenNodes: [],
               aspectList: state!.settings.definedAspects,
               existingNodes: Object.values(state!.nodes).map(n => n.label),
-              mode: 'existing',
               creativity: state!.settings.creativity,
               config
             });

@@ -1,6 +1,8 @@
+import type { NodeObject } from "3d-force-graph";
+
 export type NodeStatus = 'proposed' | 'accepted' | 'forbidden';
 
-export interface GraphNode {
+export interface GraphNode extends NodeObject {
   id: string;
   label: string;
   status: NodeStatus;
@@ -13,13 +15,6 @@ export interface GraphNode {
     reason?: string;
     timestamp: number;
   };
-  // Physics
-  x?: number;
-  y?: number;
-  z?: number;
-  fx?: number | null;
-  fy?: number | null;
-  fz?: number | null;
   isLocked?: boolean;
   // Computed properties (client-side)
   neighbors?: GraphNode[];
