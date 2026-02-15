@@ -17,7 +17,6 @@ export const useGraphConfigStore = defineStore(
 		const linkDirectionalParticleSpeed = ref(0.005);
 
 		// Labels
-		const labelVisibleDistance = ref(500);
 		const labelSize = ref(1);
 
 		// Forces
@@ -37,7 +36,6 @@ export const useGraphConfigStore = defineStore(
 			nodeRelSize.value = 4;
 			linkWidth.value = 0.5;
 			linkOpacity.value = 0.5;
-			labelVisibleDistance.value = 500;
 			labelSize.value = 1;
 			linkDirectionalParticles.value = 0;
 			chargeStrength.value = -20;
@@ -58,7 +56,6 @@ export const useGraphConfigStore = defineStore(
 			linkOpacity,
 			linkDirectionalParticles,
 			linkDirectionalParticleSpeed,
-			labelVisibleDistance,
 			labelSize,
 			chargeStrength,
 			distanceMax,

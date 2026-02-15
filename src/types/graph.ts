@@ -9,25 +9,30 @@ export interface GraphNode extends NodeObject {
   type: 'concept' | 'root';
   val: number;
   aspects: Record<string, number>;
-  description?: string
+  description?: string;
   group?: number;
   metadata?: {
     reason?: string;
     timestamp: number;
   };
   isLocked?: boolean;
-  // Computed properties (client-side)
-  neighbors?: GraphNode[];
-  links?: GraphLink[];
-  __threeObj?: any;
 }
 
 export interface GraphLink {
-  source: string;
-  target: string;
+  source: string | GraphNode;
+  target: string | GraphNode;
   type: 'ai' | 'user' | 'bridge';
   relationType?: string;
   id?: string;
+}
+
+export interface GraphSettings {
+  creativity: number;
+  maxWords: number;
+  minConnections: number;
+  autoExplore: boolean;
+  definedAspects: string[];
+  activeAspects: string[];
 }
 
 export interface GraphState {
@@ -35,18 +40,19 @@ export interface GraphState {
   links: GraphLink[];
   focusNodeId: string | null;
   thinkingNodeId: string | null;
-  settings: {
-    creativity: number;
-    maxWords: number;
-    minConnections: number;
-    autoExplore: boolean;
-    definedAspects: string[];
-    activeAspects: string[];
-  };
+  settings: GraphSettings;
 }
 
 export interface GraphData {
   nodes: GraphNode[];
   links: GraphLink[];
-  settings?: GraphState['settings'];
+  settings?: GraphSettings;
+}
+
+export type AiStatus = 'unloaded' | 'loading' | 'ready' | 'thinking' | 'error';
+
+export interface ServerPatch {
+  op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | 'test';
+  path: string;
+  value?: any;
 }
