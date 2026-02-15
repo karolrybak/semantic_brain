@@ -15,6 +15,12 @@ import ForceGraph3D from '3d-force-graph'
 import type { GraphData, GraphNode } from '../types/graph'
 import { useGraphConfigStore } from '../stores/graphConfig'
 
+const RELATION_TYPES = [
+  'enables', 'causes', 'conflicts_with', 'depends_on', 
+  'example_of', 'part_of', 'risk_of', 'opportunity_for', 
+  'similar_to', 'opposite_of'
+];
+
 const props = defineProps<{
   data: GraphData
   selectedNodeId?: string
@@ -30,66 +36,106 @@ let resizeObserver: ResizeObserver | null = null
 const draggedNode = ref<GraphNode | null>(null)
 let animationFrameId: number | null = null
 
+const textureCache = new Map<string, THREE.SpriteMaterial>();
+
+function precomputeTextures() {
+  RELATION_TYPES.forEach(type => {
+    const material = createTextMaterial(type, false);
+    textureCache.set(`link-${type}`, material);
+  });
+}
+
+function createTextMaterial(text: string, isLabel: boolean) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  if (!context) return new THREE.SpriteMaterial();
+
+  const fontSize = isLabel ? 64 : 40;
+  context.font = `bold ${fontSize}px Inter, Arial`;
+  const metrics = context.measureText(text);
+  const textWidth = metrics.width;
+  
+  canvas.width = textWidth + 40;
+  canvas.height = fontSize + 40;
+
+  context.fillStyle = 'rgba(0, 0, 0, 0.9)';
+  context.beginPath();
+  context.roundRect(0, 0, canvas.width, canvas.height, 8);
+  context.fill();
+
+  context.font = `bold ${fontSize}px Inter, Arial`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillStyle = isLabel ? '#ffffff' : '#999999';
+  context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  return new THREE.SpriteMaterial({ map: texture, depthTest: false, transparent: true });
+}
+
+function getSprite(text: string, isLabel: boolean) {
+  const key = isLabel ? `node-${text}` : `link-${text}`;
+  let material = textureCache.get(key);
+  
+  if (!material) {
+    material = createTextMaterial(text, isLabel);
+    textureCache.set(key, material);
+  }
+
+  const sprite = new THREE.Sprite(material);
+  const scaleFactor = isLabel ? 50 : 100;
+  const canvas = material.map?.image;
+  if (canvas) {
+    sprite.scale.set(canvas.width / scaleFactor, canvas.height / scaleFactor, 1);
+  }
+  return sprite;
+}
+
 onMounted(() => {
   if (container.value) {
-    initGraph()
-    if (props.data) updateGraph(props.data)
+    precomputeTextures();
+    initGraph();
+    if (props.data) updateGraph(props.data);
+    
     resizeObserver = new ResizeObserver(() => {
       if (graph && container.value) {
-        graph.width(container.value.clientWidth)
-        graph.height(container.value.clientHeight)
+        graph.width(container.value.clientWidth);
+        graph.height(container.value.clientHeight);
       }
-    })
-    resizeObserver.observe(container.value)
-    animate()
+    });
+    resizeObserver.observe(container.value);
+    animate();
   }
-})
-
-onBeforeUnmount(() => {
-  if (resizeObserver) resizeObserver.disconnect()
-  if (graph) graph._destructor()
-  if (animationFrameId) cancelAnimationFrame(animationFrameId)
-})
-
-watch(() => props.data, (newData) => {
-  if (graph) updateGraph(newData)
-}, { deep: true })
-
-watch(() => [props.selectedNodeId, props.thinkingNodeId], () => {
-    if (graph) {
-      setupGeometries();
-      graph.refresh();
-    }
 });
 
-watch(() => props.data.settings?.activeAspects, () => {
-    if (graph) {
-      updateNodeVisuals();
-      applyConfig();
-      // Simulation is NOT reheated here to maintain stability
-    }
+onBeforeUnmount(() => {
+  if (resizeObserver) resizeObserver.disconnect();
+  if (graph) graph._destructor();
+  if (animationFrameId) cancelAnimationFrame(animationFrameId);
+});
+
+watch(() => props.data, (newData) => {
+  if (graph) updateGraph(newData);
 }, { deep: true });
 
 watch(() => [props.selectedNodeId, props.thinkingNodeId], () => {
-    if (graph) {
-      setupGeometries();
-      graph.refresh();
-
-    }
+  // Purely visual change, no layout update needed
+  updateVisualStates();
 });
 
 watch(() => props.data.settings?.activeAspects, () => {
-    if (graph) {
-      applyConfig();
-      graph.refresh();
-    }
+  if (graph) {
+    // Aspects change visual representation and potentially drift forces
+    // but we don't call updateGraph to avoid simulation reset
+    updateVisualStates();
+    applyForces();
+  }
 }, { deep: true });
 
 function animate() {
   if (graph) {
     const { nodes } = graph.graphData();
     
-    // Thinking node animation
     if (props.thinkingNodeId) {
       const node = nodes.find((n: any) => n.id === props.thinkingNodeId);
       if (node && node.__threeObj) {
@@ -98,56 +144,53 @@ function animate() {
       }
     }
 
-    // Smoothly track selected node if it's moving (physics)
     if (props.selectedNodeId) {
       const selected = nodes.find((n: any) => n.id === props.selectedNodeId);
       if (selected && graph.controls()) {
-        // Continuously update the rotation target to follow the node
         graph.controls().target.lerp(new THREE.Vector3(selected.x, selected.y, selected.z), 0.1);
       }
     }
   }
-  animationFrameId = requestAnimationFrame(animate)
+  animationFrameId = requestAnimationFrame(animate);
+}
+
+function getHealthColor(node: GraphNode) {
+  if (node.status === 'forbidden') return '#450a0a';
+  if (props.thinkingNodeId === node.id) return '#22c55e';
+  const active = props.data.settings?.activeAspects || [];
+  const score = calculateNodeScore(node, active);
+  return '#' + getAspectColor(score).getHexString();
 }
 
 function calculateNodeScore(node: GraphNode, active: string[]) {
   if (active.length === 0) return 0.5;
-  if (!node.aspects || Object.keys(node.aspects).length === 0) return 0;
-
-  let sum = 0;
-  let count = 0;
+  if (!node.aspects) return 0;
+  let sum = 0, count = 0;
   active.forEach(a => {
-    if (node.aspects && node.aspects[a] !== undefined) {
-       sum += node.aspects[a];
-       count++;
-    }
+    if (node.aspects[a] !== undefined) { sum += node.aspects[a]; count++; }
   });
   return count > 0 ? sum / count : 0;
 }
 
 function getAspectColor(value: number) {
   const colors = [
-    { stop: 0.0, color: new THREE.Color('#4a4a4e') }, // Gray (0%)
-    { stop: 0.5, color: new THREE.Color('#3b82f6') }, // Blue (50%)
-    { stop: 0.75, color: new THREE.Color('#fbbf24') }, // Yellow (75%)
-    { stop: 1.0, color: new THREE.Color('#ef4444') }  // Red (100%)
+    { stop: 0.0, color: new THREE.Color('#4a4a4e') },
+    { stop: 0.5, color: new THREE.Color('#3b82f6') },
+    { stop: 0.75, color: new THREE.Color('#fbbf24') },
+    { stop: 1.0, color: new THREE.Color('#ef4444') }
   ];
-
   if (value <= colors[0].stop) return colors[0].color;
   if (value >= colors[colors.length - 1].stop) return colors[colors.length - 1].color;
-
   for (let i = 0; i < colors.length - 1; i++) {
-    const c1 = colors[i];
-    const c2 = colors[i + 1];
+    const c1 = colors[i], c2 = colors[i + 1];
     if (value >= c1.stop && value <= c2.stop) {
-      const alpha = (value - c1.stop) / (c2.stop - c1.stop);
-      return new THREE.Color().copy(c1.color).lerp(c2.color, alpha);
+      return new THREE.Color().copy(c1.color).lerp(c2.color, (value - c1.stop) / (c2.stop - c1.stop));
     }
   }
   return colors[0].color;
 }
 
-function updateNodeVisuals() {
+function updateVisualStates() {
   if (!graph) return;
   const { nodes } = graph.graphData();
   nodes.forEach((node: any) => {
@@ -155,19 +198,10 @@ function updateNodeVisuals() {
       const mesh = node.__threeObj.getObjectByName('node-mesh');
       if (mesh && mesh.material) {
         mesh.material.color.set(getHealthColor(node));
+        mesh.material.opacity = node.status === 'proposed' ? 0.4 : 0.9;
       }
     }
   });
-}
-
-function getHealthColor(node: GraphNode) {
-  if (node.status === 'forbidden') return '#450a0a';
-  if (props.thinkingNodeId === node.id) return '#22c55e';
-
-  const active = props.data.settings?.activeAspects || [];
-  const score = calculateNodeScore(node, active);
-
-  return '#' + getAspectColor(score).getHexString();
 }
 
 function initGraph() {
@@ -180,11 +214,44 @@ function initGraph() {
         else { node.fx = null; node.fy = null; node.fz = null }
         draggedNode.value = null
     })
+    .nodeThreeObject((node: any) => {
+        const group = new THREE.Group();
+        const size = (node.val || 2) * config.nodeRelSize;
+        let geometry;
+        if (node.type === 'root') geometry = new THREE.IcosahedronGeometry(size, 0);
+        else geometry = new THREE.SphereGeometry(size, 12, 12);
 
-  applyConfig()
-  setupGeometries()
+        const material = new THREE.MeshLambertMaterial({ 
+          color: getHealthColor(node), 
+          transparent: true, 
+          opacity: node.status === 'proposed' ? 0.4 : 0.9 
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.name = 'node-mesh';
+        group.add(mesh);
+
+        const label = getSprite(node.label || node.id, true);
+        label.position.y = size + 4;
+        label.name = 'node-label';
+        group.add(label);
+        return group;
+    })
+    .nodeThreeObjectExtend(false)
+    .linkThreeObjectExtend(true)
+    .linkThreeObject((link: any) => {
+        if (!link.relationType) return null;
+        return getSprite(link.relationType, false);
+    })
+    .linkPositionUpdate((sprite: any, { start, end }: any) => {
+        sprite.position.set(
+          start.x + (end.x - start.x) / 2,
+          start.y + (end.y - start.y) / 2,
+          start.z + (end.z - start.z) / 2
+        );
+    });
+
+  applyConfig();
 }
-
 
 function applyConfig() {
   graph
@@ -198,116 +265,96 @@ function applyConfig() {
     .showNavInfo(false)
     .d3VelocityDecay(0.3);
 
-  // Force set to stable -20 as requested
-  const baseCharge = -20;
+  applyForces();
+}
+
+function applyForces() {
+  if (!graph) return;
   const active = props.data.settings?.activeAspects || [];
+  const baseCharge = -30;
 
   graph.d3Force('charge')
     .strength((node: any) => {
-      if (active.length === 0) return baseCharge;
-      const score = calculateNodeScore(node, active);
-      const multiplier = 2.5 - (score * 1.5);
-      return baseCharge * multiplier;
+       if (active.length === 0) return baseCharge;
+       const score = calculateNodeScore(node, active);
+       // Dynamic repulsion: nodes relevant to active aspects push more significantly
+       return -  ( score * 2);
     })
     .distanceMax(500);
 }
 
-function createTextSprite(text: string, isLabel = true) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  if (!context) return new THREE.Object3D();
-
-  const fontSize = isLabel ? 63 : 48; // 1.5x for nodes (42->63), 2x for links (24->48)
-  context.font = `bold ${fontSize}px Inter, Arial`;
-  const metrics = context.measureText(text);
-  const textWidth = metrics.width;
-  
-  canvas.width = textWidth + 40;
-  canvas.height = fontSize + 40;
-
-  context.fillStyle = 'rgba(0, 0, 0, 0.9)'; // Black background
-  context.beginPath();
-  context.roundRect(0, 0, canvas.width, canvas.height, 8);
-  context.fill();
-
-  context.font = `bold ${fontSize}px Inter, Arial`;
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.fillStyle = isLabel ? '#ffffff' : '#888888';
-  context.fillText(text, canvas.width / 2, canvas.height / 2);
-
-  const texture = new THREE.CanvasTexture(canvas);
-  const material = new THREE.SpriteMaterial({ map: texture, depthTest: false, transparent: true });
-  const sprite = new THREE.Sprite(material);
-  const scaleFactor = isLabel ? 50 : 80;
-  sprite.scale.set(canvas.width / scaleFactor, canvas.height / scaleFactor, 1);
-  return sprite;
-}
-
-function setupGeometries() {
-  graph
-    .nodeThreeObject((node: any) => {
-        const group = new THREE.Group();
-        const size = (node.val || 2) * config.nodeRelSize;
-        let geometry;
-        if (props.thinkingNodeId === node.id) geometry = new THREE.OctahedronGeometry(size * 1.5, 0);
-        else if (node.type === 'root') geometry = new THREE.IcosahedronGeometry(size, 0);
-        else geometry = new THREE.SphereGeometry(size, 16, 16);
-
-        let opacity = node.status === 'proposed' ? 0.4 : 0.9;
-
-        const material = new THREE.MeshLambertMaterial({ color: getHealthColor(node), transparent: true, opacity });
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.name = 'node-mesh';
-        group.add(mesh);
-
-        const label = createTextSprite(node.label || node.id, true);
-        label.position.y = size + 2;
-        label.name = 'node-label';
-        group.add(label);
-        return group;
-    })
-    .nodeThreeObjectExtend(false)
-    .linkThreeObjectExtend(true)
-    .linkThreeObject((link: any) => {
-        if (!link.relationType) return null;
-        return createTextSprite(link.relationType, false);
-    })
-    .linkPositionUpdate((sprite: any, { start, end }: any) => {
-        const middlePos = Object.assign({}, ...['x', 'y', 'z'].map(c => ({
-          [c]: start[c] + (end[c] - start[c]) / 2
-        })));
-        Object.assign(sprite.position, middlePos);
-    });
-}
-
 function updateGraph(data: GraphData) {
-  const currentGraphData = graph.graphData();
-  const existingNodes = new Map(currentGraphData.nodes.map((n: any) => [n.id, n]));
-  const nodes = data.nodes.map(n => {
-    const existing = existingNodes.get(n.id);
-    if (existing) {
-      const { x, y, z, fx, fy, fz, __threeObj, neighbors, links, ...serializable } = n;
-      Object.assign(existing, serializable);
-      return existing;
+  const current = graph.graphData();
+  
+  // Identify truly new entities
+  const existingNodeIds = new Set(current.nodes.map((n: any) => n.id));
+  const newNodes = data.nodes.filter(n => !existingNodeIds.has(n.id));
+  
+  const existingLinkKeys = new Set(current.links.map((l: any) => 
+    `${typeof l.source === 'object' ? l.source.id : l.source}=>${typeof l.target === 'object' ? l.target.id : l.target}`
+  ));
+  const newLinks = data.links.filter(l => !existingLinkKeys.has(`${l.source}=>${l.target}`));
+
+  const topologyChanged = newNodes.length > 0 || newLinks.length > 0 || data.nodes.length < current.nodes.length;
+
+  if (topologyChanged) {
+    if (config.cooldownTicks === -1 && data.nodes.length >= current.nodes.length) {
+      // Prevent Reheat: Inject new data into existing arrays
+      newNodes.forEach(n => {
+        const node = { ...n };
+        // Try to position new node near its parent to reduce jitter
+        const parentLink = data.links.find(l => l.target === n.id);
+        const parent = parentLink ? current.nodes.find((cn: any) => cn.id === parentLink.source) : null;
+        if (parent) {
+          node.x = parent.x + (Math.random() - 0.5) * 20;
+          node.y = parent.y + (Math.random() - 0.5) * 20;
+          node.z = parent.z + (Math.random() - 0.5) * 20;
+        }
+        current.nodes.push(node);
+      });
+      
+      newLinks.forEach(l => {
+        current.links.push({ ...l });
+      });
+
+      // Handle deletions (if any node was removed despite our length check)
+      if (data.nodes.length < current.nodes.length) {
+        const dataNodeIds = new Set(data.nodes.map(n => n.id));
+        current.nodes = current.nodes.filter((n: any) => dataNodeIds.has(n.id));
+        const dataLinkKeys = new Set(data.links.map(l => `${l.source}=>${l.target}`));
+        current.links = current.links.filter((l: any) => 
+          dataLinkKeys.has(`${typeof l.source === 'object' ? l.source.id : l.source}=>${typeof l.target === 'object' ? l.target.id : l.target}`)
+        );
+      }
+
+      graph.refresh();
+    } else {
+      // Standard update (Triggers reheat)
+      graph.graphData({
+        nodes: data.nodes.map(n => ({ ...n })),
+        links: data.links.map(l => ({ ...l }))
+      });
     }
-    return { ...n };
+  }
+
+  // Always sync metadata for existing nodes (aspects, status, etc.)
+  const nodeMap = new Map(current.nodes.map((n: any) => [n.id, n]));
+  data.nodes.forEach(n => {
+    const existing = nodeMap.get(n.id);
+    if (existing) {
+      const { x, y, z, vx, vy, vz, fx, fy, fz, __threeObj, ...metadata } = n as any;
+      Object.assign(existing, metadata);
+    }
   });
-  graph.graphData({ nodes, links: data.links.map(l => ({ ...l })) });
+
+  updateVisualStates();
 }
 
 function focusNode(id: string) {
   const { nodes } = graph.graphData();
   const node = nodes.find((n: any) => n.id === id);
   if (node) {
-    const distance = 140;
-    // Smoothly transition camera position and look-at target
-    // Passing 'node' as the second argument automatically updates the OrbitControls target
-    graph.cameraPosition(
-      { x: node.x, y: node.y, z: node.z + distance }, 
-      node, 
-      1200
-    );
+    graph.cameraPosition({ x: node.x, y: node.y, z: node.z + 140 }, node, 1200);
   }
 }
 

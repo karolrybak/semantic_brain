@@ -4,7 +4,7 @@
     "medium": "/mnt/ssd/qwen2.5-7b-instruct-q4_k_m.gguf",
     "large": "/mnt/ssd/qwen2.5-14b-instruct-q4_k_m.gguf"
   },
-  "selectedSize": "large",
+  "selectedSize": "medium",
   "loadOnStartup": false,
   "logPrompts": true
 }

@@ -18,7 +18,7 @@ export const useGraphConfigStore = defineStore(
 		const labelVisibleDistance = ref(10000); // Effectivly infinite
 
 		// Forces
-		const chargeStrength = ref(-20);
+		const chargeStrength = ref(-10);
 		const distanceMax = ref(400);
 
 		// Engine & Advanced
@@ -27,7 +27,7 @@ export const useGraphConfigStore = defineStore(
 		const dagMode = ref<string>("null"); // 'null', 'td', 'bu', 'lr', 'rl', 'zout', 'zin', 'radialout', 'radialin'
 		const dagLevelDistance = ref(50);
 		const warmupTicks = ref(0);
-		const cooldownTicks = ref(15000); // -1 for infinite
+		const cooldownTicks = ref(-1); // -1 for infinite
 
 		function reset() {
 			backgroundColor.value = "#19191d";
@@ -35,13 +35,13 @@ export const useGraphConfigStore = defineStore(
 			linkWidth.value = 0.5;
 			linkOpacity.value = 0.5;
 			linkDirectionalParticles.value = 0;
-			chargeStrength.value = -20;
+			chargeStrength.value = -10;
 			forceEngine.value = "d3";
 			numDimensions.value = 3;
 			dagMode.value = "null";
 			dagLevelDistance.value = 50;
 			warmupTicks.value = 0;
-			cooldownTicks.value = 15000;
+			cooldownTicks.value = -1;
 		}
 
 		return {
