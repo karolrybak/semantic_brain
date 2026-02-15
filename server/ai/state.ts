@@ -12,20 +12,40 @@ export const AI_STATE: AIState = {
   isAiBusy: false,
 };
 
+export async function unloadAI(): Promise<void> {
+  console.log("[AI] Unloading model...");
+  AI_STATE.session = null;
+  AI_STATE.context = null;
+  AI_STATE.model = null;
+  AI_STATE.isAiBusy = false;
+}
+
 export async function initializeAI(
   config: ServerConfig,
-  onReady?: () => void
+  onReady?: (error?: string) => void
 ): Promise<void> {
-  const path = config.modelPath;
-  if (!path || !existsSync(path)) return;
+  const path = config.modelPaths[config.selectedSize];
+  
+  if (AI_STATE.model) {
+    await unloadAI();
+  }
+
+  if (!path || !existsSync(path)) {
+    const err = `Model file not found: ${path}`;
+    console.error(`[AI] ${err}`);
+    onReady?.(err);
+    return;
+  }
 
   try {
-    console.log("\n--- [AI INITIALIZATION] ---");
-    AI_STATE.llama = await getLlama({  
-      //  build: "forceRebuild"
-    });
+    console.log(`\n--- [AI INITIALIZATION] size: ${config.selectedSize} ---`);
+    if (!AI_STATE.llama) {
+      AI_STATE.llama = await getLlama();
+    }
+    
     AI_STATE.model = await AI_STATE.llama.loadModel({ modelPath: path });
     if (!AI_STATE.model) throw new Error("Failed to load model");
+    
     AI_STATE.context = await AI_STATE.model.createContext();
     AI_STATE.session = new LlamaChatSession({
       contextSequence: AI_STATE.context!.getSequence(),
@@ -34,7 +54,13 @@ export async function initializeAI(
 
     console.log("[AI] READY: Semantic Engine online.");
     onReady?.();
-  } catch (e) {
+  } catch (e: any) {
     console.error("[AI] Load error", e);
+    onReady?.(e.message || "Unknown error");
   }
+}
+
+export function getAIStatus(): 'unloaded' | 'ready' | 'loading' | 'error' {
+    if (AI_STATE.model && AI_STATE.session) return 'ready';
+    return 'unloaded';
 }

@@ -11,6 +11,12 @@ body {
 	overflow: hidden;
 	width: 100vw;
 	height: 100vh;
+	user-select: none;
+}
+
+button {
+	user-select: none;
+	cursor: pointer;
 }
 
 #app {

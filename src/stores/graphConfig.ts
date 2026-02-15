@@ -18,7 +18,7 @@ export const useGraphConfigStore = defineStore(
 		const labelVisibleDistance = ref(10000); // Effectivly infinite
 
 		// Forces
-		const chargeStrength = ref(-100);
+		const chargeStrength = ref(-20);
 		const distanceMax = ref(400);
 
 		// Engine & Advanced
@@ -35,7 +35,7 @@ export const useGraphConfigStore = defineStore(
 			linkWidth.value = 0.5;
 			linkOpacity.value = 0.5;
 			linkDirectionalParticles.value = 0;
-			chargeStrength.value = -100;
+			chargeStrength.value = -20;
 			forceEngine.value = "d3";
 			numDimensions.value = 3;
 			dagMode.value = "null";

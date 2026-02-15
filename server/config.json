@@ -1,4 +1,10 @@
 {
-  "modelPath": "/mnt/ssd/qwen2.5-7b-instruct-q4_k_m.gguf",
+  "modelPaths": {
+    "small": "/mnt/ssd/Qwen2.5-0.5B-Instruct-Q5_K_M.gguf",
+    "medium": "/mnt/ssd/qwen2.5-7b-instruct-q4_k_m.gguf",
+    "large": "/mnt/ssd/qwen2.5-14b-instruct-q4_k_m.gguf"
+  },
+  "selectedSize": "large",
+  "loadOnStartup": false,
   "logPrompts": true
 }

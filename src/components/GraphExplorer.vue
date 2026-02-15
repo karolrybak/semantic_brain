@@ -21,6 +21,9 @@
 
         <div class="mb-4">
           <h2 class="text-xl font-bold text-white break-words leading-tight">{{ selectedNode.label }}</h2>
+          <div v-if="selectedNode.description" class="mt-3 p-3 bg-zinc-950/50 rounded-lg border border-zinc-800/50">
+            <p class="text-[13px] text-zinc-300 leading-relaxed font-medium">{{ selectedNode.description }}</p>
+          </div>
           <div class="flex items-center gap-2 mt-1">
             <span class="text-[9px] uppercase tracking-widest text-zinc-500 font-mono">{{ selectedNode.status }} {{ selectedNode.type }}</span>
             <span v-if="thinkingNodeId === selectedNode.id" class="text-[9px] text-indigo-400 animate-pulse font-bold uppercase italic">AI is dreaming...</span>
@@ -47,7 +50,7 @@
             <!-- Connections -->
             <div v-if="incomingLinks.length > 0">
                 <h3 class="text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-2 border-b border-zinc-800 pb-1">Related By</h3>
-                <div class="flex flex-col gap-1">
+                <div class="flex flex-col gap-1 max-h-40 overflow-y-auto custom-scrollbar pr-1">
                     <div v-for="ref in incomingLinks" :key="ref.id" @click="$emit('select', ref.node)" class="cursor-pointer text-xs p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 truncate border border-transparent hover:border-zinc-700 flex items-center justify-between">
                         <div class="flex items-center gap-2 truncate">
                           <NodeIcon :type="ref.node.status === 'proposed' ? 'function' : 'file'" :color="getNodeColor(ref.node)" class="w-2.5 h-2.5" />
@@ -60,7 +63,7 @@
 
             <div v-if="outgoingLinks.length > 0">
                 <h3 class="text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-2 border-b border-zinc-800 pb-1">Leads To</h3>
-                <div class="flex flex-col gap-1">
+                <div class="flex flex-col gap-1 max-h-40 overflow-y-auto custom-scrollbar pr-1">
                     <div v-for="dep in outgoingLinks" :key="dep.id" @click="$emit('select', dep.node)" class="cursor-pointer text-xs p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 truncate border border-transparent hover:border-zinc-700 flex items-center justify-between">
                         <div class="flex items-center gap-2 truncate">
                           <NodeIcon :type="dep.node.status === 'proposed' ? 'function' : 'file'" :color="getNodeColor(dep.node)" class="w-2.5 h-2.5" />

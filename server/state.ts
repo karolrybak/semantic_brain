@@ -132,7 +132,7 @@ export function addAIGeneratedNodes(
         value: {
           id,
           label: s.target,
-          status: "proposed",
+          status: "accepted",
           type: "concept",
           val: 2,
           aspects: {},

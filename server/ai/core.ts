@@ -43,7 +43,12 @@ export async function executeAITask<T>(
     const data = typeof response === "string" ? JSON.parse(response) : response;
     const result = schema(data);
 
-    return result;
+    if (result.problems) {
+      console.error(`[AI] ${taskName} validation failed:`, result.problems.summary);
+      return null;
+    }
+
+    return result.data || result;
   } catch (e) {
     console.error(`[AI] ${taskName} execution failed:`, e);
     return null;

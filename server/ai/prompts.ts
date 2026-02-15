@@ -21,10 +21,10 @@ Concept: "${label}"
 /**
  * Brainstorm New Prompt
  */
-export const NEW_CONNECTIONS_PROMPT = (label: string, focus: string, existingStr: string, forbiddenStr: string) => `
+export const NEW_CONNECTIONS_PROMPT = (label: string, existingStr: string, forbiddenStr: string) => `
 ### INSTRUCTION
 Generate 3-5 NEW unique concepts related to "${label}" 
-Focus on "${focus}"
+Provide varied relation types and concepts.
 
 ### INPUT
 - Target Concept: "${label}"

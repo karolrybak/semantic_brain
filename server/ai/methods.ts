@@ -10,11 +10,9 @@ import type { ServerConfig } from "../config";
 
 export interface NewConnectionsParams {
   label: string;
-  focus: string;
   forbiddenNodes: string[];
   aspectList: string[];
   existingNodes: string[];
-  mode: 'new' | 'existing';
   creativity: number;
   config: ServerConfig;
 }
@@ -31,11 +29,11 @@ export async function describeConcept(label: string, config: ServerConfig): Prom
 }
 
 export async function newConnections(params: NewConnectionsParams): Promise<typeof Schemas.ConnectionResponse.infer> {
-  const { label, focus, forbiddenNodes, aspectList, existingNodes, creativity, config } = params;
+  const { label, forbiddenNodes, existingNodes, creativity, config } = params;
   const forbiddenStr = forbiddenNodes.join(", ");
   const existingStr = existingNodes.join(", ");
 
-  const prompt = newConnectionsPrompt(label, focus, existingStr, forbiddenStr)
+  const prompt = newConnectionsPrompt(label, existingStr, forbiddenStr);
 
   const result = await executeAITask<typeof Schemas.ConnectionResponse.infer>({
     prompt,
@@ -46,7 +44,30 @@ export async function newConnections(params: NewConnectionsParams): Promise<type
     maxTokens: 1000
   });
 
-  
+  return result || { connections: [] };
+}
+
+export interface FindConnectionsParams {
+  label: string;
+  existingNodes: string[];
+  config: ServerConfig;
+}
+
+export async function findExistingConnections(params: FindConnectionsParams): Promise<typeof Schemas.ConnectionResponse.infer> {
+  const { label, existingNodes, config } = params;
+  const existingStr = existingNodes.join(", ");
+
+  const prompt = FIND_CONNECTIONS_PROMPT(label, existingStr);
+
+  const result = await executeAITask<typeof Schemas.ConnectionResponse.infer>({
+    prompt,
+    schema: Schemas.ConnectionResponse,
+    config,
+    taskName: `FIND_EXISTING_CONNECTIONS`,
+    temperature: 0.3,
+    maxTokens: 1000
+  });
+
   return result || { connections: [] };
 }
 
@@ -57,7 +78,7 @@ export async function describeNode(
   label: string, 
   aspectList: string[], 
   config: ServerConfig
-): Promise<typeof Schemas.Node.infer | null> {
+): Promise<{ description: string; aspects: Record<string, number> } | null> {
   
   const result = await executeAITask<typeof Schemas.Node.infer>({
     prompt: EVALUATE_ASPECTS_PROMPT(label, aspectList.join(", ")),
@@ -67,5 +88,18 @@ export async function describeNode(
     temperature: 0.1,
     maxTokens: 500
   });
-  return result;
+
+  if (!result) return null;
+
+  const aspects: Record<string, number> = {};
+  if (Array.isArray(result.scores)) {
+    result.scores.forEach((s: any) => {
+      aspects[s.aspect] = s.rating;
+    });
+  }
+
+  return {
+    description: result.description,
+    aspects
+  };
 }

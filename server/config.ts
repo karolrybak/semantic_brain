@@ -1,10 +1,22 @@
 export interface ServerConfig {
-  modelPath: string;
+  modelPaths: {
+    small: string;
+    medium: string;
+    large: string;
+  };
+  selectedSize: 'small' | 'medium' | 'large';
+  loadOnStartup: boolean;
   logPrompts: boolean;
 }
 
 export const DEFAULT_CONFIG: ServerConfig = {
-  modelPath: "",
+  modelPaths: {
+    small: "",
+    medium: "",
+    large: "",
+  },
+  selectedSize: 'medium',
+  loadOnStartup: true,
   logPrompts: false,
 };
 
@@ -14,7 +26,7 @@ export async function loadConfig(configPath: string): Promise<ServerConfig> {
     if (await confFile.exists()) {
       const config = await confFile.json();
       console.log("[Config] Server config loaded.");
-      return config as ServerConfig;
+      return { ...DEFAULT_CONFIG, ...config };
     }
   } catch (e) {
     console.error("[Config] Failed to load config.json");

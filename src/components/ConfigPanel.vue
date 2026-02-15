@@ -19,7 +19,7 @@
     </div>
     <div class="space-y-1">
       <label class="flex justify-between text-zinc-500">Physics <span>{{ config.chargeStrength }}</span></label>
-      <input type="range" min="-500" max="-10" step="10" v-model.number="config.chargeStrength" class="w-full accent-blue-500" />
+      <input type="range" min="-500" max="500" step="10" v-model.number="config.chargeStrength" class="w-full accent-blue-500" />
     </div>
 
     <div class="pt-2 border-t border-zinc-700/50 flex flex-col gap-2">

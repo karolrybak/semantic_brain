@@ -45,7 +45,7 @@ export function aiListToGraphPatch(
     };
 
     ops.push({ op: "add", path: `/nodes/${nodeId}`, value: graphNode });
-    ops.push({ op: "add", path: `/links/`, value: graphLink });
+    ops.push({ op: "add", path: `/links/-`, value: graphLink });
   }
 
   return ops;

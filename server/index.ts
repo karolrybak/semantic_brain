@@ -28,7 +28,7 @@ import {
   createDefaultState,
   initializeLoadedState,
 } from "./state";
-import { initializeAI, AI_STATE } from "./ai/index";
+import { initializeAI, AI_STATE, getAIStatus } from "./ai/index";
 import { startAutoExplore } from "./auto-explore";
 import {
   broadcast,
@@ -55,26 +55,29 @@ if (loadedState) {
   console.log("[State] Created new graph state.");
 }
 
-// Initialize AI
-await initializeAI(serverConfig, () => {
-  broadcast(clients, { type: "AI_STATUS", status: "ready" });
-});
+// Initialize AI if startup flag is set
+if (serverConfig.loadOnStartup) {
+  initializeAI(serverConfig, () => {
+    broadcast(clients, { type: "AI_STATUS", status: "ready", size: serverConfig.selectedSize });
+  });
+}
 
 // Create handler context
 const handlerContext = {
   state,
   config: serverConfig,
+  configPath: CONFIG_PATH,
   statePath: STATE_PATH,
   broadcast: (payload: any) => broadcast(clients, payload),
 };
 
-// Auto-explore background loop disabled by default (can be triggered manually)
-// startAutoExplore({
-//   state,
-//   config: serverConfig,
-//   broadcast: (payload: any) => broadcast(clients, payload),
-//   triggerSave: () => triggerDebouncedSave(STATE_PATH, state),
-// });
+// Start the background auto-exploration agent
+startAutoExplore({
+  state,
+  config: serverConfig,
+  broadcast: (payload: any) => broadcast(clients, payload),
+  triggerSave: () => triggerDebouncedSave(STATE_PATH, state),
+});
 
 // Start HTTP/WebSocket server
 serve({
@@ -87,7 +90,10 @@ serve({
   websocket: {
     open(ws) {
       clients.add(ws);
+      // Initial sync for the client
       ws.send(JSON.stringify({ type: "FULL_STATE", state }));
+      ws.send(JSON.stringify({ type: "AI_CONFIG_UPDATED", config: serverConfig }));
+      ws.send(JSON.stringify({ type: "AI_STATUS", status: getAIStatus() }));
       console.log(`[WS] Client linked. Count: ${clients.size}`);
     },
     message: createWSMessageHandler(handlerContext),
