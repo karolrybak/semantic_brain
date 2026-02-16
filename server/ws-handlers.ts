@@ -140,6 +140,7 @@ export async function handleWSMessage(
           forbiddenNodes: forbiddenLabels,
           existingNodes: contextLabels,
           creativity: state.settings.creativity,
+          aspectList: state.settings.definedAspects,
           config
         });
       } else {

@@ -29,11 +29,12 @@ export async function describeConcept(label: string, config: ServerConfig): Prom
 }
 
 export async function newConnections(params: NewConnectionsParams): Promise<typeof Schemas.ConnectionResponse.infer> {
-  const { label, forbiddenNodes, existingNodes, creativity, config } = params;
+  const { label, forbiddenNodes, existingNodes, creativity, config, aspectList } = params;
   const forbiddenStr = forbiddenNodes.join(", ");
   const existingStr = existingNodes.join(", ");
+  
 
-  const prompt = newConnectionsPrompt(label, existingStr, forbiddenStr);
+  const prompt = newConnectionsPrompt(label, existingStr, aspectList.join(", "));
 
   const result = await executeAITask<typeof Schemas.ConnectionResponse.infer>({
     prompt,

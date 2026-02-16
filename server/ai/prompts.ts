@@ -21,15 +21,58 @@ Concept: "${label}"
 /**
  * Brainstorm New Prompt
  */
-export const NEW_CONNECTIONS_PROMPT = (label: string, existingStr: string, forbiddenStr: string) => `
-### INSTRUCTION
-Generate 3-5 NEW unique concepts related to "${label}" 
-Provide varied relation types and concepts.
+export const NEW_CONNECTIONS_PROMPT = (label: string, existingStr: string, aspects: string) => `
+### TASK
+Generate 3–5 NEW graph nodes related to the target concept.
+
+### STRICT RULES (very important)
+
+1) Avoid generic or corporate wording.
+   Forbidden examples:
+   - "increased efficiency"
+   - "broader access"
+   - "improved collaboration"
+   - "better productivity"
+   - "innovation", "growth", "opportunities"
+   - any abstract business/HR phrasing
+
+2) Every concept must be TANGIBLE and OBSERVABLE.
+   A good concept is something you could:
+   - see
+   - measure
+   - record
+   - physically experience
+   - or point to as a real-world phenomenon
+
+3) Prefer:
+   - specific behaviors
+   - concrete situations
+   - tools, rituals, environments
+   - real constraints
+   - side effects
+   - niche or unexpected angles
+
+4) Each concept MUST introduce a different perspective.
+   Use varied relation types such as:
+   - causes
+   - side-effects
+   - tools
+   - environments
+   - behaviors
+   - risks
+   - rituals
+   - artifacts
+   - measurable signals
+
+5) Avoid overlap with existing graph labels.
+
+6) Prefer short 1-3 words for concepts.
+   Avoid long sentences or paragraphs.
 
 ### INPUT
-- Target Concept: "${label}"
-- Existing Graph Labels: [${existingStr}]
-- Forbidden Labels: [${forbiddenStr}]
+Target Concept: "${label}"
+Existing Graph Labels: [${existingStr}]
+Focus Aspects: [${aspects}]
 `;
 
 /**

@@ -113,12 +113,15 @@ const showBrainPanel = ref(false)
 // Use the store's computed island calculation
 const graphIslands = computed(() => store.graphIslands);
 
-function handleOnboardingComplete(payload: { label: string, aspects: string[] }) {
+function handleOnboardingComplete(payload: { labels: string[], aspects: string[] }) {
   store.send({ 
     type: 'UPDATE_SETTINGS', 
     settings: { ...store.state.settings, definedAspects: payload.aspects, activeAspects: payload.aspects.slice(0, 3) } 
   });
-  store.send({ type: 'ADD_NODE', label: payload.label });
+  // Add all starting concepts
+  payload.labels.forEach(label => {
+    store.send({ type: 'ADD_NODE', label });
+  });
 }
 
 function onNodeSelect(node: GraphNode | null) {

@@ -24,20 +24,19 @@ const emit = defineEmits<{ (e: 'select', node: GraphNode | null): void }>()
 const PHYSICS = {
   TRANSITION_SPEED: 0.04,
   LINK_DISTANCE: 5,
-  LINK_STRENGTH_BASE: 0.5,
-  ASPECT_FILTER_LINK_MULT: 0.1, // Reduction when filtering
+  LINK_STRENGTH_BASE: 0.4,
+  ASPECT_FILTER_LINK_MULT: 0.5, 
   CHARGE_STRENGTH: -120,
-  ASPECT_FILTER_CHARGE_MULT: 0.4, 
-  CHARGE_DYNAMICS: { base: 1.2, multiplier: 0.4 },
+  ASPECT_FILTER_CHARGE_MULT: 0.5, 
+  CHARGE_DYNAMICS: { base: 1.6, multiplier: 1.1 },
   CENTER_GRAVITY_K: 0.08,
-  CENTER_GRAVITY_SCORE_BIAS: 1,
-  SIMILARITY_K: 5,
+  CENTER_GRAVITY_SCORE_BIAS: 1.4,
+  SIMILARITY_K: 0.4,
   SIMILARITY_THRESHOLD: 0.85,
-  SIMILARITY_FORCE_MULTIPLIER: 1,
-  VELOCITY_DECAY: 0.2,
-  
-  NODE_SIZE_RANGE: { min: 1, max: 15 }, // Range for node value (radius factor)
-  NODE_REL_SIZE: 1.5, // Base relative size multiplier
+  SIMILARITY_FORCE_MULTIPLIER: 0.5,
+  VELOCITY_DECAY: 0.4,
+  NODE_SIZE_RANGE: { min: 1, max: 15 },
+  NODE_REL_SIZE: 1.5,
   FOCUS_DISTANCE: 80,
   SCORE_THRESHOLDS: { irrelevant: 0.25, relevant: 0.85, center: 0.5, high: 0.7 }
 };
@@ -51,6 +50,13 @@ let updateTimer: number | null = null;
 // Physics and Animation state
 const nodePhysicsData = new Map<string, { currentScore: number, targetScore: number }>();
 let transitionAlpha = 1.0;
+let currentLinkMult = 1.0;
+let targetLinkMult = 1.0;
+let currentChargeMult = 1.0;
+let targetChargeMult = 1.0;
+
+// Clock for pulsing animations
+const clock = new THREE.Clock();
 
 function cosineSimilarity(a: Record<string, number>, b: Record<string, number>, aspects: string[]) {
   if (!aspects.length) return 0;
@@ -95,11 +101,18 @@ watch(() => props.settings.activeAspects, (active) => {
     data.targetScore = calculateNodeScore(n, active);
     nodePhysicsData.set(n.id, data);
   });
+  
+  const isFiltering = active.length > 0;
+  targetLinkMult = isFiltering ? PHYSICS.ASPECT_FILTER_LINK_MULT : 1.0;
+  targetChargeMult = isFiltering ? PHYSICS.ASPECT_FILTER_CHARGE_MULT : 1.0;
+
   transitionAlpha = 0;
-  if (graph.value) {
-    graph.value.d3ReheatSimulation();
-  }
+  if (graph.value) graph.value.d3ReheatSimulation();
 }, { deep: true, immediate: true });
+
+watch(() => props.thinkingNodeId, () => {
+  if (graph.value) graph.value.nodeThreeObject(graph.value.nodeThreeObject());
+});
 
 function updateData() {
   if (!graph.value) return;
@@ -120,22 +133,46 @@ function updateData() {
   });
 }
 
+function createThinkingHalo() {
+  const geometry = new THREE.SphereGeometry(6, 32, 32);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x10b981,
+    transparent: true,
+    opacity: 0.2,
+    side: THREE.BackSide
+  });
+  const halo = new THREE.Mesh(geometry, material);
+  halo.name = 'thinking-halo';
+  return halo;
+}
+
 function initGraph() {
   if (!container.value) return;
   
   const g = new ForceGraph3D(container.value)
     .backgroundColor('#19191d')
     .nodeColor(node => getHealthColor(node as GraphNode))
-    .nodeVal(node => { 
+    .nodeVal(node => {
       const score = nodePhysicsData.get((node as any).id)?.currentScore || 0.5;
       return PHYSICS.NODE_SIZE_RANGE.min + (PHYSICS.NODE_SIZE_RANGE.max - PHYSICS.NODE_SIZE_RANGE.min) * score;
     })
     .nodeThreeObject(node => {
-      const sprite = new SpriteText((node as GraphNode).label);
+      const gNode = node as GraphNode;
+      const group = new THREE.Group();
+
+      // Label
+      const sprite = new SpriteText(gNode.label);
       sprite.color = '#ffffff';
       sprite.textHeight = config.labelSize * 4;
-      sprite.center.y = -1.2; // Slightly more offset for larger nodes
-      return sprite;
+      sprite.center.y = -1.2;
+      group.add(sprite);
+
+      // Thinking Aura
+      if (props.thinkingNodeId === gNode.id) {
+        group.add(createThinkingHalo());
+      }
+
+      return group;
     })
     .nodeThreeObjectExtend(true)
     .linkColor(() => 'rgba(255,255,255,0.15)')
@@ -144,24 +181,21 @@ function initGraph() {
       performFocus(node);
     });
 
-  // Force: Link Strength
+  // Forces
   g.d3Force('link')?.distance(PHYSICS.LINK_DISTANCE).strength(link => {
     const s = nodePhysicsData.get((link.source as any).id)?.currentScore || 0.5;
     const t = nodePhysicsData.get((link.target as any).id)?.currentScore || 0.5;
     const isFiltering = props.settings.activeAspects.length > 0;
-    const mult = isFiltering ? PHYSICS.ASPECT_FILTER_LINK_MULT : 1.0;
+    const mult = isFiltering ? currentLinkMult : 1.0;
     return PHYSICS.LINK_STRENGTH_BASE * ((s + t) / 2) * mult;
   });
 
-  // Force: Repulsion (Charge)
   g.d3Force('charge')?.strength(node => {
     const score = nodePhysicsData.get((node as any).id)?.currentScore || 0.5;
-    const isFiltering = props.settings.activeAspects.length > 0;
-    const mult = isFiltering ? PHYSICS.ASPECT_FILTER_CHARGE_MULT : 1.0;
-    return PHYSICS.CHARGE_STRENGTH * (PHYSICS.CHARGE_DYNAMICS.base - score * PHYSICS.CHARGE_DYNAMICS.multiplier) * mult;
+    const strength = PHYSICS.CHARGE_STRENGTH * (PHYSICS.CHARGE_DYNAMICS.base - score * PHYSICS.CHARGE_DYNAMICS.multiplier);
+    return strength * currentChargeMult;
   });
 
-  // Force: Aspect-Based Gravity
   g.d3Force('aspectCenter', (alpha: number) => {
     const nodes = g.graphData().nodes;
     const k = PHYSICS.CENTER_GRAVITY_K * alpha;
@@ -173,7 +207,6 @@ function initGraph() {
     });
   });
 
-  // Force: Similarity Spring
   g.d3Force('similarity', (alpha: number) => {
     const nodes = g.graphData().nodes;
     if (nodes.length > 80) return; 
@@ -186,7 +219,6 @@ function initGraph() {
         const a = nodes[i] as any;
         const b = nodes[j] as any;
         const sim = cosineSimilarity(a.aspects || {}, b.aspects || {}, allAspects);
-        
         if (sim > PHYSICS.SIMILARITY_THRESHOLD) {
           const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
           const f = sim * k * PHYSICS.SIMILARITY_FORCE_MULTIPLIER;
@@ -197,23 +229,38 @@ function initGraph() {
     }
   });
 
-  // Transition Loop: Interpolate Scores and Refresh Visuals
+  // Animation & Transition Loop
   g.d3Force('transition', () => {
+    const elapsed = clock.getElapsedTime();
+    const lerpFactor = PHYSICS.TRANSITION_SPEED * 2.5;
+
     if (transitionAlpha < 1.0) {
       transitionAlpha = Math.min(1.0, transitionAlpha + PHYSICS.TRANSITION_SPEED);
       nodePhysicsData.forEach((data) => {
-        data.currentScore += (data.targetScore - data.currentScore) * PHYSICS.TRANSITION_SPEED * 2.5;
+        data.currentScore += (data.targetScore - data.currentScore) * lerpFactor;
       });
-      // Refresh visual properties
+      currentLinkMult += (targetLinkMult - currentLinkMult) * lerpFactor;
+      currentChargeMult += (targetChargeMult - currentChargeMult) * lerpFactor;
+      
       g.nodeColor(g.nodeColor());
       g.nodeVal(g.nodeVal());
-
-      // Force D3 to re-evaluate cached strengths for links and charge
       const lForce: any = g.d3Force('link');
       if (lForce) lForce.strength(lForce.strength());
       const cForce: any = g.d3Force('charge');
       if (cForce) cForce.strength(cForce.strength());
     }
+
+    // Animate Thinking Halos
+    g.graphData().nodes.forEach((node: any) => {
+      if (node.__threeObj && props.thinkingNodeId === node.id) {
+        const halo = node.__threeObj.getObjectByName('thinking-halo');
+        if (halo) {
+          const pulse = (Math.sin(elapsed * 4) + 1) / 2;
+          halo.scale.setScalar(1.2 + pulse * 0.4);
+          halo.material.opacity = 0.1 + pulse * 0.2;
+        }
+      }
+    });
   });
 
   g.nodeRelSize(PHYSICS.NODE_REL_SIZE)
@@ -229,7 +276,7 @@ function initGraph() {
 
 function getHealthColor(node: GraphNode) {
   if (node.status === 'forbidden') return '#450a0a';
-  if (props.thinkingNodeId === node.id) return '#22c55e';
+  if (props.thinkingNodeId === node.id) return '#10b981';
   const data = nodePhysicsData.get(node.id);
   const score = data ? data.currentScore : 0.5;
   return '#' + getAspectColor(score).getHexString();
@@ -240,23 +287,13 @@ function getAspectColor(value: number): THREE.Color {
   const cBlue = new THREE.Color('#3b82f6');
   const cYellow = new THREE.Color('#fbbf24');
   const cRed = new THREE.Color('#ef4444');
-
   if (props.settings.activeAspects.length === 0) return cBlue;
-
   const T = PHYSICS.SCORE_THRESHOLDS;
   if (value <= T.irrelevant) return cGray;
   if (value >= T.relevant) return cRed;
-  
-  if (value < T.center) {
-    const alpha = (value - T.irrelevant) / (T.center - T.irrelevant);
-    return cGray.clone().lerp(cBlue, alpha);
-  } else if (value < T.high) {
-    const alpha = (value - T.center) / (T.high - T.center);
-    return cBlue.clone().lerp(cYellow, alpha);
-  } else {
-    const alpha = (value - T.high) / (T.relevant - T.high);
-    return cYellow.clone().lerp(cRed, alpha);
-  }
+  if (value < T.center) return cGray.clone().lerp(cBlue, (value - T.irrelevant) / (T.center - T.irrelevant));
+  if (value < T.high) return cBlue.clone().lerp(cYellow, (value - T.center) / (T.high - T.center));
+  return cYellow.clone().lerp(cRed, (value - T.high) / (T.relevant - T.high));
 }
 
 function performFocus(node: any) {
@@ -296,7 +333,9 @@ onBeforeUnmount(() => {
 
 defineExpose({
   focusNode: (id: string) => {
-    const node = props.nodes.find(n => n.id === id);
+    if (!graph.value) return;
+    const simNodes = graph.value.graphData().nodes as any[];
+    const node = simNodes.find(n => n.id === id);
     if (node) performFocus(node);
   },
   reheat: () => graph.value?.d3ReheatSimulation()

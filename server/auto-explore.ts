@@ -18,7 +18,7 @@ export function startAutoExplore(context: AutoExploreContext): NodeJS.Timeout {
 
   autoExploreInterval = setInterval(async () => {
     await runAutoExploreIteration(context);
-  }, 5000);
+  }, 100);
 
   return autoExploreInterval;
 }
@@ -110,6 +110,7 @@ async function runAutoExploreIteration(context: AutoExploreContext): Promise<voi
       forbiddenNodes: forbiddenLabels,
       existingNodes: contextLabels,
       creativity: state.settings.creativity,
+      aspectList: state.settings.definedAspects,
       config
     });
 

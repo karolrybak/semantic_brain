@@ -1,109 +1,117 @@
 <template>
-  <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl shadow-2xl w-full max-w-lg">
-    <!-- Step 1: Concept -->
-    <div v-if="step === 1">
-      <h2 class="text-xl font-bold text-white mb-2 text-center">Start Exploration</h2>
-      <p class="text-zinc-500 text-sm mb-6 text-center">What concept do you want to explore with AI today?</p>
-      <input 
-        v-model="concept"
-        @keyup.enter="fetchAspects"
-        placeholder="e.g. Cyberpunk, Ancient Rome, Coffee..."
-        class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-all"
-        autofocus
-      />
-      <button 
-        @click="fetchAspects" 
-        :disabled="!concept || loading"
-        class="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all"
-      >
-        <span v-if="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-        {{ loading ? 'Analyzing...' : 'Continue' }}
-      </button>
-    </div>
+  <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl shadow-2xl w-full max-w-2xl">
+    <h2 class="text-2xl font-bold text-white mb-2 text-center">Initialize Workspace</h2>
+    <p class="text-zinc-500 text-sm mb-8 text-center">Define your starting concepts and the semantic dimensions to explore.</p>
 
-    <!-- Step 2: Aspects -->
-    <div v-else-if="step === 2">
-      <h2 class="text-xl font-bold text-white mb-1 text-center">Define Perspectives</h2>
-      <p class="text-zinc-500 text-xs mb-6 text-center">Select which semantic dimensions the AI should consider.</p>
-      
-      <div class="flex flex-wrap gap-2 mb-6 justify-center">
-        <div 
-          v-for="a in suggestions" 
-          :key="a"
-          @click="toggleAspect(a)"
-          class="px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider cursor-pointer transition-all border"
-          :class="selectedAspects.includes(a) 
-            ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg' 
-            : 'bg-zinc-800 border-zinc-700 text-zinc-500 hover:text-zinc-300'"
-        >
-          {{ a }}
+    <div class="grid grid-cols-2 gap-8 mb-8">
+      <!-- Concepts Column -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-[10px] font-bold uppercase tracking-widest text-indigo-400">Starting Concepts</h3>
+        <div class="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scrollbar pr-2">
+          <div 
+            v-for="(c, idx) in concepts" 
+            :key="idx" 
+            class="group flex items-center justify-between bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white animate-in fade-in slide-in-from-left-2"
+          >
+            <span class="truncate">{{ c }}</span>
+            <button @click="removeConcept(idx)" class="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-red-500 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
         </div>
-        
-        <div class="w-full flex mt-2">
+        <div class="relative">
           <input 
-            v-model="customAspect"
-            @keyup.enter="addCustomAspect"
-            placeholder="Add custom aspect..."
-            class="flex-1 bg-zinc-950 border border-zinc-800 border-r-0 rounded-l-lg px-3 py-2 text-xs text-white focus:outline-none"
+            v-model="newConcept"
+            @keyup.enter="addConcept"
+            placeholder="Add concept..."
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 transition-all"
           />
-          <button @click="addCustomAspect" class="bg-zinc-800 border border-zinc-800 border-l-0 rounded-r-lg px-3 text-zinc-400 hover:text-white">
-            +
+          <button @click="addConcept" class="absolute right-2 top-1.5 text-zinc-500 hover:text-indigo-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </button>
         </div>
       </div>
 
-      <div class="flex gap-3">
-        <button @click="step = 1" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 py-2.5 rounded-lg font-bold">Back</button>
-        <button @click="start" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white py-2.5 rounded-lg font-bold shadow-lg shadow-indigo-900/20">Begin Exploration</button>
+      <!-- Aspects Column -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Semantic Aspects</h3>
+        <div class="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scrollbar pr-2">
+          <div 
+            v-for="(a, idx) in aspects" 
+            :key="idx" 
+            class="group flex items-center justify-between bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white animate-in fade-in slide-in-from-right-2"
+          >
+            <span class="truncate italic">{{ a }}</span>
+            <button @click="removeAspect(idx)" class="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-red-500 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+        <div class="relative">
+          <input 
+            v-model="newAspect"
+            @keyup.enter="addAspect"
+            placeholder="Add aspect..."
+            class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-all"
+          />
+          <button @click="addAspect" class="absolute right-2 top-1.5 text-zinc-500 hover:text-emerald-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+        </div>
       </div>
     </div>
+
+    <button 
+      @click="start" 
+      :disabled="concepts.length === 0 || aspects.length === 0"
+      class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-900/20 transition-all transform active:scale-[0.98] uppercase tracking-widest text-xs"
+    >
+      Begin Exploration
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const props = defineProps<{ ws: WebSocket | null }>();
-const emit = defineEmits<{ (e: 'start', payload: { label: string, aspects: string[] }): void }>();
+const emit = defineEmits<{ (e: 'start', payload: { labels: string[], aspects: string[] }): void }>();
 
-const step = ref(1);
-const concept = ref('');
-const loading = ref(false);
-const suggestions = ref<string[]>([]);
-const selectedAspects = ref<string[]>(['Technical', 'Emotional']);
-const customAspect = ref('');
+const concepts = ref<string[]>(['Artificial Intelligence']);
+const aspects = ref<string[]>(['Technical Complexity', 'Social Impact', 'Ethics', 'Economic Value']);
 
-function fetchAspects() {
-  if (!concept.value || !props.ws) return;
-  loading.value = true;
-  props.ws.send(JSON.stringify({ type: 'SUGGEST_ASPECTS', label: concept.value }));
-  
-  const handler = (e: MessageEvent) => {
-    const data = JSON.parse(e.data);
-    if (data.type === 'ASPECT_SUGGESTIONS') {
-      suggestions.value = data.suggestions;
-      selectedAspects.value = data.suggestions.slice(0, 4);
-      loading.value = false;
-      step.value = 2;
-      props.ws?.removeEventListener('message', handler);
-    }
-  };
-  props.ws.addEventListener('message', handler);
+const newConcept = ref('');
+const newAspect = ref('');
+
+function addConcept() {
+  if (newConcept.value.trim()) {
+    concepts.value.push(newConcept.value.trim());
+    newConcept.value = '';
+  }
 }
 
-function toggleAspect(a: string) {
-  if (selectedAspects.value.includes(a)) selectedAspects.value = selectedAspects.value.filter(i => i !== a);
-  else selectedAspects.value.push(a);
+function removeConcept(idx: number) {
+  concepts.value.splice(idx, 1);
 }
 
-function addCustomAspect() {
-  if (!customAspect.value) return;
-  if (!suggestions.value.includes(customAspect.value)) suggestions.value.push(customAspect.value);
-  if (!selectedAspects.value.includes(customAspect.value)) selectedAspects.value.push(customAspect.value);
-  customAspect.value = '';
+function addAspect() {
+  if (newAspect.value.trim()) {
+    aspects.value.push(newAspect.value.trim());
+    newAspect.value = '';
+  }
+}
+
+function removeAspect(idx: number) {
+  aspects.value.splice(idx, 1);
 }
 
 function start() {
-  emit('start', { label: concept.value, aspects: selectedAspects.value });
+  emit('start', { labels: [...concepts.value], aspects: [...aspects.value] });
 }
 </script>
+
+<style scoped>
+.animate-in {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+</style>
