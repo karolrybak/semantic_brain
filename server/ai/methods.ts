@@ -1,12 +1,13 @@
 import { executeAITask } from "./core";
 import { Schemas } from "./schemas";
 import { 
-  ASPECT_SUGGESTION_PROMPT as DESCRIBE_PROMPT, 
-  NEW_CONNECTIONS_PROMPT as newConnectionsPrompt, 
+  DESCRIBE_PROMPT, 
+  NEW_CONNECTIONS_PROMPT, 
   FIND_CONNECTIONS_PROMPT, 
-  EVALUATE_ASPECTS_PROMPT 
+  CREATE_SVG_PROMPT
 } from "./prompts";
 import type { ServerConfig } from "../config";
+import type { GraphNode } from "../../src/types/graph";
 
 export interface NewConnectionsParams {
   label: string;
@@ -17,24 +18,11 @@ export interface NewConnectionsParams {
   config: ServerConfig;
 }
 
-export async function describeConcept(label: string, config: ServerConfig): Promise<string[]> {
-  const result = await executeAITask<string[]>({
-    prompt: DESCRIBE_PROMPT(label),
-    schema: Schemas.AspectResponse,
-    config,
-    taskName: "SUGGEST_ASPECTS",
-    maxTokens: 200
-  });
-  return result || [];
-}
-
 export async function newConnections(params: NewConnectionsParams): Promise<typeof Schemas.ConnectionResponse.infer> {
-  const { label, forbiddenNodes, existingNodes, creativity, config, aspectList } = params;
-  const forbiddenStr = forbiddenNodes.join(", ");
+  const { label, existingNodes, creativity, config, aspectList } = params;
   const existingStr = existingNodes.join(", ");
-  
 
-  const prompt = newConnectionsPrompt(label, existingStr, aspectList.join(", "));
+  const prompt = NEW_CONNECTIONS_PROMPT(label, existingStr, aspectList.join(", "));
 
   const result = await executeAITask<typeof Schemas.ConnectionResponse.infer>({
     prompt,
@@ -72,17 +60,14 @@ export async function findExistingConnections(params: FindConnectionsParams): Pr
   return result || { connections: [] };
 }
 
-
-
-
 export async function describeNode(
   label: string, 
   aspectList: string[], 
   config: ServerConfig
-): Promise<{ description: string; aspects: Record<string, number> } | null> {
+): Promise<{ description: string; aspects: Record<string, number>, color: string, shape: string } | null> {
   
   const result = await executeAITask<typeof Schemas.Node.infer>({
-    prompt: EVALUATE_ASPECTS_PROMPT(label, aspectList.join(", ")),
+    prompt: DESCRIBE_PROMPT(label, aspectList.join(", ")),
     schema: Schemas.Node,
     config,
     taskName: "EVALUATE_ASPECTS",
@@ -101,6 +86,20 @@ export async function describeNode(
 
   return {
     description: result.description,
-    aspects
+    aspects,
+    color: result.color || "white",
+    shape: result.shape || "generic"
   };
+}
+
+export async function generateSvg(concept: GraphNode, config: ServerConfig): Promise<string> {
+  const result = await executeAITask<string>({
+    prompt: CREATE_SVG_PROMPT(concept),
+    schema: Schemas.SvgResponse,
+    config,
+    taskName: "CREATE_SVG",
+    temperature: 0.1,
+    maxTokens: 1000
+  });
+  return result || "";
 }

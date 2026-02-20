@@ -37,7 +37,7 @@ import {
 
 console.log("\n--- [STARTING BRAIN SERVER S2] ---");
 
-const CONFIG_PATH = join(import.meta.dir, "config.json");
+const CONFIG_PATH = join(import.meta.dir, "./..", "config.json");
 const clients = new Set<any>();
 
 let state: GraphState;

@@ -1,6 +1,6 @@
 import type { GraphState } from "../src/types/graph";
 import type { ServerConfig } from "./config";
-import { newConnections, findExistingConnections, describeConcept, describeNode, AI_STATE, initializeAI, unloadAI } from "./ai/index";
+import { newConnections, findExistingConnections, describeNode, AI_STATE, initializeAI, unloadAI } from "./ai/index";
 import {
   addNodeToState,
   applyStatePatches,
@@ -190,7 +190,7 @@ export async function handleWSMessage(
         broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: null }] });
       }
       break;
-    }
+    }    
   }
 }
 
@@ -200,10 +200,6 @@ export function createWSMessageHandler(context: WSHandlerContext) {
       const data = JSON.parse(message.toString());
       await handleWSMessage(data, context);
 
-      if (data.type === "SUGGEST_ASPECTS") {
-        const suggested = await describeConcept(data.label, context.config);
-        ws.send(JSON.stringify({ type: "ASPECT_SUGGESTIONS", suggestions: suggested }));
-      }
     } catch (e) {
       console.error("[WS] Message error", e);
     }

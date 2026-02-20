@@ -22,6 +22,7 @@ export const DEFAULT_CONFIG: ServerConfig = {
 
 export async function loadConfig(configPath: string): Promise<ServerConfig> {
   try {
+    console.log("Loading config from", configPath);
     const confFile = Bun.file(configPath);
     if (await confFile.exists()) {
       const config = await confFile.json();

@@ -1,8 +1,9 @@
 import type { GraphState, GraphNode } from "../src/types/graph";
-import { AI_STATE, newConnections, describeNode } from "./ai/index";
+import { AI_STATE, newConnections, describeNode, generateSvg } from "./ai/index";
 import { addAIGeneratedNodes, applyStatePatches } from "./state";
 import type { Operation } from "fast-json-patch";
 import type { ServerConfig } from "./config";
+import { create } from "domain";
 
 export interface AutoExploreContext {
   state: GraphState;
@@ -37,6 +38,7 @@ async function runAutoExploreIteration(context: AutoExploreContext): Promise<voi
   if (AI_STATE.isAiBusy || !AI_STATE.model) return;
 
   const needsMetadata = (n: GraphNode) => n.status === "accepted" && (!n.description || !n.aspects || Object.keys(n.aspects).length === 0);
+  const needsSvg = (n: GraphNode) => n.status === "accepted" && n.description && !n.svg;
   const needsConnections = (n: GraphNode) => {
     if (n.status !== "accepted" && !state.settings.autoExplore) return false;
     const links = state.links.filter(l => l.source === n.id || l.target === n.id);
@@ -47,26 +49,18 @@ async function runAutoExploreIteration(context: AutoExploreContext): Promise<voi
   let targetNode = null;
 
   // PRIORITY 1: Metadata Enrichment (Clean up the graph first)
-  // Check focus first, then others
-  if (state.focusNodeId && state.nodes[state.focusNodeId] && needsMetadata(state.nodes[state.focusNodeId])) {
-    targetNode = state.nodes[state.focusNodeId];
-  } else {
-    targetNode = allNodes.find(needsMetadata);
-  }
+  targetNode = allNodes.find(needsMetadata);
 
-  // PRIORITY 2: New Connections (Only if all accepted nodes are described AND autoExplore is enabled)
-  if (!targetNode && state.settings.autoExplore) {
-    if (state.focusNodeId && state.nodes[state.focusNodeId] && needsConnections(state.nodes[state.focusNodeId])) {
-      targetNode = state.nodes[state.focusNodeId];
-    } else {
-      targetNode = allNodes.find(needsConnections);
-    }
-  }
+  // PRIORITY 2: SVG Generation
+  targetNode = allNodes.find(needsMetadata);
+
+  // PRIORITY 3: New Connections (Only if all accepted nodes are described AND autoExplore is enabled)
+  targetNode = allNodes.find(needsConnections);
 
   if (!targetNode) return;
 
   // Check if we should DESCRIBE or EXPLORE
-  const mode = needsMetadata(targetNode) ? 'DESCRIBE' : 'EXPLORE';
+  const mode = needsMetadata(targetNode) ? 'DESCRIBE' : needsSvg(targetNode) ? 'SVG' : 'EXPLORE';
 
   // Set thinking state
   applyStatePatches(state, [
@@ -85,12 +79,30 @@ async function runAutoExploreIteration(context: AutoExploreContext): Promise<voi
     if (nodeInfo) {
       patches.push({ op: "replace", path: `/nodes/${targetNode.id}/description`, value: nodeInfo.description });
       patches.push({ op: "replace", path: `/nodes/${targetNode.id}/aspects`, value: nodeInfo.aspects });
+      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/color`, value: nodeInfo.color });
+      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/shape`, value: nodeInfo.shape });
     }
 
     applyStatePatches(state, patches);
     broadcast({ type: "PATCH", patches });
     triggerSave();
-  } else {
+  } else if ( mode === 'SVG') {
+    const nodeInfo = await generateSvg(targetNode.label, state.settings.definedAspects, config);
+    
+    // Clear thinking state
+    const patches: Operation[] = [
+      { op: "replace", path: "/thinkingNodeId", value: null }
+    ];
+
+    if (nodeInfo) {
+      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/svg`, value: nodeInfo.svg });
+    }
+
+    applyStatePatches(state, patches);
+    broadcast({ type: "PATCH", patches });
+    triggerSave();
+  } else if (mode === 'EXPLORE') {
+    
     // Generate connections
     const neighborIds = state.links
       .filter(l => l.source === targetNode.id || l.target === targetNode.id)
