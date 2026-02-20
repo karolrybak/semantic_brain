@@ -1,5 +1,5 @@
 {
-  "projectRoot": "/home/kr/Documents/mindscapes",
+  "projectRoot": "/home/kr/Documents/semantic_brain",
   "server": {
     "host": "127.0.0.1",
     "port": 7401,
@@ -51,5 +51,5 @@
     "lint": "bun scripts/lint.ts",
     "format": "bun scripts/format.ts"
   },
-  "version": "0.0.198"
+  "version": "0.0.201"
 }

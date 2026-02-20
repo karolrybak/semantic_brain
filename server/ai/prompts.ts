@@ -5,7 +5,7 @@ import type { GraphNode } from "../../src/types/graph";
  * Global System Prompt
  */
 export const SYSTEM_PROMPT = `
-You are a knowledge graph generator.
+You are a ontologic knowledge graph generator.
 Your job is to expand a conceptual graph using specific nodes and relations.
 `;
 
@@ -21,12 +21,10 @@ Return as a simple JSON array of strings.
 Concept: "${label}"
 `;
 
-/**
- * Brainstorm New Prompt
- */
-export const NEW_CONNECTIONS_PROMPT = (label: string, existingStr: string, aspects: string) => `
+
+const NEW_CONNECTIONS = `
 ### TASK
-Generate 3–5 NEW graph nodes related to the target concept.
+Generate 3–5 NEW ontologic concepts related to the target concept.
 
 ### STRICT RULES (very important)
 
@@ -34,8 +32,6 @@ Generate 3–5 NEW graph nodes related to the target concept.
    Forbidden examples:
    - "increased efficiency"
    - "broader access"
-   - "improved collaboration"
-   - "better productivity"
    - "innovation", "growth", "opportunities"
    - any abstract business/HR phrasing
 
@@ -47,18 +43,19 @@ Generate 3–5 NEW graph nodes related to the target concept.
    - physically experience
    - or point to as a real-world phenomenon
 
-3) Prefer:
-   - specific behaviors
-   - concrete situations
-   - tools, rituals, environments
-   - real constraints
-   - side effects
-   - niche or unexpected angles
+3) Avoid overlap with existing graph labels.
 
-5) Avoid overlap with existing graph labels.
-
-6) Prefer short 1-3 words for concepts.
+4) Prefer short 1-3 words for concepts.
    Avoid long sentences or paragraphs.
+`
+
+/**
+ * Brainstorm New Prompt
+ */
+export const NEW_CONNECTIONS_PROMPT = (label: string, existingStr: string, aspects: string) => `
+${NEW_CONNECTIONS}
+
+5) Provide variety of possible relation types
 
 ### INPUT
 Target Concept: "${label}"
@@ -66,12 +63,26 @@ Existing Graph Labels: [${existingStr}]
 Focus Aspects: [${aspects}]
 `;
 
+
+export const NEW_RELATIONS_LIMITED_PROMPT = (label: string, existingStr: string, aspects: string, relations: string[]) => `
+${NEW_CONNECTIONS}
+
+5) Provide only relations of types: [${relations.join(", ")}]
+
+### INPUT
+Target Concept: "${label}"
+Existing Graph Labels: [${existingStr}]
+Focus Aspects: [${aspects}]
+`
+
+
 /**
  * Brainstorm Existing Prompt
  */
 export const FIND_CONNECTIONS_PROMPT = (label: string, existingStr: string) => `
 ### INSTRUCTION
 Find logical links between "${label}" and the candidate concepts below.
+Only include direct relationships.
 
 ### INPUT
 - Target Concept: "${label}"
@@ -85,23 +96,9 @@ export const DESCRIBE_PROMPT = (label: string, aspectStr: string) => `
 ### INSTRUCTION
 Provide short 10-20 words description of the concept.
 Assign relevance scores (0.0 to 1.0) for each of specified aspects.
-If the concept is commonly associated with a color or shape, include it.
+Pick up to three emoji symbols to represent the concept, use as little as possible.
 
 ### INPUT
 - Concept: "${label}"
 - Aspects: [${aspectStr}]
-`;
-
-export const CREATE_SVG_PROMPT = (concept: GraphNode) => `
-
-### INSTRUCTION
-Create a simple symbolic SVG icon for the concept below.
-Size of the svg should be 32x32.
-Use simple shapes and colors. If you're unable to do this, return an empty string.
-
-### INPUT
-Concept: ${concept.label}
-Color: ${concept.color}
-Shape: ${concept.shape}
-
 `;

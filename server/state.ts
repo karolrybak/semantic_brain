@@ -41,41 +41,41 @@ export function addNodeToState(
   state: GraphState,
   label: string,
   parentId?: string
-): { nodeId: string; ops: Operation[] } {
-  const id = Math.random().toString(36).slice(2, 9);
+): string {
+  const id = shortRandomHash();
   const isFirst = Object.keys(state.nodes).length === 0;
-  const newNode = {
+  
+  state.nodes[id] = {
     id,
     label,
-    status: "accepted" as const,
-    type: isFirst ? ("root" as const) : ("concept" as const),
+    status: "accepted",
+    type: isFirst ? "root" : "concept",
     val: isFirst ? 5 : 3,
-    aspects: {} as Record<string, number>,
+    aspects: {},
   };
 
-  const ops: Operation[] = [{ op: "add", path: `/nodes/${id}`, value: newNode }];
   if (parentId) {
-    ops.push({
-      op: "add",
-      path: "/links/-",
-      value: { source: parentId, target: id, type: "user" },
+    state.links.push({
+      source: parentId,
+      target: id,
+      type: "user"
     });
   }
+  
   if (isFirst) {
-    ops.push({ op: "replace", path: "/focusNodeId", value: id });
+    state.focusNodeId = id;
   }
 
-  return { nodeId: id, ops };
+  return id;
 }
 
-export function deleteNodeFromState(state: GraphState, nodeId: string): Operation[] {
-  const remainingLinks = state.links.filter(
+export function deleteNodeFromState(state: GraphState, nodeId: string): void {
+  delete state.nodes[nodeId];
+  state.links = state.links.filter(
     l => l.source !== nodeId && l.target !== nodeId
   );
-  return [
-    { op: "remove", path: `/nodes/${nodeId}` },
-    { op: "replace", path: "/links", value: remainingLinks },
-  ];
+  if (state.focusNodeId === nodeId) state.focusNodeId = null;
+  if (state.thinkingNodeId === nodeId) state.thinkingNodeId = null;
 }
 
 export function clearStateGraph(state: GraphState): void {
@@ -95,60 +95,43 @@ export function addAIGeneratedNodes(
   state: GraphState,
   targetNodeId: string,
   suggestions: typeof Schemas.ConnectionResponse.infer
-): Operation[] {
-  const ops: Operation[] = [];
+): void {
   const existingNodes = Object.values(state.nodes);
 
   suggestions.connections.forEach((s) => {
-    // Normalize label for comparison
     const normalizedLabel = s.target.trim().toLowerCase();
     const existing = existingNodes.find(n => n.label.trim().toLowerCase() === normalizedLabel);
 
     if (existing) {
-      // Check if link already exists
       const linkExists = state.links.some(l => 
         (l.source === targetNodeId && l.target === existing.id) ||
         (l.source === existing.id && l.target === targetNodeId)
       );
       
       if (!linkExists) {
-        ops.push({
-          op: "add",
-          path: "/links/-",
-          value: {
-            source: targetNodeId,
-            target: existing.id,
-            type: "bridge",
-            relationType: s.relation,
-          },
+        state.links.push({
+          source: targetNodeId,
+          target: existing.id,
+          type: "bridge",
+          relationType: s.relation,
         });
       }
     } else {
-      // Add as new proposed node
       const id = shortRandomHash();
-      ops.push({
-        op: "add",
-        path: `/nodes/${id}`,
-        value: {
-          id,
-          label: s.target,
-          status: "accepted",
-          type: "concept",
-          val: 2,
-          aspects: {},
-        },
-      });
-      ops.push({
-        op: "add",
-        path: "/links/-",
-        value: {
-          source: targetNodeId,
-          target: id,
-          type: "ai",
-          relationType: s.relation,
-        },
+      state.nodes[id] = {
+        id,
+        label: s.target,
+        status: "accepted",
+        type: "concept",
+        val: 2,
+        aspects: {},
+      };
+      state.links.push({
+        source: targetNodeId,
+        target: id,
+        type: "ai",
+        relationType: s.relation,
       });
     }
   });
-  return ops;
 }

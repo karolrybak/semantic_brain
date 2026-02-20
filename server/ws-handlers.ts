@@ -3,13 +3,10 @@ import type { ServerConfig } from "./config";
 import { newConnections, findExistingConnections, describeNode, AI_STATE, initializeAI, unloadAI } from "./ai/index";
 import {
   addNodeToState,
-  applyStatePatches,
   deleteNodeFromState,
   clearStateGraph,
   addAIGeneratedNodes,
 } from "./state";
-import { triggerDebouncedSave } from "./persistence";
-import type { Operation } from "fast-json-patch";
 
 export interface WSHandlerContext {
   state: GraphState;
@@ -17,6 +14,7 @@ export interface WSHandlerContext {
   configPath: string;
   statePath: string;
   broadcast: (payload: any) => void;
+  sync: () => void;
 }
 
 export function broadcast(clients: Set<any>, payload: any): void {
@@ -34,54 +32,54 @@ export async function handleWSMessage(
   message: any,
   context: WSHandlerContext
 ): Promise<void> {
-  const { state, config, configPath, statePath, broadcast } = context;
+  const { state, config, configPath, statePath, broadcast, sync } = context;
   const data = message;
   
   switch (data.type) {
     case "SET_FOCUS":
-      applyStatePatches(state, [{ op: "replace", path: "/focusNodeId", value: data.nodeId }]);
-      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/focusNodeId", value: data.nodeId }] });
-      triggerDebouncedSave(statePath, state);
+      state.focusNodeId = data.nodeId;
+      sync();
       break;
 
     case "UPDATE_SETTINGS":
-      applyStatePatches(state, [{ op: "replace", path: "/settings", value: data.settings }]);
-      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/settings", value: data.settings }] });
-      triggerDebouncedSave(statePath, state);
+      Object.assign(state.settings, data.settings);
+      sync();
       break;
 
     case "ADD_NODE": {
-      const { nodeId, ops } = addNodeToState(state, data.label, data.parentId);
-      applyStatePatches(state, ops);
-      broadcast({ type: "PATCH", patches: ops });
-      triggerDebouncedSave(statePath, state);
+      addNodeToState(state, data.label, data.parentId);
+      sync();
       break;
     }
 
-    case "ACCEPT_NODE":
-      applyStatePatches(state, [{ op: "replace", path: `/nodes/${data.nodeId}/status`, value: "accepted" }]);
-      broadcast({ type: "PATCH", patches: [{ op: "replace", path: `/nodes/${data.nodeId}/status`, value: "accepted" }] });
-      triggerDebouncedSave(statePath, state);
+    case "ACCEPT_NODE": {
+      const tNode = state.nodes[data.nodeId]
+      if (tNode) {
+        tNode.status = "accepted";
+        sync();
+      }
       break;
+    }
 
-    case "FORBID_NODE":
-      applyStatePatches(state, [{ op: "replace", path: `/nodes/${data.nodeId}/status`, value: "forbidden" }]);
-      broadcast({ type: "PATCH", patches: [{ op: "replace", path: `/nodes/${data.nodeId}/status`, value: "forbidden" }] });
-      triggerDebouncedSave(statePath, state);
+    case "FORBID_NODE": {
+      const tNode = state.nodes[data.nodeId];
+      if (tNode) {
+        tNode.status = "forbidden";
+        sync();
+      }
       break;
+    }
 
     case "DELETE_NODE": {
-      const ops = deleteNodeFromState(state, data.nodeId);
-      applyStatePatches(state, ops);
-      broadcast({ type: "PATCH", patches: ops });
-      triggerDebouncedSave(statePath, state);
+      deleteNodeFromState(state, data.nodeId);
+      sync();
       break;
     }
 
     case "CLEAR_GRAPH":
       clearStateGraph(state);
       broadcast({ type: "FULL_STATE", state });
-      triggerDebouncedSave(statePath, state);
+      sync();
       break;
 
     case "LOAD_AI_MODEL":
@@ -117,8 +115,8 @@ export async function handleWSMessage(
       const targetNode = state.nodes[data.nodeId];
       if (!targetNode) return;
 
-      applyStatePatches(state, [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }]);
-      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }] });
+      state.thinkingNodeId = targetNode.id;
+      sync();
 
       const neighborIds = state.links
         .filter(l => l.source === targetNode.id || l.target === targetNode.id)
@@ -130,8 +128,8 @@ export async function handleWSMessage(
 
       let suggestions;
       const contextLabels = Array.from(new Set(neighborIds))
-        .map(id => state.nodes[id]?.label)
-        .filter(Boolean)
+        .map(id => state.nodes[id as string]?.label)
+        .filter((label): label is string => Boolean(label))
         .slice(0, 10);
 
       if (data.type === "EXPLORE_NEW") {
@@ -156,14 +154,12 @@ export async function handleWSMessage(
         });
       }
 
-      applyStatePatches(state, [{ op: "replace", path: "/thinkingNodeId", value: null }]);
-      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: null }] });
+      state.thinkingNodeId = null;
+      sync();
 
       if (suggestions && suggestions.connections.length > 0) {
-        const ops = addAIGeneratedNodes(state, targetNode.id, suggestions);
-        applyStatePatches(state, ops);
-        broadcast({ type: "PATCH", patches: ops });
-        triggerDebouncedSave(statePath, state);
+        addAIGeneratedNodes(state, targetNode.id, suggestions);
+        sync();
       }
       break;
     }
@@ -173,21 +169,22 @@ export async function handleWSMessage(
       const targetNode = state.nodes[data.nodeId];
       if (!targetNode) return;
 
-      broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }] });
+      state.thinkingNodeId = targetNode.id;
+      sync();
 
       const nodeInfo = await describeNode(targetNode.label, state.settings.definedAspects, config);
 
       if (nodeInfo) {
-        const patches: Operation[] = [
-          { op: "replace", path: "/thinkingNodeId", value: null },
-          { op: "replace", path: `/nodes/${targetNode.id}/description`, value: nodeInfo.description },
-          { op: "replace", path: `/nodes/${targetNode.id}/aspects`, value: nodeInfo.aspects }
-        ];
-        applyStatePatches(state, patches);
-        broadcast({ type: "PATCH", patches });
-        triggerDebouncedSave(statePath, state);
+        const tNode = state.nodes[targetNode.id];
+        if(!tNode) return;
+        tNode.description = nodeInfo.description;
+        tNode.aspects = nodeInfo.aspects;
+        tNode.emoji = nodeInfo.emoji;
+        state.thinkingNodeId = null;
+        sync();
       } else {
-        broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: null }] });
+        state.thinkingNodeId = null;
+        sync();
       }
       break;
     }    

@@ -40,8 +40,7 @@ export const Schemas = type.module({
         label: "string",
         scores: "AspectRating[]",
         description: "string",
-        "color?": "string",
-        "shape?": "string"
+        emoji: "string",
     },
     Connection: {
         target: "string",

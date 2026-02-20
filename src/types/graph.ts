@@ -10,9 +10,7 @@ export interface GraphNode extends NodeObject {
   val: number;
   aspects: Record<string, number>;
   description?: string;
-  color?: string;
-  shape?: string;
-  svg? : string;
+  emoji?: string;
   group?: number;
   metadata?: {
     reason?: string;

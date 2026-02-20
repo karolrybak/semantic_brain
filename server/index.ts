@@ -1,6 +1,7 @@
 import { serve } from "bun";
 import type { GraphState } from "../src/types/graph";
 import { join } from "path";
+import { observe, generate } from "fast-json-patch";
 import { Schemas, getJsonSchema } from "./ai/schemas";
 
 // Handle CLI Flags
@@ -55,6 +56,16 @@ if (loadedState) {
   console.log("[State] Created new graph state.");
 }
 
+const stateObserver = observe<GraphState>(state);
+
+const sync = () => {
+  const patches = generate(stateObserver);
+  if (patches.length > 0) {
+    broadcast(clients, { type: "PATCH", patches });
+    triggerDebouncedSave(STATE_PATH, state);
+  }
+};
+
 // Initialize AI if startup flag is set
 if (serverConfig.loadOnStartup) {
   initializeAI(serverConfig, () => {
@@ -69,6 +80,7 @@ const handlerContext = {
   configPath: CONFIG_PATH,
   statePath: STATE_PATH,
   broadcast: (payload: any) => broadcast(clients, payload),
+  sync,
 };
 
 // Start the background auto-exploration agent
@@ -77,6 +89,7 @@ startAutoExplore({
   config: serverConfig,
   broadcast: (payload: any) => broadcast(clients, payload),
   triggerSave: () => triggerDebouncedSave(STATE_PATH, state),
+  sync,
 });
 
 // Start HTTP/WebSocket server

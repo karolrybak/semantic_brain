@@ -1,15 +1,14 @@
 import type { GraphState, GraphNode } from "../src/types/graph";
-import { AI_STATE, newConnections, describeNode, generateSvg } from "./ai/index";
-import { addAIGeneratedNodes, applyStatePatches } from "./state";
-import type { Operation } from "fast-json-patch";
+import { AI_STATE, newConnections, describeNode } from "./ai/index";
+import { addAIGeneratedNodes } from "./state";
 import type { ServerConfig } from "./config";
-import { create } from "domain";
 
 export interface AutoExploreContext {
   state: GraphState;
   config: ServerConfig;
   broadcast: (payload: any) => void;
   triggerSave: () => void;
+  sync: () => void;
 }
 
 let autoExploreInterval: NodeJS.Timeout | null = null;
@@ -32,113 +31,75 @@ export function stopAutoExplore(): void {
 }
 
 async function runAutoExploreIteration(context: AutoExploreContext): Promise<void> {
-  const { state, config, broadcast, triggerSave } = context;
+  const { state, config, sync } = context;
 
-  // Exit if AI is busy or model not loaded
   if (AI_STATE.isAiBusy || !AI_STATE.model) return;
 
-  const needsMetadata = (n: GraphNode) => n.status === "accepted" && (!n.description || !n.aspects || Object.keys(n.aspects).length === 0);
-  const needsSvg = (n: GraphNode) => n.status === "accepted" && n.description && !n.svg;
+  const needsMetadata = (n: GraphNode) => n.status === "accepted" && (!n.emoji || !n.description || !n.aspects || Object.keys(n.aspects).length === 0 || !n.emoji);
   const needsConnections = (n: GraphNode) => {
-    if (n.status !== "accepted" && !state.settings.autoExplore) return false;
+    if (!state.settings.autoExplore) return false;
+    if (n.status !== "accepted") return false;
     const links = state.links.filter(l => l.source === n.id || l.target === n.id);
     return links.length < state.settings.minConnections;
   };
 
   const allNodes = Object.values(state.nodes);
   let targetNode = null;
+  let mode: 'DESCRIBE' | 'EXPLORE' | null = null;
 
-  // PRIORITY 1: Metadata Enrichment (Clean up the graph first)
   targetNode = allNodes.find(needsMetadata);
+  if (targetNode) mode = 'DESCRIBE';
 
-  // PRIORITY 2: SVG Generation
-  targetNode = allNodes.find(needsMetadata);
+  if (!targetNode) {
+    targetNode = allNodes.find(needsConnections);
+    if (targetNode) mode = 'EXPLORE';
+  }
 
-  // PRIORITY 3: New Connections (Only if all accepted nodes are described AND autoExplore is enabled)
-  targetNode = allNodes.find(needsConnections);
+  if (!targetNode || !mode) return;
 
-  if (!targetNode) return;
+  state.thinkingNodeId = targetNode.id;
+  sync();
 
-  // Check if we should DESCRIBE or EXPLORE
-  const mode = needsMetadata(targetNode) ? 'DESCRIBE' : needsSvg(targetNode) ? 'SVG' : 'EXPLORE';
+  try {
+    if (mode === 'DESCRIBE') {
+      const nodeInfo = await describeNode(targetNode.label, state.settings.definedAspects, config);
+      
+      if (nodeInfo) {
+        const nodeState = state.nodes[targetNode.id];
+        if(!nodeState) return;
+        nodeState.description = nodeInfo.description;
+        nodeState.aspects = nodeInfo.aspects;
+        nodeState.emoji = nodeInfo.emoji;
+      }
+    } else if (mode === 'EXPLORE') {
+      const neighborIds = state.links
+        .filter(l => l.source === targetNode.id || l.target === targetNode.id)
+        .map(l => l.source === targetNode.id ? l.target : l.source);
+      
+      const contextLabels = Array.from(new Set(neighborIds))
+        .map(id => state.nodes[String(id)]?.label)
+        .filter((label): label is string => Boolean(label))
+        .slice(0, 10);
 
-  // Set thinking state
-  applyStatePatches(state, [
-    { op: "replace", path: "/thinkingNodeId", value: targetNode.id },
-  ]);
-  broadcast({ type: "PATCH", patches: [{ op: "replace", path: "/thinkingNodeId", value: targetNode.id }] });
+      const forbiddenLabels = Object.values(state.nodes)
+        .filter(n => n.status === "forbidden")
+        .map(n => n.label.toLowerCase());
 
-  if (mode === 'DESCRIBE') {
-    const nodeInfo = await describeNode(targetNode.label, state.settings.definedAspects, config);
-    
-    // Clear thinking state
-    const patches: Operation[] = [
-      { op: "replace", path: "/thinkingNodeId", value: null }
-    ];
+      const suggestions = await newConnections({
+        label: targetNode.label,
+        forbiddenNodes: forbiddenLabels,
+        existingNodes: contextLabels,
+        creativity: state.settings.creativity,
+        aspectList: state.settings.definedAspects,
+        config
+      });
 
-    if (nodeInfo) {
-      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/description`, value: nodeInfo.description });
-      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/aspects`, value: nodeInfo.aspects });
-      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/color`, value: nodeInfo.color });
-      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/shape`, value: nodeInfo.shape });
+      if (suggestions && suggestions.connections.length > 0) {
+        addAIGeneratedNodes(state, targetNode.id, suggestions);
+      }
     }
-
-    applyStatePatches(state, patches);
-    broadcast({ type: "PATCH", patches });
-    triggerSave();
-  } else if ( mode === 'SVG') {
-    const nodeInfo = await generateSvg(targetNode.label, state.settings.definedAspects, config);
-    
-    // Clear thinking state
-    const patches: Operation[] = [
-      { op: "replace", path: "/thinkingNodeId", value: null }
-    ];
-
-    if (nodeInfo) {
-      patches.push({ op: "replace", path: `/nodes/${targetNode.id}/svg`, value: nodeInfo.svg });
-    }
-
-    applyStatePatches(state, patches);
-    broadcast({ type: "PATCH", patches });
-    triggerSave();
-  } else if (mode === 'EXPLORE') {
-    
-    // Generate connections
-    const neighborIds = state.links
-      .filter(l => l.source === targetNode.id || l.target === targetNode.id)
-      .map(l => l.source === targetNode.id ? l.target : l.source);
-    
-    const contextLabels = Array.from(new Set(neighborIds))
-      .map(id => state.nodes[id]?.label)
-      .filter(Boolean)
-      .slice(0, 10);
-
-    const forbiddenLabels = Object.values(state.nodes)
-      .filter(n => n.status === "forbidden")
-      .map(n => n.label.toLowerCase());
-
-    const suggestions = await newConnections({
-      label: targetNode.label,
-      forbiddenNodes: forbiddenLabels,
-      existingNodes: contextLabels,
-      creativity: state.settings.creativity,
-      aspectList: state.settings.definedAspects,
-      config
-    });
-
-    // Clear thinking and apply changes
-    const patches: Operation[] = [
-      { op: "replace", path: "/thinkingNodeId", value: null },
-    ];
-
-    applyStatePatches(state, patches);
-    broadcast({ type: "PATCH", patches });
-
-    if (suggestions && suggestions.connections.length > 0) {
-      const ops = addAIGeneratedNodes(state, targetNode.id, suggestions);
-      applyStatePatches(state, ops);
-      broadcast({ type: "PATCH", patches: ops });
-      triggerSave();
-    }
+  } finally {
+    state.thinkingNodeId = null;
+    sync();
   }
 }

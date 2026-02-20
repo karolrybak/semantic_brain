@@ -23,15 +23,15 @@ const emit = defineEmits<{ (e: 'select', node: GraphNode | null): void }>()
 // --- Physics & Visual Constants ---
 const PHYSICS = {
   TRANSITION_SPEED: 0.04,
-  LINK_DISTANCE: 5,
+  LINK_DISTANCE: 35,
   LINK_STRENGTH_BASE: 0.4,
-  ASPECT_FILTER_LINK_MULT: 0.5, 
+  ASPECT_FILTER_LINK_MULT: 0.1, // Reduction when filtering
   CHARGE_STRENGTH: -120,
-  ASPECT_FILTER_CHARGE_MULT: 0.5, 
-  CHARGE_DYNAMICS: { base: 1.6, multiplier: 1.1 },
+  ASPECT_FILTER_CHARGE_MULT: 0.4, 
+  CHARGE_DYNAMICS: { base: 1.2, multiplier: 0.4 },
   CENTER_GRAVITY_K: 0.08,
-  CENTER_GRAVITY_SCORE_BIAS: 1.4,
-  SIMILARITY_K: 0.4,
+  CENTER_GRAVITY_SCORE_BIAS: 1,
+  SIMILARITY_K: 0.01,
   SIMILARITY_THRESHOLD: 0.85,
   SIMILARITY_FORCE_MULTIPLIER: 0.5,
   VELOCITY_DECAY: 0.4,
@@ -40,6 +40,7 @@ const PHYSICS = {
   FOCUS_DISTANCE: 80,
   SCORE_THRESHOLDS: { irrelevant: 0.25, relevant: 0.85, center: 0.5, high: 0.7 }
 };
+
 
 const container = ref<HTMLElement | null>(null)
 const config = useGraphConfigStore()
@@ -161,7 +162,7 @@ function initGraph() {
       const group = new THREE.Group();
 
       // Label
-      const sprite = new SpriteText(gNode.label);
+      const sprite = new SpriteText(gNode.label + gNode.emoji);
       sprite.color = '#ffffff';
       sprite.textHeight = config.labelSize * 4;
       sprite.center.y = -1.2;

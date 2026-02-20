@@ -3,8 +3,7 @@ import { Schemas } from "./schemas";
 import { 
   DESCRIBE_PROMPT, 
   NEW_CONNECTIONS_PROMPT, 
-  FIND_CONNECTIONS_PROMPT, 
-  CREATE_SVG_PROMPT
+  FIND_CONNECTIONS_PROMPT
 } from "./prompts";
 import type { ServerConfig } from "../config";
 import type { GraphNode } from "../../src/types/graph";
@@ -64,7 +63,7 @@ export async function describeNode(
   label: string, 
   aspectList: string[], 
   config: ServerConfig
-): Promise<{ description: string; aspects: Record<string, number>, color: string, shape: string } | null> {
+): Promise<{ description: string; aspects: Record<string, number>, emoji: string } | null> {
   
   const result = await executeAITask<typeof Schemas.Node.infer>({
     prompt: DESCRIBE_PROMPT(label, aspectList.join(", ")),
@@ -87,19 +86,12 @@ export async function describeNode(
   return {
     description: result.description,
     aspects,
-    color: result.color || "white",
-    shape: result.shape || "generic"
+    emoji: extractEmojis(result.emoji)
   };
 }
 
-export async function generateSvg(concept: GraphNode, config: ServerConfig): Promise<string> {
-  const result = await executeAITask<string>({
-    prompt: CREATE_SVG_PROMPT(concept),
-    schema: Schemas.SvgResponse,
-    config,
-    taskName: "CREATE_SVG",
-    temperature: 0.1,
-    maxTokens: 1000
-  });
-  return result || "";
+function extractEmojis(input: string): string {
+  const emojiRegex = /\p{Extended_Pictographic}/gu;
+  const matches = input.match(emojiRegex);
+  return matches ? matches.slice(0, 3).join("") : "";
 }
