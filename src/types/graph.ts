@@ -12,6 +12,7 @@ export interface GraphNode extends NodeObject {
   description?: string;
   emoji?: string;
   group?: number;
+  attempts: Record<string, number>;
   metadata?: {
     reason?: string;
     timestamp: number;
@@ -28,6 +29,7 @@ export interface GraphLink {
 }
 
 export interface GraphSettings {
+  name: string;
   creativity: number;
   maxWords: number;
   minConnections: number;

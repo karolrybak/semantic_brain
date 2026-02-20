@@ -27,6 +27,9 @@ export function initializeLoadedState(state: GraphState): GraphState {
   if (!state.settings.activeAspects) {
     state.settings.activeAspects = [];
   }
+  Object.values(state.nodes).forEach(n => {
+    if (!n.attempts) n.attempts = {};
+  });
   return state;
 }
 
@@ -52,6 +55,7 @@ export function addNodeToState(
     type: isFirst ? "root" : "concept",
     val: isFirst ? 5 : 3,
     aspects: {},
+    attempts: {},
   };
 
   if (parentId) {

@@ -76,8 +76,8 @@ import { ref } from 'vue';
 
 const emit = defineEmits<{ (e: 'start', payload: { labels: string[], aspects: string[] }): void }>();
 
-const concepts = ref<string[]>(['Artificial Intelligence']);
-const aspects = ref<string[]>(['Technical Complexity', 'Social Impact', 'Ethics', 'Economic Value']);
+const concepts = ref<string[]>([]);
+const aspects = ref<string[]>([]);
 
 const newConcept = ref('');
 const newAspect = ref('');

@@ -30,7 +30,7 @@ const PHYSICS = {
   ASPECT_FILTER_CHARGE_MULT: 0.4, 
   CHARGE_DYNAMICS: { base: 1.2, multiplier: 0.4 },
   CENTER_GRAVITY_K: 0.08,
-  CENTER_GRAVITY_SCORE_BIAS: 1,
+  CENTER_GRAVITY_SCORE_BIAS: 5,
   SIMILARITY_K: 0.01,
   SIMILARITY_THRESHOLD: 0.85,
   SIMILARITY_FORCE_MULTIPLIER: 0.5,
@@ -40,7 +40,6 @@ const PHYSICS = {
   FOCUS_DISTANCE: 80,
   SCORE_THRESHOLDS: { irrelevant: 0.25, relevant: 0.85, center: 0.5, high: 0.7 }
 };
-
 
 const container = ref<HTMLElement | null>(null)
 const config = useGraphConfigStore()
@@ -162,7 +161,10 @@ function initGraph() {
       const group = new THREE.Group();
 
       // Label
-      const sprite = new SpriteText(gNode.label + gNode.emoji);
+      var text = gNode.label
+      if(gNode.emoji) 
+        text = `${gNode.emoji} ${text}`
+      const sprite = new SpriteText(text);
       sprite.color = '#ffffff';
       sprite.textHeight = config.labelSize * 4;
       sprite.center.y = -1.2;
@@ -283,18 +285,38 @@ function getHealthColor(node: GraphNode) {
   return '#' + getAspectColor(score).getHexString();
 }
 
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
+
 function getAspectColor(value: number): THREE.Color {
-  const cGray = new THREE.Color('#4a4a4e');
-  const cBlue = new THREE.Color('#3b82f6');
-  const cYellow = new THREE.Color('#fbbf24');
-  const cRed = new THREE.Color('#ef4444');
-  if (props.settings.activeAspects.length === 0) return cBlue;
-  const T = PHYSICS.SCORE_THRESHOLDS;
-  if (value <= T.irrelevant) return cGray;
-  if (value >= T.relevant) return cRed;
-  if (value < T.center) return cGray.clone().lerp(cBlue, (value - T.irrelevant) / (T.center - T.irrelevant));
-  if (value < T.high) return cBlue.clone().lerp(cYellow, (value - T.center) / (T.high - T.center));
-  return cYellow.clone().lerp(cRed, (value - T.high) / (T.relevant - T.high));
+  const v = THREE.MathUtils.clamp(value, 0, 1);
+
+  const hueStops = [
+    { t: 0.0, h: 220 / 360 }, // blue
+    { t: 0.5, h: 140 / 360 }, // green
+    { t: 0.66, h: 35 / 360 },  // orange
+    { t: 1.0, h: 0 / 360 }     // red
+  ];
+
+  for (let i = 0; i < hueStops.length - 1; i++) {
+    const s1 = hueStops[i];
+    const s2 = hueStops[i + 1];
+
+    if (v >= s1.t && v <= s2.t) {
+      const localT = (v - s1.t) / (s2.t - s1.t);
+      const hue = lerp(s1.h, s2.h, localT);
+
+      const color = new THREE.Color();
+      color.setHSL(hue, 0.8, 0.55); // saturation, lightness
+      return color;
+    }
+  }
+
+  // fallback (should never happen)
+  const fallback = new THREE.Color();
+  fallback.setHSL(0, 0.8, 0.55);
+  return fallback;
 }
 
 function performFocus(node: any) {

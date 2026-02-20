@@ -29,10 +29,10 @@
           </div>
         </div>
 
-        <div class="flex-1 overflow-y-auto pr-1 custom-scrollbar space-y-4">
+        <div class="flex-1 overflow-y-auto pr-1 custom-scrollbar space-y-4 max-h-120">
             <div v-if="hasAspects">
                 <h3 class="text-[10px] uppercase tracking-wider text-zinc-500 font-bold mb-2 border-b border-zinc-800 pb-1">Aspect Relevance</h3>
-                <div class="space-y-2">
+                <div class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
                     <div v-for="(val, name) in selectedNode.aspects" :key="name" class="flex flex-col gap-1">
                         <div class="flex justify-between text-[10px] text-zinc-400">
                             <span>{{ name }}</span>

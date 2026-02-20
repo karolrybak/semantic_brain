@@ -10,6 +10,7 @@ export const AI_STATE: AIState = {
   context: null,
   session: null,
   isAiBusy: false,
+  userQueue: [],
 };
 
 export async function unloadAI(): Promise<void> {

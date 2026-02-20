@@ -45,7 +45,7 @@ Generate 3–5 NEW ontologic concepts related to the target concept.
 
 3) Avoid overlap with existing graph labels.
 
-4) Prefer short 1-3 words for concepts.
+4) Prefer 1-3 words for concept.
    Avoid long sentences or paragraphs.
 `
 
@@ -60,7 +60,6 @@ ${NEW_CONNECTIONS}
 ### INPUT
 Target Concept: "${label}"
 Existing Graph Labels: [${existingStr}]
-Focus Aspects: [${aspects}]
 `;
 
 
@@ -72,7 +71,6 @@ ${NEW_CONNECTIONS}
 ### INPUT
 Target Concept: "${label}"
 Existing Graph Labels: [${existingStr}]
-Focus Aspects: [${aspects}]
 `
 
 
@@ -83,9 +81,9 @@ export const FIND_CONNECTIONS_PROMPT = (label: string, existingStr: string) => `
 ### INSTRUCTION
 Find logical links between "${label}" and the candidate concepts below.
 Only include direct relationships.
+DO NOT create new concepts, only use existing ones.
 
 ### INPUT
-- Target Concept: "${label}"
 - Candidate Concepts: [${existingStr}]
 `;
 
@@ -94,11 +92,10 @@ Only include direct relationships.
  */
 export const DESCRIBE_PROMPT = (label: string, aspectStr: string) => `
 ### INSTRUCTION
-Provide short 10-20 words description of the concept.
-Assign relevance scores (0.0 to 1.0) for each of specified aspects.
+Provide short 10-20 words description of the concept -> "${label}".
 Pick up to three emoji symbols to represent the concept, use as little as possible.
+For each of the aspects specified below - assign relevance score (0.0 to 1.0)
 
 ### INPUT
-- Concept: "${label}"
 - Aspects: [${aspectStr}]
 `;

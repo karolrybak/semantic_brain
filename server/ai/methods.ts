@@ -1,12 +1,12 @@
 import { executeAITask } from "./core";
 import { Schemas } from "./schemas";
-import { 
-  DESCRIBE_PROMPT, 
-  NEW_CONNECTIONS_PROMPT, 
-  FIND_CONNECTIONS_PROMPT
+import {
+  DESCRIBE_PROMPT,
+  NEW_CONNECTIONS_PROMPT,
+  FIND_CONNECTIONS_PROMPT,
+  NEW_RELATIONS_LIMITED_PROMPT
 } from "./prompts";
 import type { ServerConfig } from "../config";
-import type { GraphNode } from "../../src/types/graph";
 
 export interface NewConnectionsParams {
   label: string;
@@ -35,6 +35,24 @@ export async function newConnections(params: NewConnectionsParams): Promise<type
   return result || { connections: [] };
 }
 
+export async function newConnectionsLimited(params: NewConnectionsParams & { relations: string[] }): Promise<typeof Schemas.ConnectionResponse.infer> {
+  const { label, existingNodes, creativity, config, aspectList, relations } = params;
+  const existingStr = existingNodes.join(", ");
+
+  const prompt = NEW_RELATIONS_LIMITED_PROMPT(label, existingStr, aspectList.join(", "), relations);
+
+  const result = await executeAITask<typeof Schemas.ConnectionResponse.infer>({
+    prompt,
+    schema: Schemas.ConnectionResponse,
+    config,
+    taskName: `NEW_CONNECTIONS_LIMITED`,
+    temperature: creativity,
+    maxTokens: 1000
+  });
+
+  return result || { connections: [] };
+}
+
 export interface FindConnectionsParams {
   label: string;
   existingNodes: string[];
@@ -44,7 +62,7 @@ export interface FindConnectionsParams {
 export async function findExistingConnections(params: FindConnectionsParams): Promise<typeof Schemas.ConnectionResponse.infer> {
   const { label, existingNodes, config } = params;
   const existingStr = existingNodes.join(", ");
-
+  
   const prompt = FIND_CONNECTIONS_PROMPT(label, existingStr);
 
   const result = await executeAITask<typeof Schemas.ConnectionResponse.infer>({
@@ -55,16 +73,19 @@ export async function findExistingConnections(params: FindConnectionsParams): Pr
     temperature: 0.3,
     maxTokens: 1000
   });
-
-  return result || { connections: [] };
+  if(!result) return { connections: [] };
+  
+  result.connections = result.connections.filter((c) => existingNodes.includes(c.target));
+  
+  return result;
 }
 
 export async function describeNode(
-  label: string, 
-  aspectList: string[], 
+  label: string,
+  aspectList: string[],
   config: ServerConfig
 ): Promise<{ description: string; aspects: Record<string, number>, emoji: string } | null> {
-  
+
   const result = await executeAITask<typeof Schemas.Node.infer>({
     prompt: DESCRIBE_PROMPT(label, aspectList.join(", ")),
     schema: Schemas.Node,
@@ -93,5 +114,5 @@ export async function describeNode(
 function extractEmojis(input: string): string {
   const emojiRegex = /\p{Extended_Pictographic}/gu;
   const matches = input.match(emojiRegex);
-  return matches ? matches.slice(0, 3).join("") : "";
+  return matches ? matches.slice(0, 3).join("") : "◾";
 }
