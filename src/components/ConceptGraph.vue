@@ -38,6 +38,7 @@ const PHYSICS = {
   NODE_SIZE_RANGE: { min: 1, max: 15 },
   NODE_REL_SIZE: 1.5,
   FOCUS_DISTANCE: 80,
+  MAX_DISTANCE: 5000,
   SCORE_THRESHOLDS: { irrelevant: 0.25, relevant: 0.85, center: 0.5, high: 0.7 }
 };
 
@@ -284,9 +285,35 @@ function initGraph() {
    .d3VelocityDecay(PHYSICS.VELOCITY_DECAY);
 
   graph.value = g;
-  g.scene().fog = new THREE.Fog(0x141418, 200, 600);
+  g.controls().maxDistance = PHYSICS.MAX_DISTANCE;
+
+  // Starfield background
+  const starsGeometry = new THREE.BufferGeometry();
+  const starCount = 1000;
+  const positions = [];
+  for (let i = 0; i < starCount; i++) {
+    positions.push(
+      (Math.random() - 0.5) * 10000,
+      (Math.random() - 0.5) * 10000,
+      (Math.random() - 0.5) * 10000
+    );
+  }
+  starsGeometry.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute(positions, 3)
+  );
+  const starsMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 1,
+    sizeAttenuation: true
+  });
+  const starField = new THREE.Points(starsGeometry, starsMaterial);
+  g.scene().add(starField);
+
   updateData();
-}
+  }
+
+
 
 function getHealthColor(node: GraphNode) {
   if (node.status === 'forbidden') return '#450a0a';

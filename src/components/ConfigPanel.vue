@@ -34,6 +34,7 @@
       <input type="range" min="0.1" max="3" step="0.1" v-model.number="config.labelSize" class="w-full accent-blue-500" />
     </div>
 
+
     <div class="pt-2 border-t border-zinc-700/50 flex flex-col gap-2">
        <button @click="clearGraph" class="w-full py-2 bg-red-950/20 hover:bg-red-900/40 text-red-500 border border-red-900/50 rounded text-[10px] font-bold uppercase transition-all">Clear All Concepts</button>
     </div>

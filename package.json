@@ -1,13 +1,14 @@
 {
   "name": "kodoksztalt-vite",
-  "version": "0.0.224",
+  "version": "0.0.226",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "scan": "ts-node scripts/scan.ts",
-    "server": "bun run --inspect server/index.ts",
+    "server": "bun run server/index.ts",
+    "recompile": "bun run server/index.ts --force-recompile",
     "tester": "bun run server/tester.ts"
   },
   "dependencies": {
