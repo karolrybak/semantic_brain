@@ -1,10 +1,9 @@
 import { serve } from "bun";
 import type { GraphState } from "../src/types/graph";
 import { join } from "path";
-import { observe, generate } from "fast-json-patch";
+import { observe, generate, unobserve } from "fast-json-patch";
 import { Schemas, getJsonSchema } from "./ai/schemas";
 
-// Handle CLI Flags
 const args = process.argv.slice(2);
 if (args.includes("-d") || args.includes("--dump-schema")) {
   const schemas = {
@@ -16,14 +15,14 @@ if (args.includes("-d") || args.includes("--dump-schema")) {
   process.exit(0);
 }
 
-// Module imports
 import { loadConfig } from "./config";
 import {
   initializeDataDirectory,
-  DATA_DIR,
   STATE_PATH,
   loadStateFromDisk,
   triggerDebouncedSave,
+  getGraphPath,
+  listGraphsFromDisk,
 } from "./persistence";
 import {
   createDefaultState,
@@ -41,39 +40,51 @@ console.log("\n--- [STARTING BRAIN SERVER S2] ---");
 const CONFIG_PATH = join(import.meta.dir, "./..", "config.json");
 const clients = new Set<any>();
 
+let currentGraphName = "state";
 let state: GraphState;
+let stateObserver: any;
 let serverConfig = await loadConfig(CONFIG_PATH);
 
-// Initialize state
 initializeDataDirectory();
 
 const loadedState = await loadStateFromDisk(STATE_PATH);
 if (loadedState) {
   state = initializeLoadedState(loadedState);
-  console.log("[State] Graph state loaded from disk.");
+  console.log("[State] Default graph state loaded.");
 } else {
-  state = createDefaultState();
-  console.log("[State] Created new graph state.");
+  state = createDefaultState("Default");
+  console.log("[State] Created default graph state.");
 }
-
-const stateObserver = observe<GraphState>(state);
 
 const sync = () => {
   const patches = generate(stateObserver);
   if (patches.length > 0) {
     broadcast(clients, { type: "PATCH", patches });
-    triggerDebouncedSave(STATE_PATH, state);
+    triggerDebouncedSave(getGraphPath(currentGraphName), state);
   }
 };
 
-// Initialize AI if startup flag is set
+const sendFullState = (ws: any) => {
+  ws.send(JSON.stringify({ type: "FULL_STATE", state, filename: currentGraphName }));
+};
+
+const setGraph = (name: string, newState: GraphState) => {
+  if (stateObserver) unobserve(state, stateObserver);
+  state = newState;
+  currentGraphName = name;
+  stateObserver = observe<GraphState>(state);
+  handlerContext.state = state;
+  autoExploreContext.state = state;
+};
+
+stateObserver = observe<GraphState>(state);
+
 if (serverConfig.loadOnStartup) {
   initializeAI(serverConfig, () => {
-    broadcast(clients, { type: "AI_STATUS", status: "ready", size: serverConfig.selectedSize });
+    broadcast(clients, { type: "AI_STATUS", ...getAIStatus() });
   });
 }
 
-// Create handler context
 const handlerContext = {
   state,
   config: serverConfig,
@@ -81,18 +92,19 @@ const handlerContext = {
   statePath: STATE_PATH,
   broadcast: (payload: any) => broadcast(clients, payload),
   sync,
+  setGraph,
 };
 
-// Start the background auto-exploration agent
-startAutoExplore({
+const autoExploreContext = {
   state,
   config: serverConfig,
   broadcast: (payload: any) => broadcast(clients, payload),
-  triggerSave: () => triggerDebouncedSave(STATE_PATH, state),
+  triggerSave: () => triggerDebouncedSave(getGraphPath(currentGraphName), state),
   sync,
-});
+};
 
-// Start HTTP/WebSocket server
+startAutoExplore(autoExploreContext);
+
 serve({
   port: 3001,
   hostname: "0.0.0.0",
@@ -103,10 +115,10 @@ serve({
   websocket: {
     open(ws) {
       clients.add(ws);
-      // Initial sync for the client
-      ws.send(JSON.stringify({ type: "FULL_STATE", state }));
+      sendFullState(ws);
+      ws.send(JSON.stringify({ type: "GRAPH_LIST", graphs: listGraphsFromDisk() }));
       ws.send(JSON.stringify({ type: "AI_CONFIG_UPDATED", config: serverConfig }));
-      ws.send(JSON.stringify({ type: "AI_STATUS", status: getAIStatus() }));
+      ws.send(JSON.stringify({ type: "AI_STATUS", ...getAIStatus() }));
       console.log(`[WS] Client linked. Count: ${clients.size}`);
     },
     message: createWSMessageHandler(handlerContext),

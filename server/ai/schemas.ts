@@ -1,10 +1,7 @@
 import { type } from "arktype";
-import { Connect } from "vite";
-
-// const Relations = "'enables' | 'causes' | 'conflicts_with' | 'depends_on' | 'example_of' | 'part_of' | 'risk_of' | 'opportunity_for' | 'similar_to' | 'opposite_of' | 'subclass_of' | 'instance_of' | 'incompatible_with'";
 
 export const Relations = type.module({
-    hierarchical: `'subclass_of'`,
+    hierarchical: "'subclass_of'",
 
     structural: `
         'part_of' |
@@ -17,20 +14,22 @@ export const Relations = type.module({
         'depends_on'
     `,
 
+    historical: `
+        'preceded_by' |
+        'succeded_by'
+    `,
+
     logical: `
         'incompatible_with' |
         'similar_to' |
         'opposite_of'
     `,
 
-    functional: `
-        causal
-    `,
-
     all: `
         hierarchical |
         structural |
         causal |
+        historical |
         logical
     `
 })
@@ -54,7 +53,9 @@ export const Schemas = type.module({
         aspect: "string",
         rating: "number"
     },
-    SvgResponse: "string"
+    GraphNameResponse: {
+        name: "string"
+    }
 });
 
 /**

@@ -119,9 +119,15 @@ function updateData() {
   const currentData = graph.value.graphData();
   const nodeMap = new Map(currentData.nodes.map((n: any) => [n.id, n]));
   
+  let needsObjectRefresh = false;
   const nextNodes = props.nodes.map(n => {
     const existing = nodeMap.get(n.id);
-    if (existing) return Object.assign(existing, n);
+    if (existing) {
+      if (existing.label !== n.label || existing.emoji !== n.emoji || existing.status !== n.status) {
+        needsObjectRefresh = true;
+      }
+      return Object.assign(existing, n);
+    }
     const newNode = { ...n };
     nodePhysicsData.set(n.id, { currentScore: 0.5, targetScore: calculateNodeScore(n, props.settings.activeAspects) });
     return newNode;
@@ -131,6 +137,10 @@ function updateData() {
     nodes: nextNodes,
     links: props.links.map(l => ({ ...l }))
   });
+
+  if (needsObjectRefresh) {
+    graph.value.nodeThreeObject(graph.value.nodeThreeObject());
+  }
 }
 
 function createThinkingHalo() {
@@ -162,7 +172,7 @@ function initGraph() {
 
       // Label
       var text = gNode.label
-      if(gNode.emoji) 
+      if(props.settings.showEmoji && gNode.emoji) 
         text = `${gNode.emoji} ${text}`
       const sprite = new SpriteText(text);
       sprite.color = '#ffffff';
@@ -274,6 +284,7 @@ function initGraph() {
    .d3VelocityDecay(PHYSICS.VELOCITY_DECAY);
 
   graph.value = g;
+  g.scene().fog = new THREE.Fog(0x141418, 200, 600);
   updateData();
 }
 
@@ -333,7 +344,7 @@ watch(() => config.linkOpacity, (val) => {
   if (graph.value) graph.value.linkOpacity(val);
 });
 
-watch(() => config.labelSize, () => {
+watch(() => [config.labelSize, props.settings.showEmoji], () => {
   if (graph.value) graph.value.nodeThreeObject(graph.value.nodeThreeObject());
 });
 

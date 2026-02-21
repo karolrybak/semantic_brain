@@ -32,7 +32,7 @@
         <button 
           v-else 
           @click="$emit('unload')" 
-          :disabled="status === 'thinking'"
+          :disabled="status === 'thinking' || status === 'loading'"
           class="w-full py-2 bg-red-950/20 hover:bg-red-900/40 text-red-500 border border-red-900/50 rounded font-bold uppercase transition-all disabled:opacity-50"
         >
           Unload Engine

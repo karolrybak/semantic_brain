@@ -18,6 +18,7 @@ export interface GraphNode extends NodeObject {
     timestamp: number;
   };
   isLocked?: boolean;
+  tasks?: Record<string, 'queued' | 'thinking'>;
 }
 
 export interface GraphLink {
@@ -36,6 +37,14 @@ export interface GraphSettings {
   autoExplore: boolean;
   definedAspects: string[];
   activeAspects: string[];
+  allowedRelations: string[];
+  showEmoji: boolean;
+}
+
+export interface AITask {
+  type: 'DESCRIBE' | 'EXPLORE_NEW' | 'EXPLORE_EXISTING' | 'EXPLORE_LIMITED' | 'GENERATE_NAME';
+  nodeId: string;
+  params?: any;
 }
 
 export interface GraphState {
@@ -43,6 +52,8 @@ export interface GraphState {
   links: GraphLink[];
   focusNodeId: string | null;
   thinkingNodeId: string | null;
+  userQueue: AITask[];
+  tasks?: Record<string, 'queued' | 'thinking'>;
   settings: GraphSettings;
 }
 

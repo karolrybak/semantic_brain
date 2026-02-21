@@ -24,6 +24,8 @@ export const useGraphStore = defineStore('graph', () => {
   const aiStatus = ref<AiStatus>('unloaded');
   const serverAiConfig = ref({ selectedSize: 'medium', loadOnStartup: true });
   const ws = ref<WebSocket | null>(null);
+  const currentFilename = ref<string | null>(null);
+  const graphList = ref<{ filename: string; name: string }[]>([]);
 
   // Computed arrays
   const nodesArray = computed(() => Object.values(state.value.nodes));
@@ -76,7 +78,13 @@ export const useGraphStore = defineStore('graph', () => {
     const host = window.location.hostname || 'localhost';
     ws.value = new WebSocket(`ws://${host}:3001`);
 
-    ws.value.onopen = () => { isConnected.value = true; };
+    ws.value.onopen = () => {
+      isConnected.value = true;
+      const initialGraph = window.location.hash.slice(2);
+      if (initialGraph) {
+        send({ type: 'LOAD_GRAPH', name: initialGraph });
+      }
+    };
     ws.value.onclose = () => {
       isConnected.value = false;
       isStateLoaded.value = false;
@@ -88,7 +96,13 @@ export const useGraphStore = defineStore('graph', () => {
       const data = JSON.parse(event.data);
       if (data.type === 'FULL_STATE') {
         state.value = data.state;
+        currentFilename.value = data.filename || null;
+        if (currentFilename.value) {
+          window.location.hash = '/' + currentFilename.value;
+        }
         isStateLoaded.value = true;
+      } else if (data.type === 'GRAPH_LIST') {
+        graphList.value = data.graphs;
       } else if (data.type === 'PATCH') {
         // Apply patches to the reactive state
         jsonpatch.applyPatch(state.value, data.patches);
@@ -117,6 +131,8 @@ export const useGraphStore = defineStore('graph', () => {
     nodesArray,
     linksArray,
     graphIslands,
+    currentFilename,
+    graphList,
     connect,
     send
   };

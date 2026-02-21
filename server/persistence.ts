@@ -1,5 +1,5 @@
 import { join } from "path";
-import { mkdirSync, existsSync } from "fs";
+import { mkdirSync, existsSync, readdirSync, readFileSync } from "fs";
 
 export const DATA_DIR = join(process.cwd(), "data");
 export const STATE_PATH = join(DATA_DIR, "state.json");
@@ -24,6 +24,29 @@ export async function loadStateFromDisk(statePath: string): Promise<any> {
 
 export async function saveStateToDisk(statePath: string, state: any): Promise<void> {
   await Bun.write(statePath, JSON.stringify(state, null, 2));
+}
+
+export function listGraphsFromDisk(): { filename: string; name: string }[] {
+  if (!existsSync(DATA_DIR)) return [];
+  return readdirSync(DATA_DIR)
+    .filter(f => f.endsWith(".json"))
+    .map(f => {
+      const filename = f.replace(".json", "");
+      try {
+        const content = readFileSync(join(DATA_DIR, f), "utf8");
+        const data = JSON.parse(content);
+        return { 
+          filename, 
+          name: data.settings?.name || "Unnamed graph" 
+        };
+      } catch (e) {
+        return { filename, name: "Unnamed graph" };
+      }
+    });
+}
+
+export function getGraphPath(name: string): string {
+  return join(DATA_DIR, `${name}.json`);
 }
 
 let saveTimeout: NodeJS.Timeout | null = null;

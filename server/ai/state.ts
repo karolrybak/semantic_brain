@@ -10,7 +10,7 @@ export const AI_STATE: AIState = {
   context: null,
   session: null,
   isAiBusy: false,
-  userQueue: [],
+  modelMetadata: { size: "medium" }
 };
 
 export async function unloadAI(): Promise<void> {
@@ -53,6 +53,11 @@ export async function initializeAI(
       systemPrompt: SYSTEM_PROMPT
     });
 
+    AI_STATE.modelMetadata = {
+      size: config.selectedSize,
+      vram: (AI_STATE.model as any).vramUsage || 0
+    };
+
     console.log("[AI] READY: Semantic Engine online.");
     onReady?.();
   } catch (e: any) {
@@ -61,7 +66,7 @@ export async function initializeAI(
   }
 }
 
-export function getAIStatus(): 'unloaded' | 'ready' | 'loading' | 'error' {
-    if (AI_STATE.model && AI_STATE.session) return 'ready';
-    return 'unloaded';
+export function getAIStatus(): any {
+    if (AI_STATE.model && AI_STATE.session) return { status: 'ready', ...AI_STATE.modelMetadata };
+    return { status: 'unloaded' };
 }

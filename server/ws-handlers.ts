@@ -5,7 +5,15 @@ import {
   addNodeToState,
   deleteNodeFromState,
   clearStateGraph,
+  createDefaultState,
+  initializeLoadedState,
 } from "./state";
+import {
+  listGraphsFromDisk,
+  loadStateFromDisk,
+  getGraphPath,
+  triggerDebouncedSave
+} from "./persistence";
 
 export interface WSHandlerContext {
   state: GraphState;
@@ -14,6 +22,7 @@ export interface WSHandlerContext {
   statePath: string;
   broadcast: (payload: any) => void;
   sync: () => void;
+  setGraph: (name: string, newState: GraphState) => void;
 }
 
 export function broadcast(clients: Set<any>, payload: any): void {
@@ -31,10 +40,40 @@ export async function handleWSMessage(
   message: any,
   context: WSHandlerContext
 ): Promise<void> {
-  const { state, config, configPath, broadcast, sync } = context;
+  const { state, config, configPath, broadcast, sync, setGraph } = context;
   const data = message;
   
   switch (data.type) {
+    case "LIST_GRAPHS":
+      broadcast({ type: "GRAPH_LIST", graphs: listGraphsFromDisk() });
+      break;
+
+    case "NEW_GRAPH": {
+      const name = data.name || "Untitled";
+      const newState = createDefaultState("Untitled Graph");
+      setGraph(name, newState);
+      broadcast({ type: "FULL_STATE", state: newState, filename: name });
+      broadcast({ type: "GRAPH_LIST", graphs: listGraphsFromDisk() });
+      break;
+    }
+
+    case "LOAD_GRAPH": {
+      const loaded = await loadStateFromDisk(getGraphPath(data.name));
+      if (loaded) {
+        const newState = initializeLoadedState(loaded);
+        setGraph(data.name, newState);
+        broadcast({ type: "FULL_STATE", state: newState, filename: data.name });
+      }
+      break;
+    }
+
+    case "GENERATE_GRAPH_NAME":
+      state.userQueue.push({ type: 'GENERATE_NAME', nodeId: '' });
+      if (!state.tasks) state.tasks = {};
+      state.tasks['GENERATE_NAME'] = 'queued';
+      sync();
+      break;
+
     case "SET_FOCUS":
       state.focusNodeId = data.nodeId;
       sync();
@@ -84,7 +123,7 @@ export async function handleWSMessage(
       broadcast({ type: "AI_STATUS", status: "loading" });
       await initializeAI(config, (err) => {
         if (err) broadcast({ type: "AI_STATUS", status: "error", error: err });
-        else broadcast({ type: "AI_STATUS", status: "ready", size: config.selectedSize });
+        else broadcast({ type: "AI_STATUS", ...AI_STATE.modelMetadata, status: "ready" });
       });
       break;
 
@@ -98,28 +137,55 @@ export async function handleWSMessage(
       Object.assign(config, data.config);
       try {
         await Bun.write(configPath, JSON.stringify(config, null, 2));
-        console.log("[Config] Server config updated.");
       } catch (e) {
         console.error("[Config] Failed to write config.json", e);
       }
       broadcast({ type: "AI_CONFIG_UPDATED", config });
       break;
 
-    case "EXPLORE_NEW":
-      AI_STATE.userQueue.push({ type: 'EXPLORE_NEW', nodeId: data.nodeId });
+    case "EXPLORE_NEW": {
+      state.userQueue.push({ type: 'EXPLORE_NEW', nodeId: data.nodeId, params: { relations: state.settings.allowedRelations } });
+      const node = state.nodes[data.nodeId];
+      if (node) {
+        if (!node.tasks) node.tasks = {};
+        node.tasks['EXPLORE_NEW'] = 'queued';
+      }
+      sync();
       break;
+    }
 
-    case "EXPLORE_LIMITED":
-      AI_STATE.userQueue.push({ type: 'EXPLORE_LIMITED', nodeId: data.nodeId, params: { relations: data.relations } });
+    case "EXPLORE_LIMITED": {
+      state.userQueue.push({ type: 'EXPLORE_LIMITED', nodeId: data.nodeId, params: { relations: data.relations } });
+      const node = state.nodes[data.nodeId];
+      if (node) {
+        if (!node.tasks) node.tasks = {};
+        node.tasks['EXPLORE_LIMITED'] = 'queued';
+      }
+      sync();
       break;
+    }
 
-    case "EXPLORE_EXISTING":
-      AI_STATE.userQueue.push({ type: 'EXPLORE_EXISTING', nodeId: data.nodeId });
+    case "EXPLORE_EXISTING": {
+      state.userQueue.push({ type: 'EXPLORE_EXISTING', nodeId: data.nodeId });
+      const node = state.nodes[data.nodeId];
+      if (node) {
+        if (!node.tasks) node.tasks = {};
+        node.tasks['EXPLORE_EXISTING'] = 'queued';
+      }
+      sync();
       break;
+    }
 
-    case "UPDATE_NODE_ASPECTS":
-      AI_STATE.userQueue.push({ type: 'DESCRIBE', nodeId: data.nodeId });
+    case "UPDATE_NODE_ASPECTS": {
+      state.userQueue.push({ type: 'DESCRIBE', nodeId: data.nodeId });
+      const node = state.nodes[data.nodeId];
+      if (node) {
+        if (!node.tasks) node.tasks = {};
+        node.tasks['DESCRIBE'] = 'queued';
+      }
+      sync();
       break;
+    }
   }
 }
 

@@ -44,7 +44,13 @@
         </div>
     </div>
 
-    <div v-if="store.isStateLoaded && store.nodesArray.length > 0" class="absolute top-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+    <div v-if="store.isStateLoaded && store.nodesArray.length > 0" class="absolute top-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center gap-2">
+       <div class="pointer-events-auto flex items-center gap-2 bg-zinc-900/60 backdrop-blur px-3 py-1 rounded-full border border-zinc-800 shadow-lg">
+          <span class="text-[10px] font-bold text-white uppercase tracking-wider">{{ store.state.settings.name }}</span>
+          <button @click="editGraphName" class="text-zinc-500 hover:text-indigo-400 transition-colors cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+       </div>
        <div class="pointer-events-auto">
          <AspectBar 
             :defined-aspects="store.state.settings.definedAspects"
@@ -54,13 +60,16 @@
     </div>
 
     <div v-if="store.isStateLoaded && store.nodesArray.length > 0" class="absolute top-4 right-4 z-30 flex gap-2">
+      <button @click="backToRoot" class="p-2 bg-zinc-900/80 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors" title="Back to List">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      </button>
       <button @click="codeGraphRef?.reheat()" class="p-2 bg-zinc-900/80 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors" title="Re-layout"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 12c0-4.4 3.6-8 8-8 3.3 0 6.2 2 7.4 4.9M22 12c0 4.4-3.6 8-8 8-3.3 0-6.2-2-7.4-4.9"/></svg></button>
 
       <div class="relative">
-        <button @click="showBrainPanel = !showBrainPanel" class="p-2 bg-zinc-900/80 border border-zinc-800 rounded-lg transition-colors" :class="store.aiStatus === 'ready' ? 'text-emerald-500' : (store.aiStatus === 'thinking' ? 'text-indigo-400 animate-pulse' : 'text-zinc-500')">
+        <button @click.stop="showBrainPanel = !showBrainPanel" class="p-2 bg-zinc-900/80 border border-zinc-800 rounded-lg transition-colors" :class="store.aiStatus === 'ready' ? 'text-emerald-500' : (store.aiStatus === 'thinking' ? 'text-indigo-400 animate-pulse' : 'text-zinc-500')">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.78-3.06 2.5 2.5 0 0 1-2.41-4.23 2.5 2.5 0 0 1 .53-4.58A2.5 2.5 0 0 1 9.5 2z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.78-3.06 2.5 2.5 0 0 0 2.41-4.23 2.5 2.5 0 0 0-.53-4.58A2.5 2.5 0 0 0 14.5 2z"></path></svg>
         </button>
-        <div v-if="showBrainPanel" class="absolute top-full right-0 mt-2">
+        <div v-if="showBrainPanel" @click.stop class="absolute top-full right-0 mt-2">
           <BrainPanel 
             :status="store.aiStatus" 
             :config="store.serverAiConfig" 
@@ -72,13 +81,22 @@
       </div>
 
       <div class="relative">
-        <button @click="showConfig = !showConfig" class="p-2 bg-zinc-900/80 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
-        <div v-if="showConfig" class="absolute top-full right-0 mt-2"><ConfigPanel /></div>
+        <button @click.stop="showRelations = !showRelations; showConfig = false; showBrainPanel = false" class="p-2 bg-zinc-900/80 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white" title="Relations Management">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        </button>
+        <div v-if="showRelations" @click.stop class="absolute top-full right-0 mt-2">
+          <RelationsPanel />
+        </div>
+      </div>
+
+      <div class="relative">
+        <button @click.stop="showConfig = !showConfig; showRelations = false; showBrainPanel = false" class="p-2 bg-zinc-900/80 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+        <div v-if="showConfig" @click.stop class="absolute top-full right-0 mt-2"><ConfigPanel /></div>
       </div>
     </div>
 
-    <div v-if="store.isConnected && store.isStateLoaded && store.nodesArray.length === 0" class="absolute inset-0 z-[100] bg-black/40 backdrop-blur-md flex items-center justify-center">
-       <InitialOnboarding @start="handleOnboardingComplete" />
+    <div v-if="store.isConnected && store.isStateLoaded && (!store.currentFilename || store.nodesArray.length === 0)" class="absolute inset-0 z-[100] bg-black/40 backdrop-blur-md flex items-center justify-center">
+       <InitialOnboarding :graph-list="store.graphList" @start="handleOnboardingComplete" @load="loadExistingGraph" />
     </div>
 
     <div v-if="!store.isConnected || !store.isStateLoaded" class="absolute inset-0 z-[110] bg-black/60 backdrop-blur flex items-center justify-center">
@@ -100,6 +118,7 @@ import AspectBar from './components/AspectBar.vue'
 import InitialOnboarding from './components/InitialOnboarding.vue'
 import BrainPanel from './components/BrainPanel.vue'
 import NodeIcon from './components/NodeIcon.vue'
+import RelationsPanel from './components/RelationsPanel.vue'
 import type { GraphNode } from './types/graph'
 
 const store = useGraphStore()
@@ -108,20 +127,36 @@ const selectedNodeId = ref<string | null>(null)
 const selectedNode = computed(() => selectedNodeId.value ? store.state.nodes[selectedNodeId.value] : null)
 
 const showConfig = ref(false)
+const showRelations = ref(false)
 const showBrainPanel = ref(false)
+
+function backToRoot() {
+  store.currentFilename = null;
+  window.location.hash = '';
+  store.send({ type: 'LIST_GRAPHS' });
+}
+
+function loadExistingGraph(name: string) {
+  store.send({ type: 'LOAD_GRAPH', name });
+}
 
 // Use the store's computed island calculation
 const graphIslands = computed(() => store.graphIslands);
 
-function handleOnboardingComplete(payload: { labels: string[], aspects: string[] }) {
-  store.send({ 
-    type: 'UPDATE_SETTINGS', 
-    settings: { ...store.state.settings, definedAspects: payload.aspects, activeAspects: payload.aspects.slice(0, 3) } 
-  });
-  // Add all starting concepts
-  payload.labels.forEach(label => {
-    store.send({ type: 'ADD_NODE', label });
-  });
+function handleOnboardingComplete(payload: { labels: string[], aspects: string[], name?: string }) {
+  const filename = payload.name || 'New Graph';
+  store.send({ type: 'NEW_GRAPH', name: filename });
+  
+  setTimeout(() => {
+    store.send({ 
+      type: 'UPDATE_SETTINGS', 
+      settings: { ...store.state.settings, name: filename, definedAspects: payload.aspects, activeAspects: payload.aspects.slice(0, 3) } 
+    });
+    // Add all starting concepts
+    payload.labels.forEach(label => {
+      store.send({ type: 'ADD_NODE', label });
+    });
+  }, 200);
 }
 
 function onNodeSelect(node: GraphNode | null) {
@@ -136,6 +171,13 @@ function toggleAutoExplore(val: boolean) {
   store.send({ type: 'UPDATE_SETTINGS', settings: { ...store.state.settings, autoExplore: val } });
 }
 
+function editGraphName() {
+  const name = prompt('Rename Graph:', store.state.settings.name);
+  if (name && name !== store.state.settings.name) {
+    store.send({ type: 'UPDATE_SETTINGS', settings: { ...store.state.settings, name } });
+  }
+}
+
 function promptNewIndependentNode() { 
   const label = prompt('New independent concept:'); 
   if (label) store.send({ type: 'ADD_NODE', label }); 
@@ -143,6 +185,12 @@ function promptNewIndependentNode() {
 
 onMounted(() => {
   store.connect()
+  window.addEventListener('click', () => {
+    showConfig.value = false
+    showRelations.value = false
+    showBrainPanel.value = false
+  })
+
   window.addEventListener('update-settings', (e: any) => {
     store.send({ type: 'UPDATE_SETTINGS', settings: { ...store.state.settings, ...e.detail } });
   })

@@ -12,6 +12,18 @@
       <input type="range" min="1" max="10" step="1" :value="store.state.settings.minConnections" @input="(e: any) => updateServerSettings({ minConnections: parseInt(e.target.value) })" class="w-full accent-indigo-500" />
     </div>
 
+    <div class="pt-2">
+      <label class="flex items-center gap-2 cursor-pointer group">
+        <input 
+          type="checkbox" 
+          :checked="store.state.settings.showEmoji" 
+          @change="(e: any) => updateServerSettings({ showEmoji: e.target.checked })" 
+          class="w-3.5 h-3.5 accent-indigo-500" 
+        />
+        <span class="text-zinc-400 group-hover:text-zinc-200 transition-colors">Show Emoji</span>
+      </label>
+    </div>
+
     <h3 class="font-bold text-zinc-400 uppercase tracking-wider mt-2 pt-3 border-t border-zinc-800">Visuals</h3>
     <div class="space-y-1">
       <label class="flex justify-between text-zinc-500">Link Opacity <span>{{ config.linkOpacity }}</span></label>

@@ -1,36 +1,56 @@
 import { applyPatch, type Operation } from "fast-json-patch";
-import type { GraphState } from "../src/types/graph";
+import type { GraphState, GraphNode } from "../src/types/graph";
 import type { Schemas } from "./ai/schemas";
 
-export function createDefaultState(): GraphState {
+export function createDefaultState(name: string = "Untitled Graph"): GraphState {
   return {
     nodes: {},
     links: [],
     focusNodeId: null,
     thinkingNodeId: null,
+    userQueue: [],
+    tasks: {},
     settings: {
+      name,
       creativity: 0.7,
       maxWords: 3,
       minConnections: 3,
       autoExplore: false,
       definedAspects: [],
       activeAspects: [],
+      allowedRelations: ['subclass_of', 'part_of', 'has_part', 'causes', 'enables', 'depends_on', 'preceded_by', 'succeded_by', 'similar_to'],
+      showEmoji: true,
     },
   };
 }
 
-export function initializeLoadedState(state: GraphState): GraphState {
+export function initializeLoadedState(state: any): GraphState {
+  // Clean transient AI states on load
   state.thinkingNodeId = null;
-  if (!state.settings.definedAspects) {
-    state.settings.definedAspects = [];
+  state.userQueue = [];
+  state.tasks = {};
+
+  // Ensure settings exist
+  if (!state.settings) state.settings = {};
+  if (!state.settings.definedAspects) state.settings.definedAspects = [];
+  if (!state.settings.activeAspects) state.settings.activeAspects = [];
+  if (!state.settings.allowedRelations) {
+    state.settings.allowedRelations = ['subclass_of', 'part_of', 'has_part', 'causes', 'enables', 'depends_on', 'preceded_by', 'succeded_by', 'similar_to'];
   }
-  if (!state.settings.activeAspects) {
-    state.settings.activeAspects = [];
+  if (state.settings.showEmoji === undefined) {
+    state.settings.showEmoji = true;
   }
-  Object.values(state.nodes).forEach(n => {
+
+  // Ensure nodes and their sub-objects exist
+  if (!state.nodes) state.nodes = {};
+  Object.values(state.nodes).forEach((n: any) => {
     if (!n.attempts) n.attempts = {};
+    n.tasks = {}; // Reset node tasks on load
   });
-  return state;
+
+  if (!state.links) state.links = [];
+
+  return state as GraphState;
 }
 
 export function applyStatePatches(
@@ -56,6 +76,7 @@ export function addNodeToState(
     val: isFirst ? 5 : 3,
     aspects: {},
     attempts: {},
+    tasks: {},
   };
 
   if (parentId) {
@@ -87,7 +108,10 @@ export function clearStateGraph(state: GraphState): void {
   state.links = [];
   state.focusNodeId = null;
   state.thinkingNodeId = null;
+  state.userQueue = [];
+  state.tasks = {};
 }
+
 export function shortRandomHash(length: 6 | 8 = 8): string {
   const bytesLen = Math.ceil((length * 3) / 4);
   const bytes = new Uint8Array(bytesLen);
@@ -95,6 +119,7 @@ export function shortRandomHash(length: 6 | 8 = 8): string {
 
   return Buffer.from(bytes).toString("base64url").slice(0, length);
 }
+
 export function addAIGeneratedNodes(
   state: GraphState,
   targetNodeId: string,
@@ -129,6 +154,8 @@ export function addAIGeneratedNodes(
         type: "concept",
         val: 2,
         aspects: {},
+        attempts: {},
+        tasks: {},
       };
       state.links.push({
         source: targetNodeId,

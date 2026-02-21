@@ -1,10 +1,12 @@
 import { executeAITask } from "./core";
 import { Schemas } from "./schemas";
 import {
-  DESCRIBE_PROMPT,
   NEW_CONNECTIONS_PROMPT,
   FIND_CONNECTIONS_PROMPT,
-  NEW_RELATIONS_LIMITED_PROMPT
+  NEW_RELATIONS_LIMITED_PROMPT,
+  GRAPH_NAME_PROMPT,
+  DESCRIBE_CONTENT_PROMPT,
+  EVALUATE_ASPECTS_PROMPT
 } from "./prompts";
 import type { ServerConfig } from "../config";
 
@@ -53,6 +55,19 @@ export async function newConnectionsLimited(params: NewConnectionsParams & { rel
   return result || { connections: [] };
 }
 
+export async function generateGraphName(concepts: string[], aspects: string[], config: ServerConfig): Promise<string | null> {
+  const prompt = GRAPH_NAME_PROMPT(concepts, aspects);
+  const result = await executeAITask<typeof Schemas.GraphNameResponse.infer>({
+    prompt,
+    schema: Schemas.GraphNameResponse,
+    config,
+    taskName: "GENERATE_GRAPH_NAME",
+    temperature: 0.7,
+    maxTokens: 50
+  });
+  return result?.name || null;
+}
+
 export interface FindConnectionsParams {
   label: string;
   existingNodes: string[];
@@ -86,28 +101,41 @@ export async function describeNode(
   config: ServerConfig
 ): Promise<{ description: string; aspects: Record<string, number>, emoji: string } | null> {
 
-  const result = await executeAITask<typeof Schemas.Node.infer>({
-    prompt: DESCRIBE_PROMPT(label, aspectList.join(", ")),
-    schema: Schemas.Node,
+  // Task 1: Generate Description and Emoji
+  const content = await executeAITask<any>({
+    prompt: DESCRIBE_CONTENT_PROMPT(label),
+    schema: Schemas.Node.pick("description", "emoji"),
+    config,
+    taskName: "DESCRIBE_CONTENT",
+    temperature: 0.1,
+    maxTokens: 300
+  });
+
+  if (!content) return null;
+
+  // Task 2: Evaluate Relevance Scores for Aspects
+  const scores = await executeAITask<any>({
+    prompt: EVALUATE_ASPECTS_PROMPT(label, aspectList.join(", ")),
+    schema: Schemas.Node.pick("scores"),
     config,
     taskName: "EVALUATE_ASPECTS",
     temperature: 0.1,
     maxTokens: 500
   });
 
-  if (!result) return null;
+  if (!scores) return null;
 
   const aspects: Record<string, number> = {};
-  if (Array.isArray(result.scores)) {
-    result.scores.forEach((s: any) => {
+  if (Array.isArray(scores.scores)) {
+    scores.scores.forEach((s: any) => {
       aspects[s.aspect] = s.rating;
     });
   }
 
   return {
-    description: result.description,
+    description: content.description,
     aspects,
-    emoji: extractEmojis(result.emoji)
+    emoji: extractEmojis(content.emoji)
   };
 }
 
