@@ -1,11 +1,11 @@
 {
   "name": "kodoksztalt-vite",
-  "version": "0.0.230",
+  "version": "0.0.234",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "build:demo": "vue-tsc && VITE_DEMO_MODE=true && vite build",
+    "build:demo": "vue-tsc && VITE_DEMO_MODE=true && vite build && cp -r data dist/data",
     "preview": "vite preview",
     "scan": "ts-node scripts/scan.ts",
     "server": "bun run server/index.ts",

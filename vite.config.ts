@@ -8,6 +8,9 @@ export default defineConfig(({ mode }) => ({
     vue(),
     tailwindcss(),
   ],
+  server: {
+    hmr: false
+  },
   base: mode === 'production' ? '/semantic_brain/' : '/',
   build: {
     outDir: 'dist',

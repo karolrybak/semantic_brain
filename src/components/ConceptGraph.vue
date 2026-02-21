@@ -14,6 +14,7 @@ const props = defineProps<{
   nodes: GraphNode[]
   links: GraphLink[]
   settings: GraphSettings
+  activeAspects: string[]
   selectedNodeId?: string | null
   thinkingNodeId?: string | null
 }>()
@@ -96,7 +97,7 @@ function scheduleUpdate() {
 watch(() => props.nodes.length, scheduleUpdate);
 watch(() => props.links.length, scheduleUpdate);
 
-watch(() => props.settings.activeAspects, (active) => {
+watch(() => props.activeAspects, (active) => {
   props.nodes.forEach(n => {
     const data = nodePhysicsData.get(n.id) || { currentScore: 0.5, targetScore: 0.5 };
     data.targetScore = calculateNodeScore(n, active);
@@ -130,7 +131,7 @@ function updateData() {
       return Object.assign(existing, n);
     }
     const newNode = { ...n };
-    nodePhysicsData.set(n.id, { currentScore: 0.5, targetScore: calculateNodeScore(n, props.settings.activeAspects) });
+    nodePhysicsData.set(n.id, { currentScore: 0.5, targetScore: calculateNodeScore(n, props.activeAspects) });
     return newNode;
   });
 
@@ -199,7 +200,7 @@ function initGraph() {
   g.d3Force('link')?.distance(PHYSICS.LINK_DISTANCE).strength(link => {
     const s = nodePhysicsData.get((link.source as any).id)?.currentScore || 0.5;
     const t = nodePhysicsData.get((link.target as any).id)?.currentScore || 0.5;
-    const isFiltering = props.settings.activeAspects.length > 0;
+    const isFiltering = props.activeAspects.length > 0;
     const mult = isFiltering ? currentLinkMult : 1.0;
     return PHYSICS.LINK_STRENGTH_BASE * ((s + t) / 2) * mult;
   });

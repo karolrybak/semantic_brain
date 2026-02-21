@@ -6,6 +6,7 @@
           :nodes="store.nodesArray" 
           :links="store.linksArray"
           :settings="store.state.settings"
+          :active-aspects="store.activeAspects"
           :selected-node-id="selectedNodeId"
           :thinking-node-id="store.state.thinkingNodeId"
           @select="onNodeSelect" 
@@ -54,7 +55,6 @@
        <div class="pointer-events-auto">
          <AspectBar 
             :defined-aspects="store.state.settings.definedAspects"
-            :active-aspects="store.state.settings.activeAspects"
          />
        </div>
     </div>
@@ -96,7 +96,7 @@
     </div>
 
     <div v-if="store.isConnected && store.isStateLoaded && (!store.currentFilename || store.nodesArray.length === 0)" class="absolute inset-0 z-[100] bg-black/40 backdrop-blur-md flex items-center justify-center">
-       <InitialOnboarding :graph-list="store.graphList" @start="handleOnboardingComplete" @load="loadExistingGraph" />
+       <InitialOnboarding :graph-list="store.graphList" :is-demo="store.isDemoMode" @start="handleOnboardingComplete" @load="loadExistingGraph" />
     </div>
 
     <div v-if="!store.isConnected || !store.isStateLoaded" class="absolute inset-0 z-[110] bg-black/60 backdrop-blur flex items-center justify-center">
@@ -148,9 +148,10 @@ function handleOnboardingComplete(payload: { labels: string[], aspects: string[]
   store.send({ type: 'NEW_GRAPH', name: filename });
   
   setTimeout(() => {
+    store.activeAspects = payload.aspects.slice(0, 3);
     store.send({ 
       type: 'UPDATE_SETTINGS', 
-      settings: { ...store.state.settings, name: filename, definedAspects: payload.aspects, activeAspects: payload.aspects.slice(0, 3) } 
+      settings: { ...store.state.settings, name: filename, definedAspects: payload.aspects } 
     });
     // Add all starting concepts
     payload.labels.forEach(label => {

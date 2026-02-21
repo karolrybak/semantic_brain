@@ -15,10 +15,10 @@ export const useGraphStore = defineStore('graph', () => {
       minConnections: 2,
       autoExplore: false,
       definedAspects: [],
-      activeAspects: []
     }
   });
 
+  const activeAspects = ref<string[]>([]);
   const isDemoMode = ref(import.meta.env.VITE_DEMO_MODE === 'true' || window.location.search.includes('demo=true'));
   const isConnected = ref(false);
   const isStateLoaded = ref(false);
@@ -86,6 +86,8 @@ export const useGraphStore = defineStore('graph', () => {
       const initialGraph = window.location.hash.slice(2);
       if (initialGraph) {
         loadStaticGraph(initialGraph);
+      } else {
+        isStateLoaded.value = true;
       }
       return;
     }
@@ -112,6 +114,7 @@ export const useGraphStore = defineStore('graph', () => {
       const data = JSON.parse(event.data);
       if (data.type === 'FULL_STATE') {
         state.value = data.state;
+        activeAspects.value = state.value.settings.definedAspects.slice(0, 3);
         currentFilename.value = data.filename || null;
         if (currentFilename.value) {
           window.location.hash = '/' + currentFilename.value;
@@ -137,6 +140,7 @@ export const useGraphStore = defineStore('graph', () => {
       const response = await fetch(`./data/${name}.json`);
       const data = await response.json();
       state.value = data;
+      activeAspects.value = state.value.settings.definedAspects.slice(0, 3);
       currentFilename.value = name;
       window.location.hash = '/' + name;
       isStateLoaded.value = true;
@@ -169,6 +173,8 @@ export const useGraphStore = defineStore('graph', () => {
     graphIslands,
     currentFilename,
     graphList,
+    activeAspects,
+    isDemoMode,
     connect,
     send
   };

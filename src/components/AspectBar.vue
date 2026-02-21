@@ -13,33 +13,28 @@
         {{ aspect }}
       </div>
     </div>
-    
     <div class="h-4 w-px bg-zinc-800 mx-1"></div>
-
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useGraphStore } from '../stores/graphStore';
 
 const props = defineProps<{
-  definedAspects: string[],
-  activeAspects: string[]
+  definedAspects: string[]
 }>();
 
-const newAspect = ref('');
+const store = useGraphStore();
 
 function isActive(a: string) {
-  return props.activeAspects.includes(a);
+  return store.activeAspects.includes(a);
 }
 
 function toggleAspect(a: string) {
-  let next = [...props.activeAspects];
+  let next = [...store.activeAspects];
   if (isActive(a)) next = next.filter(i => i !== a);
   else next.push(a);
   
-  window.dispatchEvent(new CustomEvent('update-settings', { 
-    detail: { activeAspects: next } 
-  }));
+  store.activeAspects = next;
 }
 </script>

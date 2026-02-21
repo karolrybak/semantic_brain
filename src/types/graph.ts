@@ -36,7 +36,6 @@ export interface GraphSettings {
   minConnections: number;
   autoExplore: boolean;
   definedAspects: string[];
-  activeAspects: string[];
   allowedRelations: string[];
   showEmoji: boolean;
 }

@@ -331,7 +331,9 @@
       "attempts": {
         "EXPLORE_EXISTING": 1
       },
-      "tasks": {}
+      "tasks": {
+        "DESCRIBE": "queued"
+      }
     },
     "APtXYQFO": {
       "id": "APtXYQFO",
@@ -816,7 +818,7 @@
       "relationType": "succeded_by"
     }
   ],
-  "focusNodeId": "KFMNQ5Og",
+  "focusNodeId": "wq92R_xA",
   "thinkingNodeId": null,
   "settings": {
     "name": "Founding Fathers' Paths",
@@ -831,13 +833,20 @@
       "Education",
       "Military service"
     ],
-    "activeAspects": [],
+    "activeAspects": [
+      "Democratic"
+    ],
     "allowedRelations": [
       "preceded_by",
       "succeded_by"
     ],
     "showEmoji": false
   },
-  "userQueue": [],
+  "userQueue": [
+    {
+      "type": "DESCRIBE",
+      "nodeId": "wq92R_xA"
+    }
+  ],
   "tasks": {}
 }

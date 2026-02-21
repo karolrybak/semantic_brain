@@ -116,13 +116,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const props = defineProps<{ graphList: { filename: string; name: string }[] }>();
+const props = defineProps<{ 
+  graphList: { filename: string; name: string }[],
+  isDemo: boolean
+}>();
 const emit = defineEmits<{
   (e: 'start', payload: { labels: string[], aspects: string[], name: string }): void
   (e: 'load', name: string): void
 }>();
 
-const step = ref<'mode' | 'list' | 'config'>('mode');
+const step = ref<'mode' | 'list' | 'config'>(props.isDemo ? 'list' : 'mode');
 const graphName = ref('');
 const concepts = ref<string[]>([]);
 const aspects = ref<string[]>([]);

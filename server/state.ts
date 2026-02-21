@@ -17,7 +17,6 @@ export function createDefaultState(name: string = "Untitled Graph"): GraphState 
       minConnections: 3,
       autoExplore: false,
       definedAspects: [],
-      activeAspects: [],
       allowedRelations: ['subclass_of', 'part_of', 'has_part', 'causes', 'enables', 'depends_on', 'preceded_by', 'succeded_by', 'similar_to'],
       showEmoji: true,
     },
@@ -33,7 +32,6 @@ export function initializeLoadedState(state: any): GraphState {
   // Ensure settings exist
   if (!state.settings) state.settings = {};
   if (!state.settings.definedAspects) state.settings.definedAspects = [];
-  if (!state.settings.activeAspects) state.settings.activeAspects = [];
   if (!state.settings.allowedRelations) {
     state.settings.allowedRelations = ['subclass_of', 'part_of', 'has_part', 'causes', 'enables', 'depends_on', 'preceded_by', 'succeded_by', 'similar_to'];
   }

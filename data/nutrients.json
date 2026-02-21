@@ -20,7 +20,8 @@
       "description": "Edible plant products rich in nutrients and vitamins.",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M15.5 12.5c-1.9 0-3.5 1.6-3.5 3.5 0 1.9 1.6 3.5 3.5 3.5s3.5-1.6 3.5-3.5c0-1.9-1.6-3.5-3.5-3.5zm0 10c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5c0 1.9-1.6 3.5-3.5 3.5zm-10-10c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5c0 1.9-1.6 3.5-3.5 3.5zm10-10c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5c0 1.9-1.6 3.5-3.5 3.5z' fill='#FFD700'/></svg>",
       "emoji": "🍎🍊🍌",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "9z8q5x4": {
       "id": "9z8q5x4",
@@ -41,7 +42,8 @@
       "description": "Nutritious plants rich in vitamins and minerals.",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M16 2C8.27 2 2 8.27 2 16s6.27 14 14 14 14-6.27 14-14S23.73 2 16 2zm0 26C9.38 28 4 22.62 4 16S9.38 4 16 4s12 5.38 12 12-5.38 12-12 12zm0-8c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' fill='#333'/><path d='M24 16c0 3.87-3.13 7-7 7s-7-3.13-7-7 3.13-7 7-7 7 3.13 7 7z' fill='#F5CBA7'/><path d='M16 26c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' fill='#D55E00'/></svg>",
       "emoji": "🥦🥕",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "4GZAVQOi": {
       "id": "4GZAVQOi",
@@ -67,7 +69,8 @@
       "emoji": "🍎",
       "attempts": {
         "EXPLORE_EXISTING": 4
-      }
+      },
+      "tasks": {}
     },
     "lMS-1huB": {
       "id": "lMS-1huB",
@@ -91,7 +94,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF69B4'/></svg>",
       "emoji": "🍇🫐",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "n5uUrjrd": {
       "id": "n5uUrjrd",
@@ -115,7 +119,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFD700'/></svg>",
       "emoji": "🍊🍋",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "IBk24Lbe": {
       "id": "IBk24Lbe",
@@ -139,7 +144,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFDAB9'/></svg>",
       "emoji": "🍑",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "pSJQHccQ": {
       "id": "pSJQHccQ",
@@ -163,7 +169,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#F0E68C'/></svg>",
       "emoji": "🍉🍈",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "cwqSz6-_": {
       "id": "cwqSz6-_",
@@ -189,7 +196,8 @@
       "emoji": "🥕",
       "attempts": {
         "EXPLORE_EXISTING": 1
-      }
+      },
+      "tasks": {}
     },
     "-kxtDqeE": {
       "id": "-kxtDqeE",
@@ -213,7 +221,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#3CB371'/></svg>",
       "emoji": "🥦",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "tojW0Ouh": {
       "id": "tojW0Ouh",
@@ -237,7 +246,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#98FB98'/></svg>",
       "emoji": "🥬",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "sM4c4KAR": {
       "id": "sM4c4KAR",
@@ -261,7 +271,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#708090'/></svg>",
       "emoji": "🥒",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "jCENpFqw": {
       "id": "jCENpFqw",
@@ -285,7 +296,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF6347'/></svg>",
       "emoji": "🍅",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "QjoUMcuG": {
       "id": "QjoUMcuG",
@@ -309,7 +321,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF4500'/></svg>",
       "emoji": "🍎",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "B83Zins1": {
       "id": "B83Zins1",
@@ -333,7 +346,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF6347'/></svg>",
       "emoji": "🫐",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "BNqLi-Em": {
       "id": "BNqLi-Em",
@@ -357,7 +371,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF69B4'/></svg>",
       "emoji": "🍓",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "Si5ZHtVh": {
       "id": "Si5ZHtVh",
@@ -381,7 +396,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFFF00'/></svg>",
       "emoji": "🍋",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "Lb5MXfve": {
       "id": "Lb5MXfve",
@@ -405,7 +421,8 @@
       "shape": "ellipse",
       "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFA500'/></svg>",
       "emoji": "🍊",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "y-pEz3Hz": {
       "id": "y-pEz3Hz",
@@ -420,7 +437,8 @@
       },
       "description": "Green plant parts used in nutrition.",
       "emoji": "🌿",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "PDCPyH1M": {
       "id": "PDCPyH1M",
@@ -443,7 +461,8 @@
       "emoji": "🌱",
       "attempts": {
         "DESCRIBE": 1
-      }
+      },
+      "tasks": {}
     },
     "3_Ynqtul": {
       "id": "3_Ynqtul",
@@ -464,7 +483,8 @@
       },
       "attempts": {},
       "description": "Plant parts that store nutrients and minerals.",
-      "emoji": "🌱🌿"
+      "emoji": "🌱🌿",
+      "tasks": {}
     },
     "QOFVyOrV": {
       "id": "QOFVyOrV",
@@ -485,7 +505,8 @@
       },
       "attempts": {},
       "description": "Colorful reproductive structures of plants.",
-      "emoji": "🌸🌺"
+      "emoji": "🌸🌺",
+      "tasks": {}
     },
     "BuDJQjBM": {
       "id": "BuDJQjBM",
@@ -506,7 +527,8 @@
       },
       "attempts": {},
       "description": "Plants' reproductive units containing embryos.",
-      "emoji": "🌱🌱"
+      "emoji": "🌱🌱",
+      "tasks": {}
     },
     "SpLZsMnR": {
       "id": "SpLZsMnR",
@@ -525,7 +547,8 @@
         "EXPLORE_EXISTING": 1
       },
       "description": "Cucumber is a low-calorie, hydrating vegetable rich in vitamins and minerals.",
-      "emoji": "🥒💦"
+      "emoji": "🥒💦",
+      "tasks": {}
     },
     "hA7xsmcs": {
       "id": "hA7xsmcs",
@@ -546,7 +569,8 @@
       },
       "attempts": {},
       "description": "Dairy products come from milk and are rich in calcium and protein.",
-      "emoji": "🥛"
+      "emoji": "🥛",
+      "tasks": {}
     },
     "wjn6NvYH": {
       "id": "wjn6NvYH",
@@ -567,7 +591,8 @@
       },
       "description": "Milk is a nutrient-rich liquid produced by mammals.",
       "emoji": "🥛",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "5XbZJ2LZ": {
       "id": "5XbZJ2LZ",
@@ -588,7 +613,8 @@
       },
       "description": "Cheese is a dairy product made from milk and aged.",
       "emoji": "🧀",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "A7Czmc0o": {
       "id": "A7Czmc0o",
@@ -609,7 +635,8 @@
       },
       "description": "Butter is a dairy product made from cream.",
       "emoji": "🧈",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "RyrLrxeH": {
       "id": "RyrLrxeH",
@@ -630,7 +657,8 @@
       },
       "description": "Yogurt is a fermented dairy product rich in probiotics.",
       "emoji": "🧇",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "oXOlioUY": {
       "id": "oXOlioUY",
@@ -651,7 +679,8 @@
       },
       "description": "Cream is a high-fat dairy product from milk.",
       "emoji": "🥛🧈",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "1TcFArVA": {
       "id": "1TcFArVA",
@@ -672,7 +701,8 @@
       },
       "attempts": {},
       "description": "Meat is animal flesh used for food.",
-      "emoji": "🥩"
+      "emoji": "🥩",
+      "tasks": {}
     },
     "m2uIA0f3": {
       "id": "m2uIA0f3",
@@ -693,7 +723,8 @@
       },
       "description": "Burgers are grilled meat patties in a bun.",
       "emoji": "🍔",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "Zq_FrI9Q": {
       "id": "Zq_FrI9Q",
@@ -714,7 +745,8 @@
       },
       "description": "Pork is meat from domestic pigs.",
       "emoji": "🍖",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "l6rU_wRK": {
       "id": "l6rU_wRK",
@@ -735,7 +767,8 @@
       },
       "description": "Sandwich is a food consisting of fillings between slices of bread.",
       "emoji": "🥪",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "qLBx9fSw": {
       "id": "qLBx9fSw",
@@ -756,7 +789,8 @@
       },
       "description": "Hamburgers are bread sandwiches with beef patty.",
       "emoji": "🍔",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "6EUd9-Yb": {
       "id": "6EUd9-Yb",
@@ -775,9 +809,12 @@
         "Iron": 0.4,
         "Carbohydrates": 0.8
       },
-      "attempts": {},
+      "attempts": {
+        "EXPLORE_NEW": 2
+      },
       "description": "Bread is a staple food made from flour and yeast.",
-      "emoji": "🍞"
+      "emoji": "🍞",
+      "tasks": {}
     },
     "cAK7g8Hr": {
       "id": "cAK7g8Hr",
@@ -798,7 +835,8 @@
       },
       "description": "Buns are small bread rolls often used in sandwiches.",
       "emoji": "🍞",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
     },
     "N-UazYJ1": {
       "id": "N-UazYJ1",
@@ -819,7 +857,30 @@
       },
       "description": "Food provides nutrients for sustenance.",
       "emoji": "🥣🥗🍔",
-      "attempts": {}
+      "attempts": {},
+      "tasks": {}
+    },
+    "75ylnhVI": {
+      "id": "75ylnhVI",
+      "label": "Lamb",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.1,
+        "Folate": 0,
+        "Potassium": 0.3,
+        "Magnesium": 0.3,
+        "Iron": 0.8,
+        "Carbohydrates": 0
+      },
+      "attempts": {},
+      "tasks": {},
+      "description": "Meat from young sheep.",
+      "emoji": "🐑"
     }
   },
   "links": [
@@ -1182,9 +1243,15 @@
       "target": "9z8q5x4",
       "type": "bridge",
       "relationType": "opposite_of"
+    },
+    {
+      "source": "1TcFArVA",
+      "target": "75ylnhVI",
+      "type": "ai",
+      "relationType": "has_part"
     }
   ],
-  "focusNodeId": "B83Zins1",
+  "focusNodeId": null,
   "thinkingNodeId": null,
   "settings": {
     "creativity": 0.7,
@@ -1203,6 +1270,20 @@
       "Carbohydrates"
     ],
     "activeAspects": [],
-    "name": "NutriHub"
-  }
+    "name": "NutriHub",
+    "allowedRelations": [
+      "subclass_of",
+      "part_of",
+      "has_part",
+      "causes",
+      "enables",
+      "depends_on",
+      "preceded_by",
+      "succeded_by",
+      "similar_to"
+    ],
+    "showEmoji": true
+  },
+  "userQueue": [],
+  "tasks": {}
 }

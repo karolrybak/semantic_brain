@@ -2,6 +2,12 @@
 
 Semantic Brain is an autonomous knowledge graph generator and explorer. It uses LLMs (via `node-llama-cpp`) to dynamically expand conceptual landscapes, evaluating relationships across multiple semantic dimensions and visualizing them in a real-time 3D environment.
 
+## Demo
+
+Here's a simple demo with few pre-generated graphs:
+
+https://karolrybak.github.io/semantic_brain/?demo=true
+
 ## 🛠 Setup & Requirements
 
 ### 1. Model Configuration
