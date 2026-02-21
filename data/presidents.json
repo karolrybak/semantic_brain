@@ -1,0 +1,843 @@
+{
+  "nodes": {
+    "OH0b60S2": {
+      "id": "OH0b60S2",
+      "label": "George Washington",
+      "status": "accepted",
+      "type": "root",
+      "val": 5,
+      "aspects": {
+        "Republican": 1,
+        "Democratic": 0,
+        "Family wealth": 0.7,
+        "Education": 0.5
+      },
+      "attempts": {
+        "DESCRIBE": 1,
+        "EXPLORE_EXISTING": 28
+      },
+      "description": "First President of the United States, 1732-1799",
+      "emoji": "👨💼",
+      "tasks": {}
+    },
+    "mW-VGjS8": {
+      "id": "mW-VGjS8",
+      "label": "John Adams",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Republican": 0.8,
+        "Democratic": 0.1,
+        "Family wealth": 0.2,
+        "Education": 0.9
+      },
+      "attempts": {
+        "EXPLORE_EXISTING": 76,
+        "EXPLORE_NEW": 1
+      },
+      "description": "Second President of the United States, 1735-1826",
+      "emoji": "👨💼👩",
+      "tasks": {}
+    },
+    "Hd6anw_N": {
+      "id": "Hd6anw_N",
+      "label": "James Monroe",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0.3,
+        "Education": 0.8
+      },
+      "attempts": {
+        "DESCRIBE": 1,
+        "EXPLORE_EXISTING": 75,
+        "EXPLORE_NEW": 3
+      },
+      "description": "Fifth President of the United States, 1758-1831",
+      "emoji": "👨💼👩",
+      "tasks": {}
+    },
+    "uQ54IN-C": {
+      "id": "uQ54IN-C",
+      "label": "James Madison",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.8,
+        "Democratic": 0.2,
+        "Family wealth": 0,
+        "Education": 1,
+        "Military service": 0
+      },
+      "description": "4th U.S. President; key figure in drafting the U.S. Constitution",
+      "emoji": "🔍📝🔍",
+      "attempts": {
+        "EXPLORE_EXISTING": 20
+      },
+      "tasks": {}
+    },
+    "Ze8M7hJZ": {
+      "id": "Ze8M7hJZ",
+      "label": "Thomas Jefferson",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.7,
+        "Democratic": 0.3,
+        "Family wealth": 0,
+        "Education": 1,
+        "Military service": 0
+      },
+      "description": "3rd U.S. President; author of the Declaration of Independence",
+      "emoji": "📖",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "I24yN9tE": {
+      "id": "I24yN9tE",
+      "label": "John Tyler",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0,
+        "Military service": 0
+      },
+      "description": "10th U.S. President; last of the Virginia Dynasty",
+      "emoji": "◾",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "KFMNQ5Og": {
+      "id": "KFMNQ5Og",
+      "label": "Zachary Taylor",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.8,
+        "Democratic": 0.1,
+        "Family wealth": 0.2,
+        "Education": 0.1,
+        "Military service": 0.9
+      },
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "description": "19th U.S. President, military hero",
+      "emoji": "🏸🏵",
+      "tasks": {}
+    },
+    "jKuoaASl": {
+      "id": "jKuoaASl",
+      "label": "Millard Fillmore",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0.3,
+        "Education": 0.2,
+        "Military service": 0
+      },
+      "description": "13th U.S. President, successor of Zachary Taylor",
+      "emoji": "🏸",
+      "attempts": {},
+      "tasks": {}
+    },
+    "XGBw_I0x": {
+      "id": "XGBw_I0x",
+      "label": "Franklin Pierce",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0.5,
+        "Education": 0.8,
+        "Military service": 0
+      },
+      "description": "14th U.S. President, from New Hampshire",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "EptgyDuj": {
+      "id": "EptgyDuj",
+      "label": "James Buchanan",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.6,
+        "Democratic": 0.4,
+        "Family wealth": 0.3,
+        "Education": 0.8,
+        "Military service": 0
+      },
+      "description": "15th U.S. President, known for the Kansas-Nebraska Act",
+      "emoji": "🏸",
+      "attempts": {},
+      "tasks": {}
+    },
+    "0ZsoHrFA": {
+      "id": "0ZsoHrFA",
+      "label": "Abraham Lincoln",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.9,
+        "Military service": 0.5
+      },
+      "description": "16th U.S. President, led during the Civil War",
+      "emoji": "🏴",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "6jwAWNM-": {
+      "id": "6jwAWNM-",
+      "label": "Andrew Johnson",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.7,
+        "Democratic": 0.3,
+        "Family wealth": 0,
+        "Education": 0.2,
+        "Military service": 0
+      },
+      "description": "17th U.S. President, succeeded Lincoln",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "RN6BwvNe": {
+      "id": "RN6BwvNe",
+      "label": "Ulysses S. Grant",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.3,
+        "Military service": 0.9
+      },
+      "description": "18th U.S. President, Civil War general",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "fltqTceb": {
+      "id": "fltqTceb",
+      "label": "Rutherford B. Hayes",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.7,
+        "Military service": 0.5
+      },
+      "description": "19th U.S. President, ended Reconstruction",
+      "emoji": "🏸",
+      "attempts": {},
+      "tasks": {}
+    },
+    "FsYWHhKE": {
+      "id": "FsYWHhKE",
+      "label": "James A. Garfield",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.8,
+        "Military service": 0.5
+      },
+      "description": "20th U.S. President, assassinated in office",
+      "emoji": "🏸",
+      "attempts": {},
+      "tasks": {}
+    },
+    "7uwlxdDc": {
+      "id": "7uwlxdDc",
+      "label": "Chester A. Arthur",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.6,
+        "Military service": 0
+      },
+      "description": "21st U.S. President, Hayes' vice president",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "wq92R_xA": {
+      "id": "wq92R_xA",
+      "label": "Grover Cleveland",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.5,
+        "Democratic": 0.5,
+        "Family wealth": 0,
+        "Education": 0.8,
+        "Military service": 0
+      },
+      "description": "22nd and 24th U.S. President, first to serve non-consecutive terms",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "APtXYQFO": {
+      "id": "APtXYQFO",
+      "label": "Benjamin Harrison",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0.7,
+        "Education": 0.8,
+        "Military service": 0
+      },
+      "description": "23rd U.S. President, grandson of William Henry Harrison",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_NEW": 1
+      },
+      "tasks": {}
+    },
+    "_1mStkfs": {
+      "id": "_1mStkfs",
+      "label": "William McKinley",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.5,
+        "Military service": 0.8
+      },
+      "attempts": {},
+      "description": "25th U.S. President, fought in Civil War",
+      "emoji": "🏸",
+      "tasks": {}
+    },
+    "5uj3vpD1": {
+      "id": "5uj3vpD1",
+      "label": "Theodore Roosevelt",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.8,
+        "Democratic": 0.2,
+        "Family wealth": 0.5,
+        "Education": 0.9,
+        "Military service": 0.8
+      },
+      "description": "26th U.S. President, fought in Spanish-American War",
+      "emoji": "🏸",
+      "attempts": {},
+      "tasks": {}
+    },
+    "5-c_3dCr": {
+      "id": "5-c_3dCr",
+      "label": "William Howard Taft",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0.7,
+        "Education": 0.9,
+        "Military service": 0
+      },
+      "description": "27th U.S. President, former Supreme Court Justice",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "NOXJFHAZ": {
+      "id": "NOXJFHAZ",
+      "label": "Woodrow Wilson",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.1,
+        "Democratic": 0.9,
+        "Family wealth": 0,
+        "Education": 0.9,
+        "Military service": 0
+      },
+      "description": "28th U.S. President, led during World War I",
+      "emoji": "◾",
+      "attempts": {},
+      "tasks": {}
+    },
+    "GydM7zOc": {
+      "id": "GydM7zOc",
+      "label": "Warren G. Harding",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0.6,
+        "Education": 0.3,
+        "Military service": 0
+      },
+      "description": "29th U.S. President, known for the Teapot Dome scandal",
+      "emoji": "🏸",
+      "attempts": {},
+      "tasks": {}
+    },
+    "eyTnFpQA": {
+      "id": "eyTnFpQA",
+      "label": "Calvin Coolidge",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.7,
+        "Military service": 0
+      },
+      "description": "30th U.S. President, known for his quiet demeanor",
+      "emoji": "🏸",
+      "attempts": {},
+      "tasks": {}
+    },
+    "TwVCYgHx": {
+      "id": "TwVCYgHx",
+      "label": "Herbert Hoover",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0.8,
+        "Education": 0.9,
+        "Military service": 0
+      },
+      "description": "31st U.S. President, known for relief efforts during Great Depression",
+      "emoji": "🏸",
+      "attempts": {
+        "EXPLORE_EXISTING": 2
+      },
+      "tasks": {}
+    },
+    "9G5W2UhB": {
+      "id": "9G5W2UhB",
+      "label": "Franklin D. Roosevelt",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.1,
+        "Democratic": 0.9,
+        "Family wealth": 0,
+        "Education": 0.9,
+        "Military service": 0
+      },
+      "description": "32nd U.S. President, led during Great Depression and World War II",
+      "emoji": "◾",
+      "attempts": {},
+      "tasks": {}
+    },
+    "VAuVzh37": {
+      "id": "VAuVzh37",
+      "label": "Harry S. Truman",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.2,
+        "Democratic": 0.8,
+        "Family wealth": 0,
+        "Education": 0.7,
+        "Military service": 0.5
+      },
+      "description": "33rd U.S. President, ended World War II",
+      "emoji": "◾",
+      "attempts": {},
+      "tasks": {}
+    },
+    "Q5b5McmM": {
+      "id": "Q5b5McmM",
+      "label": "Dwight D. Eisenhower",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0.9,
+        "Democratic": 0.1,
+        "Family wealth": 0,
+        "Education": 0.8,
+        "Military service": 0.9
+      },
+      "description": "Military leader, politician, Republican.",
+      "emoji": "💡🔱🔵",
+      "attempts": {},
+      "tasks": {}
+    },
+    "jIjvZn5d": {
+      "id": "jIjvZn5d",
+      "label": "John F. Kennedy",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0,
+        "Democratic": 1,
+        "Family wealth": 0.5,
+        "Education": 0.9,
+        "Military service": 0.8
+      },
+      "description": "Democratic, military background, Harvard education.",
+      "emoji": "🏛🔵",
+      "attempts": {},
+      "tasks": {}
+    },
+    "LttNxm-G": {
+      "id": "LttNxm-G",
+      "label": "Lyndon B. Johnson",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Republican": 0,
+        "Democratic": 1,
+        "Family wealth": 0,
+        "Education": 0.3,
+        "Military service": 0
+      },
+      "description": "Democratic, Texan, civil rights.",
+      "emoji": "📜🔴",
+      "attempts": {},
+      "tasks": {}
+    }
+  },
+  "links": [
+    {
+      "source": "OH0b60S2",
+      "target": "Hd6anw_N",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "OH0b60S2",
+      "target": "mW-VGjS8",
+      "type": "bridge",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "Hd6anw_N",
+      "target": "uQ54IN-C",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "Hd6anw_N",
+      "target": "mW-VGjS8",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "uQ54IN-C",
+      "target": "OH0b60S2",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "mW-VGjS8",
+      "target": "uQ54IN-C",
+      "type": "bridge",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "mW-VGjS8",
+      "target": "Ze8M7hJZ",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "uQ54IN-C",
+      "target": "Ze8M7hJZ",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "Hd6anw_N",
+      "target": "I24yN9tE",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "I24yN9tE",
+      "target": "KFMNQ5Og",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "KFMNQ5Og",
+      "target": "jKuoaASl",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "jKuoaASl",
+      "target": "XGBw_I0x",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "XGBw_I0x",
+      "target": "EptgyDuj",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "EptgyDuj",
+      "target": "0ZsoHrFA",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "0ZsoHrFA",
+      "target": "6jwAWNM-",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "6jwAWNM-",
+      "target": "RN6BwvNe",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "RN6BwvNe",
+      "target": "fltqTceb",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "fltqTceb",
+      "target": "FsYWHhKE",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "FsYWHhKE",
+      "target": "7uwlxdDc",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "7uwlxdDc",
+      "target": "wq92R_xA",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "wq92R_xA",
+      "target": "APtXYQFO",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "6jwAWNM-",
+      "target": "EptgyDuj",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "6jwAWNM-",
+      "target": "FsYWHhKE",
+      "type": "bridge",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "_1mStkfs",
+      "target": "APtXYQFO",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "_1mStkfs",
+      "target": "5uj3vpD1",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "5uj3vpD1",
+      "target": "5-c_3dCr",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "5-c_3dCr",
+      "target": "NOXJFHAZ",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "NOXJFHAZ",
+      "target": "GydM7zOc",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "GydM7zOc",
+      "target": "eyTnFpQA",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "eyTnFpQA",
+      "target": "TwVCYgHx",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "TwVCYgHx",
+      "target": "_1mStkfs",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "jKuoaASl",
+      "target": "EptgyDuj",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "jKuoaASl",
+      "target": "fltqTceb",
+      "type": "bridge",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "APtXYQFO",
+      "target": "fltqTceb",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "5uj3vpD1",
+      "target": "APtXYQFO",
+      "type": "bridge",
+      "relationType": "preceded_by"
+    },
+    {
+      "source": "TwVCYgHx",
+      "target": "9G5W2UhB",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "9G5W2UhB",
+      "target": "VAuVzh37",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "VAuVzh37",
+      "target": "Q5b5McmM",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "Q5b5McmM",
+      "target": "jIjvZn5d",
+      "type": "ai",
+      "relationType": "succeded_by"
+    },
+    {
+      "source": "jIjvZn5d",
+      "target": "LttNxm-G",
+      "type": "ai",
+      "relationType": "succeded_by"
+    }
+  ],
+  "focusNodeId": "KFMNQ5Og",
+  "thinkingNodeId": null,
+  "settings": {
+    "name": "Founding Fathers' Paths",
+    "creativity": 0.7,
+    "maxWords": 3,
+    "minConnections": 1,
+    "autoExplore": false,
+    "definedAspects": [
+      "Republican",
+      "Democratic",
+      "Family wealth",
+      "Education",
+      "Military service"
+    ],
+    "activeAspects": [],
+    "allowedRelations": [
+      "preceded_by",
+      "succeded_by"
+    ],
+    "showEmoji": false
+  },
+  "userQueue": [],
+  "tasks": {}
+}

@@ -1,0 +1,724 @@
+{
+  "nodes": {
+    "ekU4PFbc": {
+      "id": "ekU4PFbc",
+      "label": "Cat",
+      "status": "accepted",
+      "type": "root",
+      "val": 5,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0.2,
+        "Carnivore": 1
+      },
+      "attempts": {},
+      "description": "Small carnivorous pet with fur.",
+      "emoji": "🐱🐾",
+      "tasks": {}
+    },
+    "xssKCf6E": {
+      "id": "xssKCf6E",
+      "label": "Dog",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0.2,
+        "Carnivore": 1
+      },
+      "attempts": {},
+      "description": "Four-legged carnivorous pet.",
+      "emoji": "🐶🐾",
+      "tasks": {}
+    },
+    "mHDTNOeF": {
+      "id": "mHDTNOeF",
+      "label": "Zebra",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 1,
+        "Omnivore": 0,
+        "Carnivore": 0
+      },
+      "attempts": {},
+      "description": "Striped herbivorous equid.",
+      "emoji": "🦓🦁",
+      "tasks": {}
+    },
+    "WkQ5GpDI": {
+      "id": "WkQ5GpDI",
+      "label": "Horse",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 1,
+        "Omnivore": 0,
+        "Carnivore": 0
+      },
+      "description": "Large land animal, herbivorous.",
+      "emoji": "🐎🐴",
+      "attempts": {},
+      "tasks": {}
+    },
+    "vqObNyjW": {
+      "id": "vqObNyjW",
+      "label": "Equidae",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 1,
+        "Omnivore": 0,
+        "Carnivore": 0
+      },
+      "description": "Family of hoofed mammals, herbivorous.",
+      "emoji": "🐎🦌",
+      "attempts": {},
+      "tasks": {}
+    },
+    "4LmvGOUI": {
+      "id": "4LmvGOUI",
+      "label": "Ass",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 1,
+        "Omnivore": 0,
+        "Carnivore": 0
+      },
+      "description": "Equine animal, herbivorous.",
+      "emoji": "🐴",
+      "attempts": {},
+      "tasks": {}
+    },
+    "sKLVROU0": {
+      "id": "sKLVROU0",
+      "label": "Canine",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0.8,
+        "Carnivore": 0.2
+      },
+      "description": "Dog-like mammal, typically carnivorous.",
+      "emoji": "🐶🦮",
+      "attempts": {},
+      "tasks": {}
+    },
+    "vW8uJqy_": {
+      "id": "vW8uJqy_",
+      "label": "Mammal",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0.3,
+        "Omnivore": 0.5,
+        "Carnivore": 0.2
+      },
+      "description": "Warm-blooded vertebrate, typically mammalian.",
+      "emoji": "🦏🦴",
+      "attempts": {},
+      "tasks": {}
+    },
+    "yPktDXUy": {
+      "id": "yPktDXUy",
+      "label": "Feline",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0.2,
+        "Carnivore": 1
+      },
+      "description": "Cat-like mammal, typically carnivorous.",
+      "emoji": "🐱🐾",
+      "attempts": {
+        "EXPLORE_NEW": 1
+      },
+      "tasks": {}
+    },
+    "8g7nzi06": {
+      "id": "8g7nzi06",
+      "label": "Leopard",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0.2,
+        "Carnivore": 1
+      },
+      "description": "Large cat, carnivorous predator.",
+      "emoji": "🐆",
+      "attempts": {},
+      "tasks": {}
+    },
+    "qeKKAgPJ": {
+      "id": "qeKKAgPJ",
+      "label": "Tiger",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0.2,
+        "Carnivore": 1
+      },
+      "description": "Large cat, carnivorous predator.",
+      "emoji": "🐯🐆",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "a0pUhhqN": {
+      "id": "a0pUhhqN",
+      "label": "Wolf",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0.2,
+        "Carnivore": 1
+      },
+      "description": "Canine, carnivorous predator.",
+      "emoji": "🐺🦶",
+      "attempts": {},
+      "tasks": {}
+    },
+    "ld7vhBU7": {
+      "id": "ld7vhBU7",
+      "label": "Fox",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0.2,
+        "Omnivore": 1,
+        "Carnivore": 0.8
+      },
+      "description": "Small canid, omnivorous predator.",
+      "emoji": "🦊🦶",
+      "attempts": {},
+      "tasks": {}
+    },
+    "VNKSlHFi": {
+      "id": "VNKSlHFi",
+      "label": "Vertebrate",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0.5,
+        "Herbivore": 0.3,
+        "Omnivore": 0.7,
+        "Carnivore": 0.5
+      },
+      "description": "Animal with a backbone, diverse diets.",
+      "emoji": "🦴🦠",
+      "attempts": {},
+      "tasks": {}
+    },
+    "2mi9Hhy1": {
+      "id": "2mi9Hhy1",
+      "label": "Human",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 0.2,
+        "Omnivore": 1,
+        "Carnivore": 0
+      },
+      "description": "Two-legged omnivorous hominid.",
+      "emoji": "👨👩👧",
+      "attempts": {},
+      "tasks": {}
+    },
+    "g0dL9EJp": {
+      "id": "g0dL9EJp",
+      "label": "Bovine",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 1,
+        "Omnivore": 0,
+        "Carnivore": 0
+      },
+      "description": "Even-toed ungulate, herbivorous.",
+      "emoji": "🐄🐄",
+      "attempts": {},
+      "tasks": {}
+    },
+    "qHKqklky": {
+      "id": "qHKqklky",
+      "label": "Bison",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 1,
+        "Omnivore": 0,
+        "Carnivore": 0
+      },
+      "description": "Wild bovine, herbivorous.",
+      "emoji": "🐄",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "tasks": {}
+    },
+    "n5SDBc0y": {
+      "id": "n5SDBc0y",
+      "label": "Animal",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0.3,
+        "Aquatic": 0.3,
+        "Herbivore": 0.2,
+        "Omnivore": 0.5,
+        "Carnivore": 0.4
+      },
+      "description": "Living creature, diverse diets.",
+      "emoji": "🦏🦁",
+      "attempts": {},
+      "tasks": {}
+    },
+    "M9Aw8b4M": {
+      "id": "M9Aw8b4M",
+      "label": "Reptile",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0.5,
+        "Herbivore": 0.3,
+        "Omnivore": 0.2,
+        "Carnivore": 0.4
+      },
+      "description": "Cold-blooded vertebrate, often scaly.",
+      "emoji": "🐍🦎",
+      "attempts": {},
+      "tasks": {}
+    },
+    "aygczQRb": {
+      "id": "aygczQRb",
+      "label": "Bird",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 1,
+        "Aquatic": 0.1,
+        "Herbivore": 0.2,
+        "Omnivore": 0.5,
+        "Carnivore": 0.3
+      },
+      "description": "Feathered vertebrate, typically flies.",
+      "emoji": "🐦🦜",
+      "attempts": {},
+      "tasks": {}
+    },
+    "U7n9B1JV": {
+      "id": "U7n9B1JV",
+      "label": "Donkey",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0,
+        "Herbivore": 1,
+        "Omnivore": 0,
+        "Carnivore": 0
+      },
+      "description": "Equine animal, herbivorous.",
+      "emoji": "🦓🐴",
+      "attempts": {},
+      "tasks": {}
+    },
+    "tBPrIsS6": {
+      "id": "tBPrIsS6",
+      "label": "Eagle",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 1,
+        "Aquatic": 0,
+        "Herbivore": 0,
+        "Omnivore": 0,
+        "Carnivore": 1
+      },
+      "description": "Large bird of prey, carnivorous.",
+      "emoji": "🦅🦅",
+      "attempts": {},
+      "tasks": {}
+    },
+    "6dEyvxfL": {
+      "id": "6dEyvxfL",
+      "label": "Penguin",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 1,
+        "Herbivore": 0,
+        "Omnivore": 0,
+        "Carnivore": 1
+      },
+      "description": "Flightless bird, aquatic, carnivorous.",
+      "emoji": "🐧🦜",
+      "attempts": {},
+      "tasks": {}
+    },
+    "qrmPGlNC": {
+      "id": "qrmPGlNC",
+      "label": "Snake",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0.1,
+        "Herbivore": 0,
+        "Omnivore": 0,
+        "Carnivore": 1
+      },
+      "attempts": {
+        "DESCRIBE": 1
+      },
+      "tasks": {},
+      "description": "Long, limbless reptile.",
+      "emoji": "🐍"
+    },
+    "GTFdQK-Q": {
+      "id": "GTFdQK-Q",
+      "label": "Turtle",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Flying": 0,
+        "Aquatic": 0.8,
+        "Herbivore": 0.5,
+        "Omnivore": 0.7,
+        "Carnivore": 0.3
+      },
+      "attempts": {},
+      "tasks": {},
+      "description": "Marine creature with a hard shell.",
+      "emoji": "🐢"
+    }
+  },
+  "links": [
+    {
+      "source": "mHDTNOeF",
+      "target": "WkQ5GpDI",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "mHDTNOeF",
+      "target": "vqObNyjW",
+      "type": "ai",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "mHDTNOeF",
+      "target": "4LmvGOUI",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "xssKCf6E",
+      "target": "sKLVROU0",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "xssKCf6E",
+      "target": "vW8uJqy_",
+      "type": "ai",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "ekU4PFbc",
+      "target": "yPktDXUy",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "ekU4PFbc",
+      "target": "vW8uJqy_",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "yPktDXUy",
+      "target": "vW8uJqy_",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "yPktDXUy",
+      "target": "8g7nzi06",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "yPktDXUy",
+      "target": "qeKKAgPJ",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "sKLVROU0",
+      "target": "vW8uJqy_",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "sKLVROU0",
+      "target": "a0pUhhqN",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "sKLVROU0",
+      "target": "ld7vhBU7",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "vW8uJqy_",
+      "target": "VNKSlHFi",
+      "type": "ai",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "vW8uJqy_",
+      "target": "2mi9Hhy1",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "vW8uJqy_",
+      "target": "g0dL9EJp",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "g0dL9EJp",
+      "target": "qHKqklky",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "VNKSlHFi",
+      "target": "n5SDBc0y",
+      "type": "ai",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "VNKSlHFi",
+      "target": "M9Aw8b4M",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "VNKSlHFi",
+      "target": "aygczQRb",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "vqObNyjW",
+      "target": "vW8uJqy_",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "vqObNyjW",
+      "target": "WkQ5GpDI",
+      "type": "bridge",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "vqObNyjW",
+      "target": "U7n9B1JV",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "aygczQRb",
+      "target": "tBPrIsS6",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "aygczQRb",
+      "target": "6dEyvxfL",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "M9Aw8b4M",
+      "target": "qrmPGlNC",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "M9Aw8b4M",
+      "target": "GTFdQK-Q",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "4LmvGOUI",
+      "target": "vqObNyjW",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "4LmvGOUI",
+      "target": "vW8uJqy_",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "8g7nzi06",
+      "target": "vW8uJqy_",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "8g7nzi06",
+      "target": "VNKSlHFi",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "a0pUhhqN",
+      "target": "n5SDBc0y",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "a0pUhhqN",
+      "target": "VNKSlHFi",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "ld7vhBU7",
+      "target": "VNKSlHFi",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "2mi9Hhy1",
+      "target": "n5SDBc0y",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "2mi9Hhy1",
+      "target": "VNKSlHFi",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "U7n9B1JV",
+      "target": "VNKSlHFi",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "U7n9B1JV",
+      "target": "n5SDBc0y",
+      "type": "bridge",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "U7n9B1JV",
+      "target": "4LmvGOUI",
+      "type": "bridge",
+      "relationType": "similar_to"
+    }
+  ],
+  "focusNodeId": "4LmvGOUI",
+  "thinkingNodeId": null,
+  "settings": {
+    "name": "Land Predators & Grazers",
+    "creativity": 0.7,
+    "maxWords": 3,
+    "minConnections": 3,
+    "autoExplore": false,
+    "definedAspects": [
+      "Flying",
+      "Aquatic",
+      "Herbivore",
+      "Omnivore",
+      "Carnivore"
+    ],
+    "activeAspects": [
+      "Aquatic"
+    ],
+    "allowedRelations": [
+      "similar_to",
+      "subclass_of"
+    ],
+    "showEmoji": true
+  },
+  "userQueue": [],
+  "tasks": {}
+}
