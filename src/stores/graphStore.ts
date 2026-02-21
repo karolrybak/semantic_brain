@@ -19,6 +19,7 @@ export const useGraphStore = defineStore('graph', () => {
     }
   });
 
+  const isDemoMode = ref(false);//ref(import.meta.env.VITE_DEMO_MODE === 'true' || window.location.search.includes('demo=true'));
   const isConnected = ref(false);
   const isStateLoaded = ref(false);
   const aiStatus = ref<AiStatus>('unloaded');
@@ -73,7 +74,22 @@ export const useGraphStore = defineStore('graph', () => {
     return islands;
   });
 
-  function connect() {
+  async function connect() {
+    if (isDemoMode.value) {
+      isConnected.value = true;
+      graphList.value = [
+        { filename: 'animals', name: 'Animal Kingdom' },
+        { filename: 'nutrients', name: 'Nutrients & Health' },
+        { filename: 'presidents', name: 'US Presidents' }
+      ];
+      
+      const initialGraph = window.location.hash.slice(2);
+      if (initialGraph) {
+        loadStaticGraph(initialGraph);
+      }
+      return;
+    }
+
     if (ws.value) return;
     const host = window.location.hostname || 'localhost';
     ws.value = new WebSocket(`ws://${host}:3001`);
@@ -116,7 +132,27 @@ export const useGraphStore = defineStore('graph', () => {
     };
   }
 
+  async function loadStaticGraph(name: string) {
+    try {
+      const response = await fetch(`./data/${name}.json`);
+      const data = await response.json();
+      state.value = data;
+      currentFilename.value = name;
+      window.location.hash = '/' + name;
+      isStateLoaded.value = true;
+      aiStatus.value = 'unloaded';
+    } catch (e) {
+      console.error('Failed to load static graph', e);
+    }
+  }
+
   function send(payload: any) {
+    if (isDemoMode.value) {
+      if (payload.type === 'LOAD_GRAPH') {
+        loadStaticGraph(payload.name);
+      }
+      return;
+    }
     if (ws.value?.readyState === WebSocket.OPEN) {
       ws.value.send(JSON.stringify(payload));
     }
@@ -134,6 +170,7 @@ export const useGraphStore = defineStore('graph', () => {
     currentFilename,
     graphList,
     connect,
-    send
+    send,
+    isDemoMode
   };
 });

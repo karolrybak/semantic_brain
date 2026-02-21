@@ -14,6 +14,12 @@ if (args.includes("-d") || args.includes("--dump-schema")) {
   console.log(JSON.stringify(schemas, null, 2));
   process.exit(0);
 }
+if( args.includes("--force-recompile")) {
+  await getLlama({
+        build: "forceRebuild"
+  })
+  process.exit(0);
+}
 
 import { loadConfig } from "./config";
 import {
@@ -34,6 +40,7 @@ import {
   broadcast,
   createWSMessageHandler,
 } from "./ws-handlers";
+import { getLlama } from "node-llama-cpp";
 
 console.log("\n--- [STARTING BRAIN SERVER S2] ---");
 

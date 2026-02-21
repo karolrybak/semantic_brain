@@ -1,6 +1,6 @@
 {
   "name": "kodoksztalt-vite",
-  "version": "0.0.226",
+  "version": "0.0.231",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "scan": "ts-node scripts/scan.ts",
     "server": "bun run server/index.ts",
-    "recompile": "bun run server/index.ts --force-recompile",
+    "recompile": "bunx --no node-llama-cpp source download --release latest && bun run server/index.ts --force-recompile",
     "tester": "bun run server/tester.ts"
   },
   "dependencies": {

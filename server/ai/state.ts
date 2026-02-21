@@ -41,7 +41,9 @@ export async function initializeAI(
   try {
     console.log(`\n--- [AI INITIALIZATION] size: ${config.selectedSize} ---`);
     if (!AI_STATE.llama) {
-      AI_STATE.llama = await getLlama();
+      const options = {}
+      
+      AI_STATE.llama = await getLlama(options);
     }
     
     AI_STATE.model = await AI_STATE.llama.loadModel({ modelPath: path });
