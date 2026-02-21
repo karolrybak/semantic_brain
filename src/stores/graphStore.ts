@@ -19,7 +19,7 @@ export const useGraphStore = defineStore('graph', () => {
     }
   });
 
-  const isDemoMode = ref(false);//ref(import.meta.env.VITE_DEMO_MODE === 'true' || window.location.search.includes('demo=true'));
+  const isDemoMode = ref(import.meta.env.VITE_DEMO_MODE === 'true' || window.location.search.includes('demo=true'));
   const isConnected = ref(false);
   const isStateLoaded = ref(false);
   const aiStatus = ref<AiStatus>('unloaded');
@@ -170,7 +170,6 @@ export const useGraphStore = defineStore('graph', () => {
     currentFilename,
     graphList,
     connect,
-    send,
-    isDemoMode
+    send
   };
 });
