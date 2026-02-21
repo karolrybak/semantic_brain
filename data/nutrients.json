@@ -1,0 +1,1208 @@
+{
+  "nodes": {
+    "84xnxk8": {
+      "id": "84xnxk8",
+      "label": "Fruits",
+      "status": "accepted",
+      "type": "root",
+      "val": 1,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0.8,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.1,
+        "Folate": 0.3,
+        "Potassium": 0.5,
+        "Magnesium": 0.4,
+        "Iron": 0.2,
+        "Carbohydrates": 0.7
+      },
+      "description": "Edible plant products rich in nutrients and vitamins.",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M15.5 12.5c-1.9 0-3.5 1.6-3.5 3.5 0 1.9 1.6 3.5 3.5 3.5s3.5-1.6 3.5-3.5c0-1.9-1.6-3.5-3.5-3.5zm0 10c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5c0 1.9-1.6 3.5-3.5 3.5zm-10-10c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5c0 1.9-1.6 3.5-3.5 3.5zm10-10c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5c0 1.9-1.6 3.5-3.5 3.5z' fill='#FFD700'/></svg>",
+      "emoji": "🍎🍊🍌",
+      "attempts": {}
+    },
+    "9z8q5x4": {
+      "id": "9z8q5x4",
+      "label": "Vegetables",
+      "status": "accepted",
+      "type": "concept",
+      "val": 1,
+      "aspects": {
+        "Vitamin A": 0.8,
+        "Vitamin C": 0.9,
+        "Vitamin K": 0.7,
+        "Folate": 0.6,
+        "Potassium": 0.5,
+        "Magnesium": 0.4,
+        "Iron": 0.3,
+        "Carbohydrates": 0.2
+      },
+      "description": "Nutritious plants rich in vitamins and minerals.",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M16 2C8.27 2 2 8.27 2 16s6.27 14 14 14 14-6.27 14-14S23.73 2 16 2zm0 26C9.38 28 4 22.62 4 16S9.38 4 16 4s12 5.38 12 12-5.38 12-12 12zm0-8c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' fill='#333'/><path d='M24 16c0 3.87-3.13 7-7 7s-7-3.13-7-7 3.13-7 7-7 7 3.13 7 7z' fill='#F5CBA7'/><path d='M16 26c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' fill='#D55E00'/></svg>",
+      "emoji": "🥦🥕",
+      "attempts": {}
+    },
+    "4GZAVQOi": {
+      "id": "4GZAVQOi",
+      "label": "Apples",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.2,
+        "Folate": 0.1,
+        "Potassium": 0.7,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.8
+      },
+      "description": "A sweet, crunchy fruit high in fiber and vitamins.",
+      "color": "#FF6347",
+      "shape": "circle",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='#FF6347'/></svg>",
+      "emoji": "🍎",
+      "attempts": {
+        "EXPLORE_EXISTING": 4
+      }
+    },
+    "lMS-1huB": {
+      "id": "lMS-1huB",
+      "label": "Berries",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0.5,
+        "Folate": 0.2,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.6
+      },
+      "description": "Small, sweet fruits rich in antioxidants and vitamins.",
+      "color": "#FF69B4",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF69B4'/></svg>",
+      "emoji": "🍇🫐",
+      "attempts": {}
+    },
+    "n5uUrjrd": {
+      "id": "n5uUrjrd",
+      "label": "Citrus",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.2,
+        "Vitamin K": 0.1,
+        "Folate": 0.1,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.6
+      },
+      "description": "Sour fruits high in Vitamin C and antioxidants.",
+      "color": "#FFD700",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFD700'/></svg>",
+      "emoji": "🍊🍋",
+      "attempts": {}
+    },
+    "IBk24Lbe": {
+      "id": "IBk24Lbe",
+      "label": "Peaches",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0.7,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0.1,
+        "Folate": 0.1,
+        "Potassium": 0.6,
+        "Magnesium": 0.4,
+        "Iron": 0.1,
+        "Carbohydrates": 0.8
+      },
+      "description": "Sweet stone fruits with high Vitamin C and fiber.",
+      "color": "#FFDAB9",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFDAB9'/></svg>",
+      "emoji": "🍑",
+      "attempts": {}
+    },
+    "pSJQHccQ": {
+      "id": "pSJQHccQ",
+      "label": "Melons",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.8,
+        "Vitamin E": 0.2,
+        "Vitamin K": 0.1,
+        "Folate": 0.1,
+        "Potassium": 0.6,
+        "Magnesium": 0.4,
+        "Iron": 0.1,
+        "Carbohydrates": 0.7
+      },
+      "description": "Juicy fruits with high water content and Vitamin C.",
+      "color": "#F0E68C",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#F0E68C'/></svg>",
+      "emoji": "🍉🍈",
+      "attempts": {}
+    },
+    "cwqSz6-_": {
+      "id": "cwqSz6-_",
+      "label": "Carrots",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.9,
+        "Vitamin C": 0.3,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.2,
+        "Folate": 0.1,
+        "Potassium": 0.5,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.6
+      },
+      "description": "Root vegetable rich in Vitamin A and fiber.",
+      "color": "#FFA500",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFA500'/></svg>",
+      "emoji": "🥕",
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      }
+    },
+    "-kxtDqeE": {
+      "id": "-kxtDqeE",
+      "label": "Broccoli",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.8,
+        "Folate": 0.4,
+        "Potassium": 0.5,
+        "Magnesium": 0.3,
+        "Iron": 0.2,
+        "Carbohydrates": 0.6
+      },
+      "description": "Green vegetable packed with Vitamin C and fiber.",
+      "color": "#3CB371",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#3CB371'/></svg>",
+      "emoji": "🥦",
+      "attempts": {}
+    },
+    "tojW0Ouh": {
+      "id": "tojW0Ouh",
+      "label": "Spinach",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.3,
+        "Vitamin C": 0.5,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.9,
+        "Folate": 0.7,
+        "Potassium": 0.6,
+        "Magnesium": 0.4,
+        "Iron": 0.8,
+        "Carbohydrates": 0.3
+      },
+      "description": "Leafy green vegetable rich in Vitamin K and iron.",
+      "color": "#98FB98",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#98FB98'/></svg>",
+      "emoji": "🥬",
+      "attempts": {}
+    },
+    "sM4c4KAR": {
+      "id": "sM4c4KAR",
+      "label": "Cucumbers",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.2,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.8,
+        "Folate": 0.1,
+        "Potassium": 0.6,
+        "Magnesium": 0.4,
+        "Iron": 0.1,
+        "Carbohydrates": 0.3
+      },
+      "description": "Watery vegetable high in water content and Vitamin K.",
+      "color": "#708090",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#708090'/></svg>",
+      "emoji": "🥒",
+      "attempts": {}
+    },
+    "jCENpFqw": {
+      "id": "jCENpFqw",
+      "label": "Tomatoes",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.3,
+        "Folate": 0.1,
+        "Potassium": 0.8,
+        "Magnesium": 0.4,
+        "Iron": 0.2,
+        "Carbohydrates": 0.5
+      },
+      "description": "Red, juicy vegetable high in Vitamin C and potassium.",
+      "color": "#FF6347",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF6347'/></svg>",
+      "emoji": "🍅",
+      "attempts": {}
+    },
+    "QjoUMcuG": {
+      "id": "QjoUMcuG",
+      "label": "Red Apple",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.2,
+        "Vitamin K": 0.1,
+        "Folate": 0.1,
+        "Potassium": 0.5,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.7
+      },
+      "description": "Sweet, crunchy fruit high in Vitamin C and fiber.",
+      "color": "#FF4500",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF4500'/></svg>",
+      "emoji": "🍎",
+      "attempts": {}
+    },
+    "B83Zins1": {
+      "id": "B83Zins1",
+      "label": "Raspberries",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0.5,
+        "Folate": 0.2,
+        "Potassium": 0.6,
+        "Magnesium": 0.4,
+        "Iron": 0.1,
+        "Carbohydrates": 0.7
+      },
+      "description": "Juicy red berries high in Vitamin C and fiber.",
+      "color": "#FF6347",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF6347'/></svg>",
+      "emoji": "🫐",
+      "attempts": {}
+    },
+    "BNqLi-Em": {
+      "id": "BNqLi-Em",
+      "label": "Strawberries",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0.5,
+        "Folate": 0.2,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.7
+      },
+      "description": "Sweet, heart-shaped berries rich in Vitamin C.",
+      "color": "#FF69B4",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FF69B4'/></svg>",
+      "emoji": "🍓",
+      "attempts": {}
+    },
+    "Si5ZHtVh": {
+      "id": "Si5ZHtVh",
+      "label": "Lemons",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.2,
+        "Vitamin K": 0.1,
+        "Folate": 0.1,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.6
+      },
+      "description": "Sour citrus fruit high in Vitamin C and antioxidants.",
+      "color": "#FFFF00",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFFF00'/></svg>",
+      "emoji": "🍋",
+      "attempts": {}
+    },
+    "Lb5MXfve": {
+      "id": "Lb5MXfve",
+      "label": "Oranges",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.9,
+        "Vitamin E": 0.2,
+        "Vitamin K": 0.1,
+        "Folate": 0.1,
+        "Potassium": 0.5,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.6
+      },
+      "description": "Sweet citrus fruit rich in Vitamin C and fiber.",
+      "color": "#FFA500",
+      "shape": "ellipse",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><ellipse cx='16' cy='16' rx='14' ry='8' fill='#FFA500'/></svg>",
+      "emoji": "🍊",
+      "attempts": {}
+    },
+    "y-pEz3Hz": {
+      "id": "y-pEz3Hz",
+      "label": "Leaves",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin K": 0.8,
+        "Iron": 0.5,
+        "Magnesium": 0.3
+      },
+      "description": "Green plant parts used in nutrition.",
+      "emoji": "🌿",
+      "attempts": {}
+    },
+    "PDCPyH1M": {
+      "id": "PDCPyH1M",
+      "label": "Stems",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.3,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.6,
+        "Folate": 0.4,
+        "Potassium": 0.8,
+        "Magnesium": 0.7,
+        "Iron": 0.2,
+        "Carbohydrates": 0.5
+      },
+      "description": "Plant structures supporting leaves and flowers.",
+      "emoji": "🌱",
+      "attempts": {
+        "DESCRIBE": 1
+      }
+    },
+    "3_Ynqtul": {
+      "id": "3_Ynqtul",
+      "label": "Roots",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.2,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.8,
+        "Folate": 0.7,
+        "Potassium": 0.6,
+        "Magnesium": 0.5,
+        "Iron": 0.3,
+        "Carbohydrates": 0.9
+      },
+      "attempts": {},
+      "description": "Plant parts that store nutrients and minerals.",
+      "emoji": "🌱🌿"
+    },
+    "QOFVyOrV": {
+      "id": "QOFVyOrV",
+      "label": "Flowers",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.4,
+        "Vitamin C": 0.8,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0.6,
+        "Folate": 0.5,
+        "Potassium": 0.2,
+        "Magnesium": 0.3,
+        "Iron": 0.1,
+        "Carbohydrates": 0.7
+      },
+      "attempts": {},
+      "description": "Colorful reproductive structures of plants.",
+      "emoji": "🌸🌺"
+    },
+    "BuDJQjBM": {
+      "id": "BuDJQjBM",
+      "label": "Seeds",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0.5,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.7,
+        "Folate": 0.8,
+        "Potassium": 0.3,
+        "Magnesium": 0.6,
+        "Iron": 0.2,
+        "Carbohydrates": 0.9
+      },
+      "attempts": {},
+      "description": "Plants' reproductive units containing embryos.",
+      "emoji": "🌱🌱"
+    },
+    "SpLZsMnR": {
+      "id": "SpLZsMnR",
+      "label": "Cucumber",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0.8,
+        "Vitamin K": 0.6,
+        "Potassium": 0.7,
+        "Magnesium": 0.3
+      },
+      "attempts": {
+        "EXPLORE_EXISTING": 1
+      },
+      "description": "Cucumber is a low-calorie, hydrating vegetable rich in vitamins and minerals.",
+      "emoji": "🥒💦"
+    },
+    "hA7xsmcs": {
+      "id": "hA7xsmcs",
+      "label": "Dairy",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0,
+        "Folate": 0,
+        "Potassium": 0,
+        "Magnesium": 0,
+        "Iron": 0,
+        "Carbohydrates": 0.3
+      },
+      "attempts": {},
+      "description": "Dairy products come from milk and are rich in calcium and protein.",
+      "emoji": "🥛"
+    },
+    "wjn6NvYH": {
+      "id": "wjn6NvYH",
+      "label": "Milk",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.5,
+        "Vitamin C": 0,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0,
+        "Folate": 0,
+        "Potassium": 0.1,
+        "Magnesium": 0.1,
+        "Iron": 0,
+        "Carbohydrates": 0.2
+      },
+      "description": "Milk is a nutrient-rich liquid produced by mammals.",
+      "emoji": "🥛",
+      "attempts": {}
+    },
+    "5XbZJ2LZ": {
+      "id": "5XbZJ2LZ",
+      "label": "Cheese",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.3,
+        "Vitamin C": 0,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.2,
+        "Folate": 0,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0,
+        "Carbohydrates": 0.1
+      },
+      "description": "Cheese is a dairy product made from milk and aged.",
+      "emoji": "🧀",
+      "attempts": {}
+    },
+    "A7Czmc0o": {
+      "id": "A7Czmc0o",
+      "label": "Butter",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.4,
+        "Vitamin C": 0,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0,
+        "Folate": 0,
+        "Potassium": 0,
+        "Magnesium": 0,
+        "Iron": 0,
+        "Carbohydrates": 0.1
+      },
+      "description": "Butter is a dairy product made from cream.",
+      "emoji": "🧈",
+      "attempts": {}
+    },
+    "RyrLrxeH": {
+      "id": "RyrLrxeH",
+      "label": "Yogurt",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0,
+        "Vitamin E": 0,
+        "Vitamin K": 0.2,
+        "Folate": 0,
+        "Potassium": 0.5,
+        "Magnesium": 0.4,
+        "Iron": 0,
+        "Carbohydrates": 0.8
+      },
+      "description": "Yogurt is a fermented dairy product rich in probiotics.",
+      "emoji": "🧇",
+      "attempts": {}
+    },
+    "oXOlioUY": {
+      "id": "oXOlioUY",
+      "label": "Cream",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.5,
+        "Vitamin C": 0,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0,
+        "Folate": 0,
+        "Potassium": 0.1,
+        "Magnesium": 0.1,
+        "Iron": 0,
+        "Carbohydrates": 0
+      },
+      "description": "Cream is a high-fat dairy product from milk.",
+      "emoji": "🥛🧈",
+      "attempts": {}
+    },
+    "1TcFArVA": {
+      "id": "1TcFArVA",
+      "label": "Meat",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Vitamin A": 0.3,
+        "Vitamin C": 0,
+        "Vitamin E": 0.2,
+        "Vitamin K": 0.1,
+        "Folate": 0,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.8,
+        "Carbohydrates": 0
+      },
+      "attempts": {},
+      "description": "Meat is animal flesh used for food.",
+      "emoji": "🥩"
+    },
+    "m2uIA0f3": {
+      "id": "m2uIA0f3",
+      "label": "Burgers",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.3,
+        "Vitamin C": 0,
+        "Vitamin E": 0.2,
+        "Vitamin K": 0.1,
+        "Folate": 0,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.8,
+        "Carbohydrates": 0.6
+      },
+      "description": "Burgers are grilled meat patties in a bun.",
+      "emoji": "🍔",
+      "attempts": {}
+    },
+    "Zq_FrI9Q": {
+      "id": "Zq_FrI9Q",
+      "label": "Pork",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.1,
+        "Folate": 0,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.6,
+        "Carbohydrates": 0
+      },
+      "description": "Pork is meat from domestic pigs.",
+      "emoji": "🍖",
+      "attempts": {}
+    },
+    "l6rU_wRK": {
+      "id": "l6rU_wRK",
+      "label": "Sandwich",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0.3,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.2,
+        "Folate": 0.1,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.2,
+        "Carbohydrates": 0.5
+      },
+      "description": "Sandwich is a food consisting of fillings between slices of bread.",
+      "emoji": "🥪",
+      "attempts": {}
+    },
+    "qLBx9fSw": {
+      "id": "qLBx9fSw",
+      "label": "Hamburgers",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.2,
+        "Vitamin C": 0.3,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0.2,
+        "Folate": 0.1,
+        "Potassium": 0.4,
+        "Magnesium": 0.3,
+        "Iron": 0.8,
+        "Carbohydrates": 0.5
+      },
+      "description": "Hamburgers are bread sandwiches with beef patty.",
+      "emoji": "🍔",
+      "attempts": {}
+    },
+    "6EUd9-Yb": {
+      "id": "6EUd9-Yb",
+      "label": "Bread",
+      "status": "accepted",
+      "type": "concept",
+      "val": 3,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0,
+        "Folate": 0.2,
+        "Potassium": 0.3,
+        "Magnesium": 0.3,
+        "Iron": 0.4,
+        "Carbohydrates": 0.8
+      },
+      "attempts": {},
+      "description": "Bread is a staple food made from flour and yeast.",
+      "emoji": "🍞"
+    },
+    "cAK7g8Hr": {
+      "id": "cAK7g8Hr",
+      "label": "Buns",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.1,
+        "Vitamin C": 0,
+        "Vitamin E": 0.1,
+        "Vitamin K": 0,
+        "Folate": 0.2,
+        "Potassium": 0.3,
+        "Magnesium": 0.3,
+        "Iron": 0.4,
+        "Carbohydrates": 0.8
+      },
+      "description": "Buns are small bread rolls often used in sandwiches.",
+      "emoji": "🍞",
+      "attempts": {}
+    },
+    "N-UazYJ1": {
+      "id": "N-UazYJ1",
+      "label": "Food",
+      "status": "accepted",
+      "type": "concept",
+      "val": 2,
+      "aspects": {
+        "Vitamin A": 0.5,
+        "Vitamin C": 0.4,
+        "Vitamin E": 0.3,
+        "Vitamin K": 0.6,
+        "Folate": 0.5,
+        "Potassium": 0.7,
+        "Magnesium": 0.6,
+        "Iron": 0.8,
+        "Carbohydrates": 0.9
+      },
+      "description": "Food provides nutrients for sustenance.",
+      "emoji": "🥣🥗🍔",
+      "attempts": {}
+    }
+  },
+  "links": [
+    {
+      "source": "84xnxk8",
+      "target": "4GZAVQOi",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "84xnxk8",
+      "target": "lMS-1huB",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "84xnxk8",
+      "target": "n5uUrjrd",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "84xnxk8",
+      "target": "IBk24Lbe",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "84xnxk8",
+      "target": "pSJQHccQ",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "cwqSz6-_",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "-kxtDqeE",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "tojW0Ouh",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "sM4c4KAR",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "jCENpFqw",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "4GZAVQOi",
+      "target": "QjoUMcuG",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "lMS-1huB",
+      "target": "B83Zins1",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "lMS-1huB",
+      "target": "BNqLi-Em",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "n5uUrjrd",
+      "target": "Si5ZHtVh",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "n5uUrjrd",
+      "target": "Lb5MXfve",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "84xnxk8",
+      "type": "bridge",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "4GZAVQOi",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "lMS-1huB",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "n5uUrjrd",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "IBk24Lbe",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "pSJQHccQ",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "QjoUMcuG",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "B83Zins1",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "BNqLi-Em",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "-kxtDqeE",
+      "target": "84xnxk8",
+      "type": "bridge",
+      "relationType": "incompatible_with"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "y-pEz3Hz",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "PDCPyH1M",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "3_Ynqtul",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "QOFVyOrV",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "9z8q5x4",
+      "target": "BuDJQjBM",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "tojW0Ouh",
+      "target": "y-pEz3Hz",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "tojW0Ouh",
+      "target": "PDCPyH1M",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "tojW0Ouh",
+      "target": "3_Ynqtul",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "tojW0Ouh",
+      "target": "BuDJQjBM",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "SpLZsMnR",
+      "target": "9z8q5x4",
+      "type": "bridge",
+      "relationType": "part_of"
+    },
+    {
+      "source": "SpLZsMnR",
+      "target": "tojW0Ouh",
+      "type": "bridge",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "hA7xsmcs",
+      "target": "wjn6NvYH",
+      "type": "ai",
+      "relationType": "part_of"
+    },
+    {
+      "source": "hA7xsmcs",
+      "target": "5XbZJ2LZ",
+      "type": "ai",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "hA7xsmcs",
+      "target": "A7Czmc0o",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "sM4c4KAR",
+      "target": "84xnxk8",
+      "type": "bridge",
+      "relationType": "part_of"
+    },
+    {
+      "source": "sM4c4KAR",
+      "target": "PDCPyH1M",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "hA7xsmcs",
+      "target": "RyrLrxeH",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "hA7xsmcs",
+      "target": "oXOlioUY",
+      "type": "ai",
+      "relationType": "has_part"
+    },
+    {
+      "source": "jCENpFqw",
+      "target": "84xnxk8",
+      "type": "bridge",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "jCENpFqw",
+      "target": "y-pEz3Hz",
+      "type": "bridge",
+      "relationType": "has_part"
+    },
+    {
+      "source": "1TcFArVA",
+      "target": "m2uIA0f3",
+      "type": "ai",
+      "relationType": "part_of"
+    },
+    {
+      "source": "1TcFArVA",
+      "target": "Zq_FrI9Q",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "Si5ZHtVh",
+      "target": "lMS-1huB",
+      "type": "bridge",
+      "relationType": "opposite_of"
+    },
+    {
+      "source": "Si5ZHtVh",
+      "target": "jCENpFqw",
+      "type": "bridge",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "Si5ZHtVh",
+      "target": "84xnxk8",
+      "type": "bridge",
+      "relationType": "part_of"
+    },
+    {
+      "source": "m2uIA0f3",
+      "target": "l6rU_wRK",
+      "type": "ai",
+      "relationType": "part_of"
+    },
+    {
+      "source": "m2uIA0f3",
+      "target": "qLBx9fSw",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "6EUd9-Yb",
+      "target": "l6rU_wRK",
+      "type": "bridge",
+      "relationType": "part_of"
+    },
+    {
+      "source": "6EUd9-Yb",
+      "target": "cAK7g8Hr",
+      "type": "ai",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "6EUd9-Yb",
+      "target": "SpLZsMnR",
+      "type": "bridge",
+      "relationType": "opposite_of"
+    },
+    {
+      "source": "hA7xsmcs",
+      "target": "IBk24Lbe",
+      "type": "bridge",
+      "relationType": "opposite_of"
+    },
+    {
+      "source": "hA7xsmcs",
+      "target": "N-UazYJ1",
+      "type": "ai",
+      "relationType": "subclass_of"
+    },
+    {
+      "source": "l6rU_wRK",
+      "target": "cAK7g8Hr",
+      "type": "bridge",
+      "relationType": "part_of"
+    },
+    {
+      "source": "l6rU_wRK",
+      "target": "qLBx9fSw",
+      "type": "bridge",
+      "relationType": "similar_to"
+    },
+    {
+      "source": "l6rU_wRK",
+      "target": "9z8q5x4",
+      "type": "bridge",
+      "relationType": "opposite_of"
+    }
+  ],
+  "focusNodeId": "B83Zins1",
+  "thinkingNodeId": null,
+  "settings": {
+    "creativity": 0.7,
+    "maxWords": 3,
+    "minConnections": 3,
+    "autoExplore": false,
+    "definedAspects": [
+      "Vitamin A",
+      "Vitamin C",
+      "Vitamin E",
+      "Vitamin K",
+      "Folate",
+      "Potassium",
+      "Magnesium",
+      "Iron",
+      "Carbohydrates"
+    ],
+    "activeAspects": [],
+    "name": "NutriHub"
+  }
+}
